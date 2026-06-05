@@ -1,0 +1,42 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "reviews": "Reviews",
+    "blog": "Blog",
+    "book": "Book",
+    "contact": "Contact"
+  },
+  "common": {
+    "siteName": "Dalibor Plečić",
+    "loadMore": "Load more",
+    "searchPlaceholder": "Search reviews by topic…",
+    "skipToContent": "Skip to content",
+    "languageSwitcherLabel": "Change language",
+    "availableIn": "Available in: {langs}"
+  },
+  "home": {
+    "title": "Critic, translator, and writer"
+  },
+  "about": {
+    "title": "About"
+  },
+  "reviews": {
+    "title": "Reviews"
+  },
+  "blog": {
+    "title": "Blog"
+  },
+  "book": {
+    "title": "The Book"
+  },
+  "contact": {
+    "title": "Contact"
+  },
+  "privacy": {
+    "title": "Privacy Policy"
+  },
+  "notFound": {
+    "title": "This page isn't here"
+  }
+}

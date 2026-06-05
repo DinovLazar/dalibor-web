@@ -1,0 +1,19 @@
+{
+  "nav": { "home": "Почетна", "about": "За Далибор", "reviews": "Критики", "blog": "Блог", "book": "Книга", "contact": "Контакт" },
+  "common": {
+    "siteName": "Далибор Плечиќ",
+    "loadMore": "Прикажи повеќе",
+    "searchPlaceholder": "Пребарувај критики по тема…",
+    "skipToContent": "Прескокни до содржината",
+    "languageSwitcherLabel": "Промени јазик",
+    "availableIn": "Достапно на: {langs}"
+  },
+  "home": { "title": "Критичар, преведувач и писател" },
+  "about": { "title": "За Далибор" },
+  "reviews": { "title": "Критики" },
+  "blog": { "title": "Блог" },
+  "book": { "title": "Книгата" },
+  "contact": { "title": "Контакт" },
+  "privacy": { "title": "Политика за приватност" },
+  "notFound": { "title": "Оваа страница ја нема" }
+}

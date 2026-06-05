@@ -1,0 +1,19 @@
+{
+  "nav": { "home": "Početna", "about": "O autoru", "reviews": "Kritike", "blog": "Blog", "book": "Knjiga", "contact": "Kontakt" },
+  "common": {
+    "siteName": "Dalibor Plečić",
+    "loadMore": "Učitaj još",
+    "searchPlaceholder": "Pretraži kritike po temi…",
+    "skipToContent": "Preskoči na sadržaj",
+    "languageSwitcherLabel": "Promeni jezik",
+    "availableIn": "Dostupno na: {langs}"
+  },
+  "home": { "title": "Kritičar, prevodilac i pisac" },
+  "about": { "title": "O autoru" },
+  "reviews": { "title": "Kritike" },
+  "blog": { "title": "Blog" },
+  "book": { "title": "Knjiga" },
+  "contact": { "title": "Kontakt" },
+  "privacy": { "title": "Politika privatnosti" },
+  "notFound": { "title": "Ova stranica ne postoji" }
+}
