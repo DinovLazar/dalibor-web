@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reviews — Dalibor Plečić (Hardcover mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-display:"Playfair Display",Georgia,serif; --font-body:"Lora",Georgia,serif;
+  --color-bg:#F4EDE1; --color-surface:#EBE0CE; --color-text:#2E2218; --color-text-muted:#6F5D46;
+  --color-primary:#A87437; --color-primary-strong:#875621; --color-primary-hover:#5B4228;
+  --color-on-primary:#FBF7EF; --color-footer:#5B4228; --color-on-footer:#F4EDE1;
+  --color-border:rgb(46 34 24 / .12); --color-border-strong:#82745F; --color-focus:#875621;
+  --radius-image:.375rem; --radius-button:.625rem; --radius-input:.625rem; --radius-card:.875rem; --radius-pill:9999px;
+  --shadow-card:0 1px 2px rgb(46 34 24 / .04),0 6px 18px rgb(46 34 24 / .06);
+  --shadow-card-hover:0 2px 4px rgb(46 34 24 / .06),0 14px 30px rgb(46 34 24 / .11);
+  --shadow-cover:0 2px 6px rgb(46 34 24 / .12),0 14px 32px rgb(46 34 24 / .18);
+  --shell:70rem; --measure:42rem; --list:48rem;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);
+  font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0}
+p{margin:0 0 1em}
+a{color:inherit}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.shell{max-width:var(--shell);margin:0 auto;padding:0 48px}
+.eyebrow{font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:.8125rem;color:var(--color-primary-strong);margin:0 0 8px}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.reveal{animation:rise .5s cubic-bezier(.2,.65,.3,1) both}
+.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.2s}.d4{animation-delay:.28s}.d5{animation-delay:.36s}
+
+/* header */
+.site-header{position:sticky;top:0;z-index:10;background:rgb(244 237 225 / .85);backdrop-filter:blur(8px);border-bottom:1px solid var(--color-border)}
+.site-header .bar{max-width:var(--shell);margin:0 auto;padding:0 48px;height:64px;display:flex;align-items:center;gap:24px}
+.wordmark{font-family:var(--font-display);font-weight:600;font-size:1.25rem;text-decoration:none;color:var(--color-text)}
+.nav{display:flex;gap:26px;margin-left:auto}
+.nav a{position:relative;text-decoration:none;color:var(--color-text);font-weight:500;font-size:1rem;padding:4px 0}
+.nav a[aria-current="page"]::after,.nav a:hover::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--color-primary);border-radius:2px}
+.nav a:hover::after{opacity:.6}
+.langswitch{display:flex;align-items:center;font-weight:500;font-size:.9375rem}
+.langswitch a,.langswitch span{padding:6px 8px;color:var(--color-text-muted);text-decoration:none}
+.langswitch [aria-current="true"]{color:var(--color-text);font-weight:600}
+.langswitch .sep{color:var(--color-border-strong);padding:0}
+.menu-btn{display:none;background:none;border:0;color:var(--color-text);width:44px;height:44px;margin-left:auto;cursor:pointer}
+
+/* page head */
+.page-head{padding:56px 0 8px}
+.page-head h1{font-weight:700;font-size:2.75rem;letter-spacing:-.01em;line-height:1.12}
+.page-head .lede{color:var(--color-text-muted);font-size:1.25rem;max-width:var(--measure);margin-top:8px}
+.list-col{max-width:var(--list);margin:0 auto;padding:0 48px}
+
+/* search */
+.searchbox{position:relative;margin:24px 0 8px}
+.searchbox input{width:100%;height:48px;border-radius:var(--radius-input);border:1px solid var(--color-border-strong);
+  background:var(--color-bg);font-family:var(--font-body);font-size:1.0625rem;color:var(--color-text);padding:0 16px 0 44px}
+.searchbox input::placeholder{color:var(--color-text-muted)}
+.searchbox input:focus{outline:none;border:2px solid var(--color-primary);box-shadow:0 0 0 3px rgb(168 116 55 / .18);padding:0 15px 0 43px}
+.searchbox .lead{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--color-text-muted)}
+.searchbox input:focus + .lead,.searchbox input:focus ~ .lead{color:var(--color-text)}
+.search-help{font-size:.875rem;color:var(--color-text-muted);margin:0 2px 28px}
+.search-help em{color:var(--color-primary-strong);font-style:italic}
+
+/* cards */
+.cardstack{display:flex;flex-direction:column;gap:16px}
+.review-card{display:flex;gap:18px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-card);
+  box-shadow:var(--shadow-card);padding:20px;text-decoration:none;color:inherit;transition:transform .2s,box-shadow .2s}
+.review-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-card-hover)}
+.review-card:hover .rc-title{color:var(--color-primary-strong)}
+.review-card:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
+.rc-cover{width:120px;flex:none;aspect-ratio:2/3;border-radius:var(--radius-image);box-shadow:var(--shadow-cover)}
+.rc-ph{width:120px;flex:none;aspect-ratio:2/3;border-radius:var(--radius-image);box-shadow:var(--shadow-cover);background:var(--color-surface);
+  border:1px solid var(--color-border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative}
+.rc-ph::after{content:"";position:absolute;inset:6px;border:1px solid var(--color-border);border-radius:3px}
+.rc-ph .mono{font-family:var(--font-display);font-weight:700;font-size:1.75rem;color:var(--color-text-muted)}
+.rc-ph svg{color:var(--color-text-muted);width:24px;height:24px}
+.rc-body{display:flex;flex-direction:column;gap:7px;min-width:0}
+.rc-title{font-family:var(--font-display);font-weight:600;font-size:1.375rem;line-height:1.28}
+.rc-meta{font-weight:500;font-size:.9375rem;color:var(--color-text-muted)}
+.rc-excerpt{font-size:1rem;color:var(--color-text-muted);margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.chip{display:inline-flex;align-items:center;height:26px;padding:0 11px;border-radius:var(--radius-pill);
+  border:1px solid var(--color-primary);color:var(--color-primary-strong);font-weight:600;font-size:.8125rem}
+
+/* load more */
+.loadmore{display:flex;justify-content:center;padding:36px 0 8px}
+.btn{font-family:var(--font-body);font-weight:500;font-size:1rem;letter-spacing:.02em;display:inline-flex;align-items:center;gap:8px;
+  height:44px;padding:0 20px;border-radius:var(--radius-button);border:1.5px solid transparent;cursor:pointer;text-decoration:none;line-height:1;transition:background .16s,transform .16s,box-shadow .16s,border-color .16s}
+.btn-secondary{border-color:var(--color-primary);color:var(--color-primary-strong);background:transparent}
+.btn-secondary:hover{background:rgb(168 116 55 / .14);border-color:var(--color-primary-strong)}
+.btn:focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}
+
+/* footer */
+.site-footer{background:var(--color-footer);color:var(--color-on-footer);border-top:2px solid var(--color-primary);margin-top:48px}
+.site-footer .inner{max-width:var(--shell);margin:0 auto;padding:64px 48px 48px}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.footer-grid h5{font-family:var(--font-body);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.8125rem;color:rgb(244 237 225 / .7);margin:0 0 12px}
+.footer-grid a{display:flex;align-items:center;gap:8px;color:rgb(244 237 225 / .88);text-decoration:none;padding:5px 0;font-size:.9375rem}
+.footer-grid a:hover{color:#fff;text-decoration:underline}
+.footer-bottom{border-top:1px solid rgb(244 237 225 / .18);margin-top:36px;padding-top:20px;color:rgb(244 237 225 / .8);font-size:.875rem}
+
+@media(max-width:768px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){
+  .nav,.langswitch{display:none}.menu-btn{display:inline-flex;align-items:center;justify-content:center}
+  .site-header .bar,.list-col,.site-footer .inner{padding-left:20px;padding-right:20px}
+  .page-head{padding:40px 0 4px}.page-head h1{font-size:2.125rem}
+  .footer-grid{grid-template-columns:1fr}
+}
+@media(max-width:420px){.review-card{flex-direction:column}.rc-cover,.rc-ph{width:100%;max-width:140px}}
+@media(prefers-reduced-motion:reduce){.reveal{animation:none}.review-card:hover{transform:none}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16M4 6h16M4 18h16"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></symbol>
+  <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17z"/><path d="m10 15 5-3-5-3z"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="wordmark" href="#">Dalibor Plečić</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#">Дома</a><a href="#">За мене</a><a href="#" aria-current="page">Рецензии</a><a href="#">Блог</a><a href="#">Книга</a><a href="#">Контакт</a>
+    </nav>
+    <nav class="langswitch" aria-label="Language">
+      <span aria-current="true">MK</span><span class="sep">·</span><a href="#">EN</a><span class="sep">·</span><a href="#">SR</a>
+    </nav>
+    <button class="menu-btn" aria-label="Open menu" aria-expanded="false"><svg class="i" style="width:24px;height:24px"><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+
+<main class="list-col">
+  <div class="page-head reveal d1">
+    <p class="eyebrow">Архива · Archive</p>
+    <h1>Рецензии</h1>
+    <p class="lede">Читања на книги од регионот и пошироко — Reviews of books from the region and beyond.</p>
+  </div>
+
+  <div class="reveal d2">
+    <div class="searchbox">
+      <input type="search" placeholder="Пребарувај рецензии по тема…" aria-label="Search reviews by topic">
+      <span class="lead"><svg class="i"><use href="#i-search"/></svg></span>
+    </div>
+    <p class="search-help">Обиди се со тема — на пр. <em>меморија</em>, <em>егзил</em>, <em>јазик</em>. Try a theme, not just a title.</p>
+  </div>
+
+  <div class="cardstack">
+    <a class="review-card reveal d2" href="#">
+      <div class="rc-cover" role="img" aria-label="Cover" style="background:linear-gradient(150deg,#7b5230,#a87437)"></div>
+      <div class="rc-body">
+        <div class="rc-title">Есеј за ноќта</div>
+        <div class="rc-meta">Марко Погачар · мај 2024</div>
+        <p class="rc-excerpt">Погачар ја претвора ноќта во простор за мислење — книга што бара бавно читање, со внимание на секој здив меѓу зборовите.</p>
+        <div class="chips"><span class="chip">меморија</span><span class="chip">поезија</span><span class="chip">ноќ</span></div>
+      </div>
+    </a>
+
+    <a class="review-card reveal d3" href="#">
+      <div class="rc-cover" role="img" aria-label="Cover" style="background:linear-gradient(150deg,#5b4228,#8a6a3a)"></div>
+      <div class="rc-body">
+        <div class="rc-title">Svijet koji sam izabrala</div>
+        <div class="rc-meta">Kalina Maleska · February 2024</div>
+        <p class="rc-excerpt">A collection that asks what it means to choose a world — Maleska writes with quiet precision and a translator's ear for the unsaid.</p>
+        <div class="chips"><span class="chip">identity</span><span class="chip">language</span></div>
+      </div>
+    </a>
+
+    <a class="review-card reveal d3" href="#">
+      <div class="rc-ph"><svg class="i"><use href="#i-book"/></svg><span class="mono">P</span></div>
+      <div class="rc-body">
+        <div class="rc-title">Putovanja slijepih</div>
+        <div class="rc-meta">Rade Jarak · 2023</div>
+        <p class="rc-excerpt">Jarak's blind travellers move through a Europe half-remembered and half-invented. (Cover-placeholder shown — no image yet.)</p>
+        <div class="chips"><span class="chip">memory</span><span class="chip">exile</span><span class="chip">travel</span></div>
+      </div>
+    </a>
+
+    <a class="review-card reveal d4" href="#">
+      <div class="rc-cover" role="img" aria-label="Cover" style="background:linear-gradient(150deg,#9c6b34,#4f3a23)"></div>
+      <div class="rc-body">
+        <div class="rc-title">Така нека биде</div>
+        <div class="rc-meta">Robert Međurečan · 2023</div>
+        <p class="rc-excerpt">Роман за прифаќањето и неговата цена — раскажан со сув хумор и неочекувана нежност.</p>
+        <div class="chips"><span class="chip">семејство</span><span class="chip">хумор</span></div>
+      </div>
+    </a>
+
+    <a class="review-card reveal d4" href="#">
+      <div class="rc-cover" role="img" aria-label="Cover" style="background:linear-gradient(150deg,#6f5236,#a8843f)"></div>
+      <div class="rc-body">
+        <div class="rc-title">Najbolje je već prošlo</div>
+        <div class="rc-meta">Danilo Stojić · 2022</div>
+        <p class="rc-excerpt">A debut that looks back without nostalgia — Stojić finds the comedy in disappointment and the grace in letting go.</p>
+        <div class="chips"><span class="chip">youth</span><span class="chip">memory</span></div>
+      </div>
+    </a>
+  </div>
+
+  <div class="loadmore">
+    <button class="btn btn-secondary" type="button">Вчитај повеќе · Load more</button>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-grid">
+      <div><h5>Контакт</h5><a href="#"><svg class="i"><use href="#i-mail"/></svg> dalibor@primer.mk</a></div>
+      <div><h5>Социјални мрежи</h5><a href="#"><svg class="i"><use href="#i-instagram"/></svg> Instagram</a><a href="#"><svg class="i"><use href="#i-facebook"/></svg> Facebook</a></div>
+      <div><h5>Пишување</h5><a href="#"><svg class="i"><use href="#i-ext"/></svg> Booksa</a><a href="#"><svg class="i"><use href="#i-ext"/></svg> Versopolis</a><a href="#"><svg class="i"><use href="#i-ext"/></svg> Partizanska knjiga</a></div>
+      <div><h5>Интервјуа</h5><a href="#"><svg class="i"><use href="#i-youtube"/></svg> YouTube / TV</a></div>
+    </div>
+    <div class="footer-bottom">© 2026 Далибор Плечиќ · Dalibor Plečić</div>
+  </div>
+</footer>
+
+</body>
+</html>

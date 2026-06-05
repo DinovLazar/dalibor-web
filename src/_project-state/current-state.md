@@ -3,7 +3,7 @@
 > **Location in repo:** `src/_project-state/current-state.md`
 > A live snapshot of the repo. **Claude Code updates this at the end of every phase.** It reflects what actually exists — if it ever disagrees with the Plan, this file (and the live code) wins.
 
-**Last updated:** 2026-06-05 — end of Phase 1.02 (project scaffolding)
+**Last updated:** 2026-06-06 — Phase 1.03 design handover filed (Design phase; `src/` app code unchanged)
 
 **Project:** Dalibor Plečić personal website — a trilingual (Macedonian default / English / Serbian), literary "well-made hardcover book" site consolidating his book reviews, blog, his own book, and an About page.
 
@@ -11,8 +11,9 @@
 
 ## Phase status
 - **1.01 — Deep research on Dalibor Plečić:** ✅ complete. Dossier held by Lazar as `Dalibor-Research.md`. (A copy sits in the working folder as `compass_artifact_…text_markdown.md`, kept **local-only / gitignored** — not published to the public repo, as it aggregates personal data.)
-- **1.02 — Project scaffolding:** ✅ complete (this phase).
-- **Next → 1.03 — Design system & visual direction** (Design phase; handover lands in `docs/design-handovers/`).
+- **1.02 — Project scaffolding:** ✅ complete.
+- **1.03 — Design system & visual direction:** ✅ complete (Design phase). Handover at `docs/design-handovers/Part-1-Phase-03-Handover.md` (Style A "Hardcover" — tokens, type scale, components, all 10 page layouts, a11y) + four HTML mockups in `docs/design-handovers/mockups/`. Report: `Part-1-Phase-03-Completion.md`. **No `src/` app code changed** — Code applies the `@theme` tokens + `next/font` in 1.04.
+- **Next → 1.04 — i18n + layout foundation** (next-intl `[locale]` shell, load Playfair+Lora, apply the design tokens to `globals.css`, build header/footer/language switcher).
 
 ## Tech stack (current)
 *Locked plan: Next.js (App Router) · TypeScript · Tailwind · shadcn/ui · Lucide · Framer Motion · next-intl · Sanity · Formspree · Vercel AI SDK + Voyage + Supabase (pgvector) · Vercel · Playfair Display + Lora.*

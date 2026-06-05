@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="mk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Есеј за ноќта — рецензија · Dalibor Plečić</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-display:"Playfair Display",Georgia,serif; --font-body:"Lora",Georgia,serif;
+  --color-bg:#F4EDE1; --color-surface:#EBE0CE; --color-text:#2E2218; --color-text-muted:#6F5D46;
+  --color-primary:#A87437; --color-primary-strong:#875621; --color-primary-hover:#5B4228;
+  --color-on-primary:#FBF7EF; --color-footer:#5B4228; --color-on-footer:#F4EDE1;
+  --color-border:rgb(46 34 24 / .12); --color-border-strong:#82745F; --color-focus:#875621;
+  --radius-image:.375rem; --radius-button:.625rem; --radius-card:.875rem; --radius-pill:9999px;
+  --shadow-card:0 1px 2px rgb(46 34 24 / .04),0 6px 18px rgb(46 34 24 / .06);
+  --shadow-cover:0 2px 6px rgb(46 34 24 / .12),0 14px 32px rgb(46 34 24 / .18);
+  --shell:70rem; --measure:42rem;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);
+  font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0}
+a{color:inherit}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.eyebrow{font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.8125rem;color:var(--color-primary-strong);margin:0 0 8px}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.reveal{animation:rise .5s cubic-bezier(.2,.65,.3,1) both}
+.d1{animation-delay:.05s}.d2{animation-delay:.13s}
+
+/* header */
+.site-header{position:sticky;top:0;z-index:10;background:rgb(244 237 225 / .85);backdrop-filter:blur(8px);border-bottom:1px solid var(--color-border)}
+.site-header .bar{max-width:var(--shell);margin:0 auto;padding:0 48px;height:64px;display:flex;align-items:center;gap:24px}
+.wordmark{font-family:var(--font-display);font-weight:600;font-size:1.25rem;text-decoration:none;color:var(--color-text)}
+.nav{display:flex;gap:26px;margin-left:auto}
+.nav a{position:relative;text-decoration:none;color:var(--color-text);font-weight:500;font-size:1rem;padding:4px 0}
+.nav a[aria-current="page"]::after,.nav a:hover::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--color-primary);border-radius:2px}
+.nav a:hover::after{opacity:.6}
+.langswitch{display:flex;align-items:center;font-weight:500;font-size:.9375rem}
+.langswitch a,.langswitch span{padding:6px 8px;color:var(--color-text-muted);text-decoration:none}
+.langswitch [aria-current="true"]{color:var(--color-text);font-weight:600}
+.langswitch .sep{color:var(--color-border-strong);padding:0}
+.menu-btn{display:none;background:none;border:0;color:var(--color-text);width:44px;height:44px;margin-left:auto;cursor:pointer}
+
+/* article head */
+.article-head{max-width:1008px;margin:0 auto;padding:48px 48px 0}
+.article-head .inner{max-width:var(--measure)}
+.backlink{display:inline-flex;align-items:center;gap:6px;color:var(--color-primary-strong);text-decoration:none;font-weight:500;font-size:.9375rem}
+.backlink:hover{color:var(--color-primary-hover);text-decoration:underline}
+.backlink svg{width:18px;height:18px}
+.breadcrumb{font-weight:500;font-size:.9375rem;margin:14px 0 18px}
+.breadcrumb a{color:var(--color-primary-strong);text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb .sep{color:var(--color-border-strong);padding:0 8px}
+.breadcrumb .cur{color:var(--color-text-muted)}
+h1.title{font-weight:700;font-size:2.75rem;line-height:1.12;letter-spacing:-.01em}
+.dbl{max-width:var(--measure);height:0;border:0;border-top:2px solid var(--color-primary);position:relative;margin:18px 0}
+.dbl::after{content:"";position:absolute;left:0;right:0;top:3px;border-top:1px solid var(--color-border)}
+.metaline{font-weight:500;font-size:.9375rem;color:var(--color-text-muted);letter-spacing:.01em}
+.avail{font-weight:500;font-size:.875rem;color:var(--color-text-muted);margin-left:4px}
+.avail b{color:var(--color-text)}
+
+/* layout */
+.article-wrap{max-width:1008px;margin:0 auto;padding:24px 48px 0;display:grid;grid-template-columns:minmax(0,var(--measure)) 18rem;gap:48px;align-items:start}
+
+/* prose */
+.article-body{font-size:1.125rem;line-height:1.7}
+.article-body p{margin:0 0 1.1em}
+.article-body>p:first-of-type::first-letter{font-family:var(--font-display);font-weight:700;color:var(--color-primary);
+  float:left;font-size:3.5em;line-height:.78;padding-right:.08em;margin-top:.02em}
+.article-body a{color:var(--color-primary-strong);text-underline-offset:.12em}
+.article-body a:hover{color:var(--color-primary-hover)}
+.pullquote{font-family:var(--font-display);font-style:italic;font-weight:500;font-size:1.5rem;line-height:1.4;
+  border-left:3px solid var(--color-primary);padding-left:24px;margin:28px 0;color:var(--color-text)}
+.translated{background:rgb(235 224 206 / .5);border-radius:var(--radius-card);padding:18px 22px;margin:24px 0}
+.translated .lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-muted);margin:0 0 6px}
+.translated p{margin:0;font-style:italic}
+.foot-chips{display:flex;gap:8px;flex-wrap:wrap;margin:32px 0 8px}
+.chip{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:var(--radius-pill);
+  border:1px solid var(--color-primary);color:var(--color-primary-strong);font-weight:600;font-size:.8125rem;text-decoration:none}
+.foot-rule{border:0;border-top:1px solid var(--color-border);margin:24px 0}
+
+/* book aside */
+.book-aside{position:sticky;top:88px}
+.book-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-card);
+  box-shadow:var(--shadow-card);padding:20px}
+.book-card .cover{width:100%;max-width:160px;aspect-ratio:2/3;border-radius:var(--radius-image);box-shadow:var(--shadow-cover);
+  background:linear-gradient(150deg,#7b5230,#a87437);margin:0 0 16px}
+.book-card h3{font-family:var(--font-display);font-weight:600;font-size:1.25rem;line-height:1.25}
+.book-card .latin{color:var(--color-text-muted);font-style:italic;font-size:1rem}
+.book-card .by{font-weight:500;font-size:.9375rem;color:var(--color-text-muted);margin:8px 0 0}
+.book-card .find{margin-top:16px;padding-top:14px;border-top:1px solid var(--color-border)}
+.book-card .find h4{font-family:var(--font-body);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.75rem;color:var(--color-text-muted);margin:0 0 8px}
+.book-card .find a{display:inline-flex;align-items:center;gap:6px;color:var(--color-primary-strong);text-decoration:none;font-size:.9375rem;padding:4px 0}
+.book-card .find a:hover{text-decoration:underline}
+.book-card .find svg{width:16px;height:16px}
+
+/* footer */
+.site-footer{background:var(--color-footer);color:var(--color-on-footer);border-top:2px solid var(--color-primary);margin-top:64px}
+.site-footer .inner{max-width:var(--shell);margin:0 auto;padding:56px 48px 44px}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.footer-grid h5{font-family:var(--font-body);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.8125rem;color:rgb(244 237 225 / .7);margin:0 0 12px}
+.footer-grid a{display:flex;align-items:center;gap:8px;color:rgb(244 237 225 / .88);text-decoration:none;padding:5px 0;font-size:.9375rem}
+.footer-grid a:hover{color:#fff;text-decoration:underline}
+.footer-grid svg{width:20px;height:20px}
+.footer-bottom{border-top:1px solid rgb(244 237 225 / .18);margin-top:36px;padding-top:20px;color:rgb(244 237 225 / .8);font-size:.875rem}
+
+@media(max-width:1024px){
+  .article-wrap{grid-template-columns:1fr;max-width:var(--measure)}
+  .book-aside{position:static;order:-1;margin-bottom:8px}
+  .book-card{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:start}
+  .book-card .cover{margin:0}
+  .book-card .find{grid-column:1 / -1}
+}
+@media(max-width:768px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){
+  .nav,.langswitch{display:none}.menu-btn{display:inline-flex;align-items:center;justify-content:center}
+  .site-header .bar,.article-head,.article-wrap,.site-footer .inner{padding-left:20px;padding-right:20px}
+  h1.title{font-size:2.125rem}.footer-grid{grid-template-columns:1fr}
+  .book-card{grid-template-columns:96px 1fr}
+}
+@media(prefers-reduced-motion:reduce){.reveal{animation:none}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16M4 6h16M4 18h16"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></symbol>
+  <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17z"/><path d="m10 15 5-3-5-3z"/></symbol>
+</svg>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="wordmark" href="#">Dalibor Plečić</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#">Дома</a><a href="#">За мене</a><a href="#" aria-current="page">Рецензии</a><a href="#">Блог</a><a href="#">Книга</a><a href="#">Контакт</a>
+    </nav>
+    <nav class="langswitch" aria-label="Language">
+      <span aria-current="true">MK</span><span class="sep">·</span><a href="#">EN</a><span class="sep">·</span><a href="#">SR</a>
+    </nav>
+    <button class="menu-btn" aria-label="Open menu" aria-expanded="false"><svg class="i" style="width:24px;height:24px"><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+
+<main>
+  <div class="article-head reveal d1">
+    <div class="inner">
+      <a class="backlink" href="#"><svg class="i"><use href="#i-arrow-left"/></svg> Назад кон рецензии</a>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="#">Дома</a><span class="sep">/</span><a href="#">Рецензии</a><span class="sep">/</span><span class="cur" aria-current="page">Есеј за ноќта</span>
+      </nav>
+      <h1 class="title">Есеј за ноќта</h1>
+      <hr class="dbl">
+      <p style="margin:0"><span class="metaline">15 мај 2024 · 7 мин читање</span><span class="avail"> · Достапно на: <b>MK</b> · EN</span></p>
+    </div>
+  </div>
+
+  <div class="article-wrap">
+    <article class="article-body reveal d2">
+      <p>Во секоја книга за ноќта има еден миг кога текстот престанува да опишува и почнува да слуша. Кај Марко Погачар тој миг доаѓа рано — пред читателот да стигне да се навикне на темнината, гласот веќе е таму, тивок и буден.</p>
+
+      <p>„Есеј за ноќта" не е книга за спиењето. Таа е за будноста што доаѓа кога другите спијат — за мислата што се продолжува таму каде што денот ја прекинал. Погачар пишува со ритам што бара да се чита бавно, речиси на глас, како некој да ви чита покрај прозорец.</p>
+
+      <blockquote class="pullquote">„Ноќта не е отсуство на светлина — таа е присуство на сè што денот го одложил."</blockquote>
+
+      <p>Она што ме задржа најдолго е начинот на кој авторот ја држи дистанцата без да изгуби нежност. Лесно е да се пишува за ноќта патетично; потешко е да ѝ се пристапи со трезвеност, а сепак да остане место за тивкото чудење. Тука лежи вредноста на оваа книга.</p>
+
+      <div class="translated" lang="en">
+        <p class="lbl">From the book · English</p>
+        <p>"The night is not the absence of light — it is the presence of everything the day has postponed."</p>
+      </div>
+
+      <p>Преводот, доколку некогаш стигне на македонски, ќе мора да го зачува токму тоа доцнење на смислата — паузата меѓу зборот и неговото значење. Се надевам дека некој ќе се осмели.</p>
+
+      <div class="foot-chips">
+        <a class="chip" href="#">меморија</a><a class="chip" href="#">поезија</a><a class="chip" href="#">ноќ</a><a class="chip" href="#">есеј</a>
+      </div>
+      <hr class="foot-rule">
+      <a class="backlink" href="#"><svg class="i"><use href="#i-arrow-left"/></svg> Назад кон рецензии</a>
+    </article>
+
+    <aside class="book-aside reveal d2" aria-label="За книгата">
+      <div class="book-card">
+        <div class="cover" role="img" aria-label="Корица на книгата „Есеј за ноќта“"></div>
+        <div>
+          <p class="eyebrow">Рецензирана книга</p>
+          <h3>Есеј за ноќта</h3>
+          <div class="latin">Esej o noći</div>
+          <p class="by">Марко Погачар · 2023</p>
+        </div>
+        <div class="find">
+          <h4>Каде да се најде</h4>
+          <a href="#"><svg class="i"><use href="#i-ext"/></svg> kupikniga.mk</a><br>
+          <a href="#"><svg class="i"><use href="#i-ext"/></svg> Кај издавачот</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-grid">
+      <div><h5>Контакт</h5><a href="#"><svg class="i"><use href="#i-mail"/></svg> dalibor@primer.mk</a></div>
+      <div><h5>Социјални мрежи</h5><a href="#"><svg class="i"><use href="#i-instagram"/></svg> Instagram</a><a href="#"><svg class="i"><use href="#i-facebook"/></svg> Facebook</a></div>
+      <div><h5>Пишување</h5><a href="#"><svg class="i"><use href="#i-ext"/></svg> Booksa</a><a href="#"><svg class="i"><use href="#i-ext"/></svg> Versopolis</a><a href="#"><svg class="i"><use href="#i-ext"/></svg> Partizanska knjiga</a></div>
+      <div><h5>Интервјуа</h5><a href="#"><svg class="i"><use href="#i-youtube"/></svg> YouTube / TV</a></div>
+    </div>
+    <div class="footer-bottom">© 2026 Далибор Плечиќ · Dalibor Plečić</div>
+  </div>
+</footer>
+
+</body>
+</html>

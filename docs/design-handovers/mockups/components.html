@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hardcover — Components (kitchen sink)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   STYLE A · "HARDCOVER" — design tokens (mirrors the .md handover)
+   ============================================================ */
+:root{
+  --font-display:"Playfair Display",Georgia,"Times New Roman",serif;
+  --font-body:"Lora",Georgia,"Times New Roman",serif;
+
+  --color-bg:#F4EDE1; --color-surface:#EBE0CE;
+  --color-text:#2E2218; --color-text-muted:#6F5D46;
+  --color-primary:#A87437; --color-primary-strong:#875621; --color-primary-hover:#5B4228;
+  --color-on-primary:#FBF7EF; --color-footer:#5B4228; --color-on-footer:#F4EDE1;
+  --color-border:rgb(46 34 24 / .12); --color-border-strong:#82745F;
+  --color-focus:#875621; --color-error:#8F3526;
+
+  --radius-image:.375rem; --radius-button:.625rem; --radius-input:.625rem; --radius-card:.875rem; --radius-pill:9999px;
+  --shadow-card:0 1px 2px rgb(46 34 24 / .04),0 6px 18px rgb(46 34 24 / .06);
+  --shadow-card-hover:0 2px 4px rgb(46 34 24 / .06),0 14px 30px rgb(46 34 24 / .11);
+  --shadow-cover:0 2px 6px rgb(46 34 24 / .12),0 14px 32px rgb(46 34 24 / .18);
+  --measure:42rem; --shell:70rem;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);
+  font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;color:var(--color-text)}
+p{margin:0 0 1em}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* page chrome for the spec sheet */
+.wrap{max-width:var(--shell);margin:0 auto;padding:40px 48px 96px}
+.sheet-head{border-bottom:1px solid var(--color-border);padding-bottom:24px;margin-bottom:8px}
+.kicker{font-family:var(--font-body);font-weight:600;text-transform:uppercase;letter-spacing:.08em;
+  font-size:.8125rem;color:var(--color-primary-strong)}
+.spec-section{padding:48px 0;border-bottom:1px solid var(--color-border)}
+.spec-section>h2{font-size:2rem;line-height:1.2;letter-spacing:-.005em;font-weight:600;margin-bottom:4px}
+.spec-note{color:var(--color-text-muted);font-size:.9375rem;max-width:var(--measure);margin-bottom:28px}
+.statelabel{font-family:var(--font-body);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--color-text-muted);margin:0 0 10px}
+.row{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.col{display:flex;flex-direction:column;gap:8px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px}
+.card-demo{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-card);padding:20px}
+@media(max-width:640px){.wrap{padding:28px 20px 72px}.spec-section>h2{font-size:1.625rem}}
+
+/* ---------- swatches ---------- */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.sw{border:1px solid var(--color-border);border-radius:12px;overflow:hidden;background:#fff}
+.sw .chip-c{height:64px}
+.sw .meta{padding:8px 10px;font-size:.78rem;line-height:1.35}
+.sw .name{font-weight:600}
+.sw .hex{color:var(--color-text-muted);font-variant-numeric:tabular-nums}
+
+/* ---------- typography proof ---------- */
+.type-row{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:baseline;padding:10px 0;border-top:1px dashed var(--color-border)}
+.type-row .tag{font-size:.75rem;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em}
+.t-display{font-family:var(--font-display);font-weight:700;font-size:3.75rem;line-height:1.05;letter-spacing:-.015em}
+.t-h1{font-family:var(--font-display);font-weight:700;font-size:2.75rem;line-height:1.12;letter-spacing:-.01em}
+.t-h2{font-family:var(--font-display);font-weight:600;font-size:2rem;line-height:1.2;letter-spacing:-.005em}
+.t-h3{font-family:var(--font-display);font-weight:600;font-size:1.5rem;line-height:1.25}
+.t-h4{font-family:var(--font-display);font-weight:600;font-size:1.25rem;line-height:1.3}
+.t-body-lg{font-size:1.25rem;line-height:1.65}
+.t-body{font-size:1.125rem;line-height:1.7}
+.t-meta{font-weight:500;font-size:.9375rem;line-height:1.5;letter-spacing:.01em;color:var(--color-text-muted)}
+.t-caption{font-style:italic;font-size:.875rem;color:var(--color-text-muted)}
+.t-eyebrow{font-weight:600;text-transform:uppercase;letter-spacing:.08em;font-size:.8125rem;color:var(--color-primary-strong)}
+@media(max-width:640px){
+  .t-display{font-size:2.5rem}.t-h1{font-size:2.125rem}.t-h2{font-size:1.625rem}.t-h3{font-size:1.375rem}.t-h4{font-size:1.1875rem}
+  .type-row{grid-template-columns:1fr}
+}
+
+/* ---------- drop cap ---------- */
+.dropcap{max-width:var(--measure)}
+.dropcap p::first-letter{font-family:var(--font-display);font-weight:700;color:var(--color-primary);
+  float:left;font-size:3.5em;line-height:.78;padding-right:.08em;margin-top:.02em}
+
+/* ---------- buttons ---------- */
+.btn{font-family:var(--font-body);font-weight:500;font-size:1rem;letter-spacing:.02em;
+  display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;border-radius:var(--radius-button);
+  border:1.5px solid transparent;cursor:pointer;text-decoration:none;line-height:1;
+  transition:background .16s,transform .16s,box-shadow .16s,border-color .16s}
+.btn.sm{height:36px;padding:0 14px;font-size:.9375rem}
+.btn-primary{background:var(--color-primary-strong);color:var(--color-on-primary)}
+.btn-primary:hover,.btn-primary.-hover{background:var(--color-primary-hover);transform:translateY(-1px)}
+.btn-primary:active,.btn-primary.-active{background:#4A351F;transform:none}
+.btn-primary.-disabled{background:var(--color-surface);color:var(--color-text-muted);cursor:not-allowed;pointer-events:none}
+.btn-secondary{background:transparent;border-color:var(--color-primary);color:var(--color-primary-strong)}
+.btn-secondary:hover,.btn-secondary.-hover{background:rgb(168 116 55 / .14);border-color:var(--color-primary-strong)}
+.btn-secondary:active,.btn-secondary.-active{background:rgb(168 116 55 / .2)}
+.btn-quiet{background:transparent;color:var(--color-primary-strong);padding:0 8px}
+.btn-quiet:hover,.btn-quiet.-hover{text-decoration:underline;background:rgb(168 116 55 / .08)}
+.btn:focus-visible,.btn.-focus{outline:2px solid var(--color-focus);outline-offset:2px}
+
+/* ---------- inline link ---------- */
+.prose-link{color:var(--color-primary-strong);text-underline-offset:.12em;text-decoration-thickness:1px}
+.prose-link:hover,.prose-link.-hover{color:var(--color-primary-hover);text-decoration-thickness:2px}
+.prose-link.-visited{color:var(--color-primary-hover)}
+.prose-link:focus-visible,.prose-link.-focus{outline:2px solid var(--color-focus);outline-offset:2px;border-radius:2px}
+
+/* ---------- language switcher ---------- */
+.langswitch{display:inline-flex;align-items:center;gap:0;font-weight:500;font-size:.9375rem}
+.langswitch a,.langswitch span{padding:6px 8px;color:var(--color-text-muted);text-decoration:none;border-radius:6px}
+.langswitch a:hover{color:var(--color-text)}
+.langswitch [aria-current="true"]{color:var(--color-text);font-weight:600}
+.langswitch .sep{color:var(--color-border-strong);padding:0;pointer-events:none}
+.langswitch a:focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}
+
+/* ---------- chips ---------- */
+.chip{display:inline-flex;align-items:center;height:28px;padding:0 12px;border-radius:var(--radius-pill);
+  border:1px solid var(--color-primary);color:var(--color-primary-strong);background:transparent;
+  font-weight:600;font-size:.8125rem;text-decoration:none}
+button.chip{cursor:pointer;font-family:var(--font-body)}
+button.chip:hover,.chip.-hover{background:rgb(168 116 55 / .12)}
+.chip.-active{background:rgb(168 116 55 / .16);border-width:1.5px}
+.chip:focus-visible{outline:2px solid var(--color-focus);outline-offset:2px}
+
+/* ---------- cover + placeholder ---------- */
+.cover{aspect-ratio:2/3;border-radius:var(--radius-image);box-shadow:var(--shadow-cover);object-fit:cover;display:block;background:#cbb9a0}
+.cover-ph{aspect-ratio:2/3;border-radius:var(--radius-image);box-shadow:var(--shadow-cover);
+  background:var(--color-surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  border:1px solid var(--color-border);position:relative}
+.cover-ph::after{content:"";position:absolute;inset:6px;border:1px solid var(--color-border);border-radius:3px}
+.cover-ph .mono{font-family:var(--font-display);font-weight:700;font-size:2rem;color:var(--color-text-muted)}
+.cover-ph svg{color:var(--color-text-muted);width:26px;height:26px}
+
+/* ---------- review card ---------- */
+.review-card{display:flex;gap:18px;background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-card);box-shadow:var(--shadow-card);padding:20px;text-decoration:none;color:inherit;
+  transition:transform .2s,box-shadow .2s;max-width:640px}
+.review-card:hover,.review-card.-hover{transform:translateY(-2px);box-shadow:var(--shadow-card-hover)}
+.review-card:hover .rc-title,.review-card.-hover .rc-title{color:var(--color-primary-strong)}
+.review-card:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
+.review-card .cover,.review-card .cover-ph{width:132px;flex:none}
+.rc-body{display:flex;flex-direction:column;gap:7px;min-width:0}
+.rc-title{font-family:var(--font-display);font-weight:600;font-size:1.25rem;line-height:1.3;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rc-meta{font-weight:500;font-size:.9375rem;color:var(--color-text-muted);letter-spacing:.01em}
+.rc-excerpt{font-size:1rem;color:var(--color-text-muted);margin:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rc-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+@media(max-width:420px){
+  .review-card{flex-direction:column}
+  .review-card .cover,.review-card .cover-ph{width:100%;max-width:140px}
+}
+/* forced narrow demo */
+.narrow{max-width:340px;border:1px dashed var(--color-border-strong);padding:12px;border-radius:12px}
+.narrow .review-card{flex-direction:column;max-width:none}
+.narrow .review-card .cover,.narrow .review-card .cover-ph{width:100%;max-width:140px}
+
+/* ---------- blog card ---------- */
+.blog-card{display:flex;gap:16px;align-items:flex-start;background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-card);box-shadow:var(--shadow-card);padding:18px 20px;text-decoration:none;color:inherit;max-width:640px;
+  transition:transform .2s,box-shadow .2s}
+.blog-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-card-hover)}
+.blog-thumb{width:72px;height:72px;border-radius:var(--radius-image);object-fit:cover;flex:none;background:#cbb9a0}
+.bc-title{font-family:var(--font-display);font-weight:600;font-size:1.25rem;line-height:1.3}
+.bc-meta{font-weight:500;font-size:.9375rem;color:var(--color-text-muted)}
+.bc-excerpt{font-size:1rem;color:var(--color-text-muted);margin:.35em 0 0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ---------- search box ---------- */
+.searchbox{position:relative;max-width:560px}
+.searchbox input{width:100%;height:48px;border-radius:var(--radius-input);border:1px solid var(--color-border-strong);
+  background:var(--color-bg);font-family:var(--font-body);font-size:1.0625rem;color:var(--color-text);
+  padding:0 44px 0 44px}
+.searchbox input::placeholder{color:var(--color-text-muted)}
+.searchbox .lead{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--color-text-muted)}
+.searchbox .trail{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--color-primary-strong)}
+.searchbox input:focus,.searchbox input.-focus{outline:none;border:2px solid var(--color-primary);
+  box-shadow:0 0 0 3px rgb(168 116 55 / .18);padding:0 43px}
+.search-help{font-size:.875rem;color:var(--color-text-muted);margin:8px 2px 0}
+.search-help em{color:var(--color-primary-strong);font-style:italic}
+.results-head{display:flex;align-items:center;gap:10px;color:var(--color-text-muted);font-size:.9375rem;margin:6px 0 14px}
+.results-head b{color:var(--color-text)}
+.results-head .clear{margin-left:auto;display:inline-flex;align-items:center;gap:4px;color:var(--color-primary-strong);
+  background:none;border:none;cursor:pointer;font-family:var(--font-body);font-size:.9375rem}
+.empty{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-card);
+  padding:36px;text-align:center;max-width:560px}
+.empty svg{width:36px;height:36px;color:var(--color-text-muted)}
+.empty h4{font-size:1.25rem;margin:12px 0 6px}
+.empty p{color:var(--color-text-muted);margin:0 0 16px}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
+.spin{animation:spin 1s linear infinite}
+.skeleton{height:14px;border-radius:6px;background:linear-gradient(90deg,rgb(46 34 24 / .06),rgb(46 34 24 / .12),rgb(46 34 24 / .06));}
+
+/* ---------- forms ---------- */
+.field{display:flex;flex-direction:column;gap:6px;max-width:560px;margin-bottom:20px}
+.field label{font-weight:500;font-size:.9375rem}
+.field input,.field textarea{font-family:var(--font-body);font-size:1.0625rem;color:var(--color-text);
+  background:var(--color-bg);border:1px solid var(--color-border-strong);border-radius:var(--radius-input);padding:12px 14px}
+.field textarea{min-height:140px;resize:vertical}
+.field input:focus,.field textarea:focus,.field .-focus{outline:none;border:2px solid var(--color-primary);
+  box-shadow:0 0 0 3px rgb(168 116 55 / .18);padding:11px 13px}
+.field .help{font-size:.875rem;color:var(--color-text-muted)}
+.field.error input,.field.error textarea{border-color:var(--color-error);border-width:2px;padding:11px 13px}
+.field .err{font-size:.875rem;color:var(--color-error);display:flex;gap:6px;align-items:center}
+.form-success{display:flex;gap:12px;align-items:flex-start;background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-card);padding:18px 20px;max-width:560px}
+.form-success svg{color:var(--color-primary-strong);width:24px;height:24px;flex:none;margin-top:2px}
+
+/* ---------- pull quote / blockquote ---------- */
+.pullquote{font-family:var(--font-display);font-style:italic;font-weight:500;font-size:1.5rem;line-height:1.4;
+  border-left:3px solid var(--color-primary);padding-left:24px;margin:24px 0;max-width:var(--measure);color:var(--color-text)}
+.pullquote .attr{display:block;font-family:var(--font-body);font-style:normal;font-weight:500;
+  font-size:.9375rem;color:var(--color-text-muted);margin-top:10px}
+
+/* ---------- meta / badge / breadcrumb / eyebrow / rule / backlink / load more ---------- */
+.meta-line{font-weight:500;font-size:.9375rem;color:var(--color-text-muted);letter-spacing:.01em}
+.avail{font-weight:500;font-size:.875rem;color:var(--color-text-muted)}
+.avail b{color:var(--color-text)}
+.breadcrumb{font-weight:500;font-size:.9375rem}
+.breadcrumb a{color:var(--color-primary-strong);text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb .sep{color:var(--color-border-strong);padding:0 8px}
+.breadcrumb .cur{color:var(--color-text-muted)}
+.double-rule{max-width:var(--measure);height:0;border:0;margin:18px 0;
+  border-top:2px solid var(--color-primary);position:relative}
+.double-rule::after{content:"";position:absolute;left:0;right:0;top:3px;border-top:1px solid var(--color-border)}
+.backlink{display:inline-flex;align-items:center;gap:6px;color:var(--color-primary-strong);text-decoration:none;
+  font-weight:500;font-size:.9375rem}
+.backlink:hover{color:var(--color-primary-hover);text-decoration:underline}
+.backlink svg{width:18px;height:18px}
+.loadmore-end{color:var(--color-text-muted);font-style:italic;text-align:center}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;max-width:var(--shell)}
+.section-head .seeall{color:var(--color-primary-strong);text-decoration:none;font-weight:500;font-size:.9375rem;white-space:nowrap}
+.section-head .seeall:hover{text-decoration:underline}
+
+/* ---------- footer ---------- */
+.site-footer{background:var(--color-footer);color:var(--color-on-footer);border-top:2px solid var(--color-primary)}
+.site-footer .inner{max-width:var(--shell);margin:0 auto;padding:64px 48px 48px}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.footer-grid h5{font-family:var(--font-body);font-weight:600;text-transform:uppercase;letter-spacing:.06em;
+  font-size:.8125rem;color:rgb(244 237 225 / .7);margin:0 0 12px}
+.footer-grid a{display:inline-flex;align-items:center;gap:8px;color:rgb(244 237 225 / .88);text-decoration:none;
+  padding:5px 0;font-size:.9375rem}
+.footer-grid a:hover{color:#fff;text-decoration:underline}
+.footer-grid a:focus-visible{outline:2px solid #F4EDE1;outline-offset:2px;border-radius:3px}
+.footer-bottom{border-top:1px solid rgb(244 237 225 / .18);margin-top:36px;padding-top:20px;
+  color:rgb(244 237 225 / .8);font-size:.875rem}
+@media(max-width:768px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.footer-grid{grid-template-columns:1fr}.site-footer .inner{padding:48px 20px 40px}}
+</style>
+</head>
+<body>
+
+<!-- icon sprite (Lucide, MIT) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16M4 6h16M4 18h16"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></symbol>
+  <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17z"/><path d="m10 15 5-3-5-3z"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-loader" viewBox="0 0 24 24"><line x1="12" x2="12" y1="2" y2="6"/><line x1="12" x2="12" y1="18" y2="22"/><line x1="4.93" x2="7.76" y1="4.93" y2="7.76"/><line x1="16.24" x2="19.07" y1="16.24" y2="19.07"/><line x1="2" x2="6" y1="12" y2="12"/><line x1="18" x2="22" y1="12" y2="12"/><line x1="4.93" x2="7.76" y1="19.07" y2="16.24"/><line x1="16.24" x2="19.07" y1="7.76" y2="4.93"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header class="sheet-head">
+    <p class="kicker">Style A · Hardcover</p>
+    <h1 class="t-h1">Component kitchen sink</h1>
+    <p class="spec-note">Every component in its states, in <b>Cyrillic and Latin</b>. Colours, type and spacing are the locked tokens. The <code>.md</code> handover is the source of truth.</p>
+  </header>
+
+  <!-- 1. COLOUR -->
+  <section class="spec-section">
+    <h2>1 · Colour tokens</h2>
+    <p class="spec-note">One accent (caramel), darkened to deep-caramel where it must carry text. All pairs meet WCAG 2.2 AA.</p>
+    <div class="swatches">
+      <div class="sw"><div class="chip-c" style="background:#F4EDE1"></div><div class="meta"><div class="name">bg · Cream</div><div class="hex">#F4EDE1</div></div></div>
+      <div class="sw"><div class="chip-c" style="background:#EBE0CE"></div><div class="meta"><div class="name">surface · Parchment</div><div class="hex">#EBE0CE</div></div></div>
+      <div class="sw"><div class="chip-c" style="background:#2E2218"></div><div class="meta"><div class="name">text · Espresso</div><div class="hex">#2E2218</div></div></div>
+      <div class="sw"><div class="chip-c" style="background:#6F5D46"></div><div class="meta"><div class="name">text-muted</div><div class="hex">#6F5D46</div></div></div>
+      <div class="sw"><div class="chip-c" style="background:#A87437"></div><div class="meta"><div class="name">primary · Caramel</div><div class="hex">#A87437</div></div></div>
+      <div class="sw"><div class="chip-c" style="background:#875621"></div><div class="meta"><div class="name">primary-strong</div><div class="hex">#875621</div></div></div>
+      <div class="sw"><div class="chip-c" style="background:#5B4228"></div><div class="meta"><div class="name">walnut · hover/footer</div><div class="hex">#5B4228</div></div></div>
+      <div class="sw"><div class="chip-c" style="background:#82745F"></div><div class="meta"><div class="name">border-strong</div><div class="hex">#82745F</div></div></div>
+    </div>
+  </section>
+
+  <!-- 2. TYPOGRAPHY -->
+  <section class="spec-section">
+    <h2>2 · Typography</h2>
+    <p class="spec-note">Playfair Display (headings) · Lora (body). Each role shown in both scripts.</p>
+    <div class="type-row"><span class="tag">Display 60/40</span><div><div class="t-display">Книга</div><div class="t-display">Book</div></div></div>
+    <div class="type-row"><span class="tag">H1 44/34</span><div><div class="t-h1">Рецензии</div><div class="t-h1">Reviews</div></div></div>
+    <div class="type-row"><span class="tag">H2 32/26</span><div><div class="t-h2">Најнови рецензии</div><div class="t-h2">Latest reviews</div></div></div>
+    <div class="type-row"><span class="tag">H3 24/22</span><div><div class="t-h3">Есеј за ноќта</div><div class="t-h3">Esej o noći</div></div></div>
+    <div class="type-row"><span class="tag">H4 / card</span><div><div class="t-h4">Свијет кој сум го избрала</div><div class="t-h4">Svijet koji sam izabrala</div></div></div>
+    <div class="type-row"><span class="tag">Body-Large</span><div><p class="t-body-lg" style="margin:0">Книгата е тивок разговор меѓу писателот и читателот.</p><p class="t-body-lg" style="margin:.2em 0 0">A book is a quiet conversation between writer and reader.</p></div></div>
+    <div class="type-row"><span class="tag">Body 18</span><div style="max-width:42rem"><p class="t-body" style="margin:0">Тој пишува внимателно, без брзање — секоја реченица чека да биде прочитана двапати.</p><p class="t-body" style="margin:.4em 0 0">He writes carefully, without hurry — each sentence waits to be read twice.</p></div></div>
+    <div class="type-row"><span class="tag">Meta · Caption · Eyebrow</span><div class="col"><span class="t-meta">мај 2024 · 6 мин читање</span><span class="t-caption">Фотографија: лична архива — Photograph: personal archive</span><span class="t-eyebrow">Од блогот · From the blog</span></div></div>
+  </section>
+
+  <!-- 3. DROP CAP -->
+  <section class="spec-section">
+    <h2>3 · Drop cap</h2>
+    <p class="spec-note">CSS <code>::first-letter</code> only — DOM text is intact for screen readers. Works in Cyrillic and Latin.</p>
+    <div class="grid2">
+      <div class="dropcap"><p class="t-body">Во почетокот на секоја книга постои тишина — миг пред првиот збор, кога сè е сè уште можно. Тој миг го носам со себе секогаш кога седнувам да пишувам за туѓ текст.</p></div>
+      <div class="dropcap"><p class="t-body">At the beginning of every book there is a silence — the moment before the first word, when everything is still possible. I carry that moment whenever I sit to write about someone else's text.</p></div>
+    </div>
+  </section>
+
+  <!-- 4. BUTTONS -->
+  <section class="spec-section">
+    <h2>4 · Buttons</h2>
+    <p class="spec-note">Primary fill is deep-caramel so the label clears 4.5:1 at any size. Hover → walnut.</p>
+    <p class="statelabel">Primary — default / hover / active / disabled / focus</p>
+    <div class="row" style="margin-bottom:28px">
+      <a class="btn btn-primary" href="#">Прочитај повеќе</a>
+      <span class="btn btn-primary -hover">Read more</span>
+      <span class="btn btn-primary -active">Read more</span>
+      <span class="btn btn-primary -disabled">Read more</span>
+      <span class="btn btn-primary -focus">Read more</span>
+    </div>
+    <p class="statelabel">Secondary (outline) — default / hover / active / focus</p>
+    <div class="row" style="margin-bottom:28px">
+      <a class="btn btn-secondary" href="#">Сите рецензии</a>
+      <span class="btn btn-secondary -hover">All reviews</span>
+      <span class="btn btn-secondary -active">All reviews</span>
+      <span class="btn btn-secondary -focus">All reviews</span>
+    </div>
+    <p class="statelabel">Quiet / text — default / hover · small size</p>
+    <div class="row">
+      <a class="btn btn-quiet" href="#">Вчитај повеќе</a>
+      <span class="btn btn-quiet -hover">Load more</span>
+      <a class="btn btn-secondary sm" href="#">Small</a>
+      <a class="btn btn-primary sm" href="#">Small primary</a>
+    </div>
+  </section>
+
+  <!-- 5. LINKS + LANG -->
+  <section class="spec-section">
+    <h2>5 · Inline links &amp; language switcher</h2>
+    <p class="statelabel">Inline link — default / hover / visited / focus (always underlined in prose)</p>
+    <p class="t-body" style="max-width:42rem;margin-bottom:24px">
+      Read his <a class="prose-link" href="#">review of <i>Esej o noći</i></a>,
+      the <a class="prose-link -hover" href="#">hovered link</a>,
+      a <a class="prose-link -visited" href="#">visited link</a>, and
+      a <a class="prose-link -focus" href="#">focused link</a>. На македонски: <a class="prose-link" href="#">види ја целата архива</a>.
+    </p>
+    <p class="statelabel">Language switcher — MK · EN · SR (active = espresso/bold, aria-current)</p>
+    <nav class="langswitch" aria-label="Language">
+      <span aria-current="true">MK</span><span class="sep">·</span>
+      <a href="#">EN</a><span class="sep">·</span>
+      <a href="#">SR</a>
+    </nav>
+  </section>
+
+  <!-- 6. CHIPS -->
+  <section class="spec-section">
+    <h2>6 · Topic chips</h2>
+    <p class="spec-note">Caramel-outline pills. Decorative on cards (span); interactive at article foot (button).</p>
+    <div class="row">
+      <span class="chip">меморија</span>
+      <span class="chip">егзил</span>
+      <span class="chip">јазик</span>
+      <button class="chip" type="button">memory</button>
+      <button class="chip -hover" type="button">exile (hover)</button>
+      <button class="chip -active" type="button" aria-pressed="true">language (active)</button>
+    </div>
+  </section>
+
+  <!-- 7. REVIEW CARD -->
+  <section class="spec-section">
+    <h2>7 · Review card — horizontal "library row"</h2>
+    <p class="spec-note">Cover left, text right. Hover lifts and tints the title. Stacks below 420px (right-hand demo).</p>
+    <div class="col" style="gap:18px;margin-bottom:24px">
+      <a class="review-card" href="#">
+        <div class="cover" role="img" aria-label="Cover" style="background:linear-gradient(150deg,#7b5230,#a87437)"></div>
+        <div class="rc-body">
+          <div class="rc-title">Есеј за ноќта</div>
+          <div class="rc-meta">Марко Погачар · мај 2024</div>
+          <p class="rc-excerpt">Погачар ја претвора ноќта во простор за мислење — книга што бара да се чита бавно, со внимание на секој здив меѓу зборовите.</p>
+          <div class="rc-chips"><span class="chip">меморија</span><span class="chip">поезија</span></div>
+        </div>
+      </a>
+      <a class="review-card -hover" href="#">
+        <div class="cover-ph"><svg class="i"><use href="#i-book"/></svg><span class="mono">B</span></div>
+        <div class="rc-body">
+          <div class="rc-title">Svijet koji sam izabrala</div>
+          <div class="rc-meta">Kalina Maleska · February 2024 · hovered</div>
+          <p class="rc-excerpt">A collection that asks what it means to choose a world — Maleska writes with quiet precision and a translator's ear. (Cover-placeholder shown.)</p>
+          <div class="rc-chips"><span class="chip">identity</span><span class="chip">language</span><span class="chip">+1</span></div>
+        </div>
+      </a>
+    </div>
+    <p class="statelabel">Mobile reflow (&lt; 420px) — cover on top, text below</p>
+    <div class="narrow">
+      <a class="review-card" href="#">
+        <div class="cover" role="img" aria-label="Cover" style="background:linear-gradient(150deg,#5b4228,#8a6a3a)"></div>
+        <div class="rc-body">
+          <div class="rc-title">Putovanja slijepih</div>
+          <div class="rc-meta">Rade Jarak · 2023</div>
+          <p class="rc-excerpt">Jarak's blind travellers move through a Europe half-remembered and half-invented.</p>
+          <div class="rc-chips"><span class="chip">memory</span><span class="chip">exile</span></div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 8. BLOG CARD -->
+  <section class="spec-section">
+    <h2>8 · Blog card</h2>
+    <p class="spec-note">Like the review row minus cover/chips; optional small thumbnail; date-ordered.</p>
+    <div class="col" style="gap:16px">
+      <a class="blog-card" href="#">
+        <div class="rc-body">
+          <div class="bc-title">Зошто препрочитувам</div>
+          <div class="bc-meta">12 април 2024 · 4 мин</div>
+          <p class="bc-excerpt">Препрочитувањето не е враќање назад — тоа е нов влез во истата книга, со поинакви очи.</p>
+        </div>
+      </a>
+      <a class="blog-card" href="#">
+        <div class="blog-thumb" role="img" aria-label="Thumbnail" style="background:linear-gradient(150deg,#a87437,#5b4228)"></div>
+        <div class="rc-body">
+          <div class="bc-title">On translating silence</div>
+          <div class="bc-meta">3 March 2024 · 6 min</div>
+          <p class="bc-excerpt">Some sentences resist every language equally. A note on the spaces a translator must leave intact.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- 9. SEARCH -->
+  <section class="spec-section">
+    <h2>9 · Topic-search box</h2>
+    <p class="statelabel">Idle</p>
+    <div class="searchbox" style="margin-bottom:6px">
+      <span class="lead"><svg class="i"><use href="#i-search"/></svg></span>
+      <input type="search" placeholder="Пребарувај рецензии по тема…" aria-label="Search reviews by topic">
+    </div>
+    <p class="search-help">Обиди се со тема — на пр. <em>меморија</em>, <em>егзил</em>, <em>јазик</em>.</p>
+
+    <p class="statelabel" style="margin-top:28px">Focused</p>
+    <div class="searchbox" style="margin-bottom:28px">
+      <span class="lead" style="color:#2E2218"><svg class="i"><use href="#i-search"/></svg></span>
+      <input class="-focus" type="search" value="меморија" aria-label="Search reviews by topic">
+    </div>
+
+    <p class="statelabel">Loading (meaning-search running)</p>
+    <div class="searchbox" style="margin-bottom:14px">
+      <span class="lead"><svg class="i"><use href="#i-search"/></svg></span>
+      <input type="search" value="exile" aria-label="Search reviews by topic">
+      <span class="trail"><svg class="i spin"><use href="#i-loader"/></svg></span>
+    </div>
+    <div class="card-demo" style="max-width:560px;display:flex;gap:18px;align-items:center">
+      <div style="width:96px;height:144px;border-radius:6px" class="skeleton"></div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:10px">
+        <div class="skeleton" style="width:70%;height:18px"></div>
+        <div class="skeleton" style="width:40%"></div>
+        <div class="skeleton" style="width:100%"></div>
+        <div class="skeleton" style="width:85%"></div>
+      </div>
+    </div>
+
+    <p class="statelabel" style="margin-top:28px">Results header</p>
+    <div class="results-head" style="max-width:560px">
+      Showing reviews about <b>“exile”</b>
+      <button class="clear">Clear <svg class="i" style="width:16px;height:16px"><use href="#i-x"/></svg></button>
+    </div>
+
+    <p class="statelabel">Empty / no results (never looks broken)</p>
+    <div class="empty">
+      <svg class="i"><use href="#i-book"/></svg>
+      <h4>Nothing on that theme — yet</h4>
+      <p>Немаме рецензија на таа тема. Обиди се со друг збор, или прелистај ги сите.</p>
+      <button class="btn btn-secondary" type="button">Clear search · Исчисти</button>
+    </div>
+  </section>
+
+  <!-- 10. FORMS -->
+  <section class="spec-section">
+    <h2>10 · Form controls (Contact)</h2>
+    <div class="field">
+      <label for="n">Име · Name</label>
+      <input id="n" type="text" placeholder="Вашето име">
+      <span class="help">So he knows who he's writing back to.</span>
+    </div>
+    <div class="field">
+      <label for="e">Е-пошта · Email</label>
+      <input id="e" type="email" value="ime@primer.mk" class="-focus">
+    </div>
+    <div class="field error">
+      <label for="e2">Е-пошта · Email (error state)</label>
+      <input id="e2" type="email" value="ime@" aria-invalid="true" aria-describedby="e2err">
+      <span class="err" id="e2err"><svg class="i" style="width:16px;height:16px"><use href="#i-x"/></svg> Внесете важечка адреса — Please enter a valid email.</span>
+    </div>
+    <div class="field">
+      <label for="m">Порака · Message</label>
+      <textarea id="m" placeholder="Напишете порака…"></textarea>
+    </div>
+    <a class="btn btn-primary" href="#">Испрати · Send</a>
+    <p class="statelabel" style="margin-top:28px">Success</p>
+    <div class="form-success">
+      <svg class="i"><use href="#i-check"/></svg>
+      <div><b>Ви благодарам.</b> Your message is on its way — thank you for writing.</div>
+    </div>
+  </section>
+
+  <!-- 11. QUOTE / META / MISC -->
+  <section class="spec-section">
+    <h2>11 · Pull-quote, meta, breadcrumb, rules</h2>
+    <blockquote class="pullquote">
+      „Критиката е форма на внимание — начин да се остане со книгата подолго."
+      <span class="attr">— Далибор Плечиќ</span>
+    </blockquote>
+    <p class="meta-line" style="margin-bottom:6px">15 мај 2024 · 7 мин читање</p>
+    <p class="avail" style="margin-bottom:20px">Достапно на: <b>MK</b> · EN</p>
+    <nav class="breadcrumb" aria-label="Breadcrumb" style="margin-bottom:18px">
+      <a href="#">Дома</a><span class="sep">/</span><a href="#">Рецензии</a><span class="sep">/</span><span class="cur" aria-current="page">Есеј за ноќта</span>
+    </nav>
+    <hr class="double-rule">
+    <a class="backlink" href="#" style="margin-top:18px"><svg class="i"><use href="#i-arrow-left"/></svg> Назад кон рецензии · Back to Reviews</a>
+    <div class="section-head" style="margin-top:32px">
+      <div><p class="t-eyebrow">Од блогот</p><h3 class="t-h2">From the blog</h3></div>
+      <a class="seeall" href="#">Сите објави →</a>
+    </div>
+    <p class="loadmore-end" style="margin-top:28px">You've reached the end · Стигнавте до крајот</p>
+  </section>
+
+  <!-- 12. COVER -->
+  <section class="spec-section">
+    <h2>12 · Book-cover component</h2>
+    <p class="spec-note">Consistent 2:3, subtle shadow. Graceful parchment placeholder with a Playfair monogram when no image.</p>
+    <div class="row" style="align-items:flex-end">
+      <div style="width:160px"><div class="cover" role="img" aria-label="Cover of Bunike" style="background:linear-gradient(160deg,#8a6a3a,#5b4228 70%)"></div></div>
+      <div style="width:160px"><div class="cover-ph"><svg class="i"><use href="#i-book"/></svg><span class="mono">Б</span></div></div>
+      <div style="width:160px"><div class="cover-ph"><svg class="i"><use href="#i-book"/></svg><span class="mono">B</span></div></div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-grid">
+      <div><h5>Контакт · Contact</h5>
+        <a href="#"><svg class="i"><use href="#i-mail"/></svg> dalibor@primer.mk</a></div>
+      <div><h5>Социјални · Social</h5>
+        <a href="#"><svg class="i"><use href="#i-instagram"/></svg> Instagram</a>
+        <a href="#"><svg class="i"><use href="#i-facebook"/></svg> Facebook</a></div>
+      <div><h5>Пишување · Writing</h5>
+        <a href="#"><svg class="i"><use href="#i-ext"/></svg> Booksa</a>
+        <a href="#"><svg class="i"><use href="#i-ext"/></svg> Versopolis</a>
+        <a href="#"><svg class="i"><use href="#i-ext"/></svg> Partizanska knjiga</a></div>
+      <div><h5>Интервјуа · Interviews</h5>
+        <a href="#"><svg class="i"><use href="#i-youtube"/></svg> YouTube / TV</a></div>
+    </div>
+    <div class="footer-bottom">© 2026 Далибор Плечиќ · Dalibor Plečić. Сите права задржани.</div>
+  </div>
+</footer>
+
+</body>
+</html>
