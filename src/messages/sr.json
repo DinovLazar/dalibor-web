@@ -13,7 +13,18 @@
     "comingSoon": "Ova stranica je u pripremi.",
     "availableIn": "Dostupno na: {langs}"
   },
-  "home": { "title": "Kritičar, prevodilac i pisac" },
+  "home": {
+    "title": "Kritičar, prevodilac i pisac",
+    "readReviews": "Čitaj kritike",
+    "featuredEyebrow": "Njegova knjiga",
+    "featuredCta": "O knjizi",
+    "latestEyebrow": "Najnovije",
+    "reviewsHeading": "Najnovije kritike",
+    "seeAllReviews": "Sve kritike",
+    "blogEyebrow": "Sa bloga",
+    "blogHeading": "Sa bloga",
+    "readBlog": "Na blog"
+  },
   "about": { "title": "O autoru" },
   "reviews": { "title": "Kritike" },
   "blog": { "title": "Blog" },

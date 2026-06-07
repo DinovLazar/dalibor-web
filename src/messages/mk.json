@@ -13,7 +13,18 @@
     "comingSoon": "Оваа страница допрва се подготвува.",
     "availableIn": "Достапно на: {langs}"
   },
-  "home": { "title": "Критичар, преведувач и писател" },
+  "home": {
+    "title": "Критичар, преведувач и писател",
+    "readReviews": "Читај критики",
+    "featuredEyebrow": "Неговата книга",
+    "featuredCta": "За книгата",
+    "latestEyebrow": "Најнови",
+    "reviewsHeading": "Најнови критики",
+    "seeAllReviews": "Сите критики",
+    "blogEyebrow": "Од блогот",
+    "blogHeading": "Од блогот",
+    "readBlog": "Кон блогот"
+  },
   "about": { "title": "За Далибор" },
   "reviews": { "title": "Критики" },
   "blog": { "title": "Блог" },

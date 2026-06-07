@@ -95,6 +95,8 @@ export type Author = {
   _rev: string;
   name?: LocalizedString;
   roles?: LocalizedString;
+  tagline?: LocalizedString;
+  heroIntro?: LocalizedText;
   photo?: LocalizedImage;
   shortBio?: LocalizedText;
   bio?: LocalizedBlockContent;
@@ -369,6 +371,58 @@ export type AUTHOR_QUERY_RESULT = {
   photo: LocalizedImage | null;
 } | null;
 
+// Source: src/sanity/lib/queries.ts
+// Variable: HOME_REVIEWS_QUERY
+// Query: *[_type == "review" && defined(slug.current)]    | order(coalesce(publishedAt, _createdAt) desc)[0...3]{    _id,    "slug": slug.current,    reviewTitle,    bookTitle,    bookAuthor,    excerpt,    coverImage,    publishedAt,    "topics": topics[]->{ _id, title }  }
+export type HOME_REVIEWS_QUERY_RESULT = Array<{
+  _id: string;
+  slug: string | null;
+  reviewTitle: LocalizedString | null;
+  bookTitle: LocalizedString | null;
+  bookAuthor: string | null;
+  excerpt: LocalizedText | null;
+  coverImage: LocalizedImage | null;
+  publishedAt: string | null;
+  topics: Array<{
+    _id: string;
+    title: LocalizedString | null;
+  }> | null;
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: HOME_POSTS_QUERY
+// Query: *[_type == "post" && defined(slug.current)]    | order(coalesce(publishedAt, _createdAt) desc)[0...3]{    _id,    "slug": slug.current,    title,    excerpt,    publishedAt  }
+export type HOME_POSTS_QUERY_RESULT = Array<{
+  _id: string;
+  slug: string | null;
+  title: LocalizedString | null;
+  excerpt: LocalizedText | null;
+  publishedAt: string | null;
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: HOME_FEATURED_BOOK_QUERY
+// Query: *[_type == "book"][0]{    _id,    title,    tagline,    coverImage,    publisher,    publicationYear  }
+export type HOME_FEATURED_BOOK_QUERY_RESULT = {
+  _id: string;
+  title: LocalizedString | null;
+  tagline: LocalizedString | null;
+  coverImage: LocalizedImage | null;
+  publisher: string | null;
+  publicationYear: number | null;
+} | null;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: HOME_HERO_QUERY
+// Query: *[_type == "author"][0]{    _id,    name,    tagline,    heroIntro,    photo  }
+export type HOME_HERO_QUERY_RESULT = {
+  _id: string;
+  name: LocalizedString | null;
+  tagline: LocalizedString | null;
+  heroIntro: LocalizedText | null;
+  photo: LocalizedImage | null;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -377,5 +431,9 @@ declare module "@sanity/client" {
     '\n  *[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    title,\n    excerpt,\n    publishedAt\n  }\n': POSTS_QUERY_RESULT;
     '\n  *[_type == "book"][0]{\n    _id,\n    title,\n    tagline,\n    genre,\n    coverImage,\n    publisher,\n    publicationYear\n  }\n': BOOK_QUERY_RESULT;
     '\n  *[_type == "author"][0]{\n    _id,\n    name,\n    roles,\n    shortBio,\n    photo\n  }\n': AUTHOR_QUERY_RESULT;
+    '\n  *[_type == "review" && defined(slug.current)]\n    | order(coalesce(publishedAt, _createdAt) desc)[0...3]{\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    excerpt,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, title }\n  }\n': HOME_REVIEWS_QUERY_RESULT;
+    '\n  *[_type == "post" && defined(slug.current)]\n    | order(coalesce(publishedAt, _createdAt) desc)[0...3]{\n    _id,\n    "slug": slug.current,\n    title,\n    excerpt,\n    publishedAt\n  }\n': HOME_POSTS_QUERY_RESULT;
+    '\n  *[_type == "book"][0]{\n    _id,\n    title,\n    tagline,\n    coverImage,\n    publisher,\n    publicationYear\n  }\n': HOME_FEATURED_BOOK_QUERY_RESULT;
+    '\n  *[_type == "author"][0]{\n    _id,\n    name,\n    tagline,\n    heroIntro,\n    photo\n  }\n': HOME_HERO_QUERY_RESULT;
   }
 }

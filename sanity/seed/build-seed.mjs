@@ -301,7 +301,11 @@ const reviews = [
       `${P} Оваа рецензија е само на македонски. На /en и /sr треба да се прикаже македонскиот наслов преку fallback, со ознака „Достапно на: MK“.`,
     ]),
     topics: [ref("topic-identity")],
-    publishedAt: "2026-02-10T09:00:00Z",
+    // Dated as the newest review so it lands in Home's "latest 3" window — this
+    // is what exercises the mk→en→sr fallback + "available in: MK" note on Home
+    // (on /en and /sr). Realistic, too: a freshly-published review often exists
+    // in Macedonian first.
+    publishedAt: "2026-06-01T09:00:00Z",
   },
 ];
 
@@ -341,6 +345,16 @@ const author = {
     `${P} критичар, преведувач, писател`,
     `${P} critic, translator, writer`,
     `${P} kritičar, prevodilac, pisac`,
+  ),
+  tagline: loc(
+    `${P} Писател, книжевен критичар и преведувач — читање низ јазиците на поранешна Југославија и пошироко.`,
+    `${P} Writer, literary critic, and translator — reading across the languages of the former Yugoslavia and beyond.`,
+    `${P} Pisac, književni kritičar i prevodilac — čitanje kroz jezike bivše Jugoslavije i šire.`,
+  ),
+  heroIntro: loc(
+    `${P} Книжевни критики, преводи и една моја книга, собрани на едно место.`,
+    `${P} Book reviews, translations, and a book of my own, gathered in one place.`,
+    `${P} Književne kritike, prevodi i jedna moja knjiga, sabrani na jednom mestu.`,
   ),
   shortBio: loc(
     `${P} Кратка био за почетна/подножје.`,

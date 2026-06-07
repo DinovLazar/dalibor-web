@@ -22,6 +22,21 @@ export const author = defineType({
       type: "localizedString",
       description: "e.g. journalist, writer, literary translator.",
     }),
+    defineField({
+      name: "tagline",
+      title: "Hero tagline",
+      type: "localizedString",
+      description:
+        "The Home hero's one-line intro (under the name). Keep it short and literary.",
+      validation: (Rule) => Rule.custom(requireMk),
+    }),
+    defineField({
+      name: "heroIntro",
+      title: "Hero intro (optional)",
+      type: "localizedText",
+      description:
+        "A 1–2 sentence supporting line under the Home hero tagline. Optional.",
+    }),
     defineField({name: "photo", title: "Photo", type: "localizedImage"}),
     defineField({
       name: "shortBio",

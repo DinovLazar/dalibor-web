@@ -2,7 +2,17 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    // Allow next/image to optimize Sanity-hosted images. Scoped to this
+    // project's image path on the Sanity CDN (be as specific as possible).
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
+        pathname: "/images/ndqmaath/**",
+      },
+    ],
+  },
 };
 
 // Wrap (don't replace) the existing config with the next-intl plugin, pointing

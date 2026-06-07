@@ -22,7 +22,16 @@
     "availableIn": "Available in: {langs}"
   },
   "home": {
-    "title": "Critic, translator, and writer"
+    "title": "Critic, translator, and writer",
+    "readReviews": "Read reviews",
+    "featuredEyebrow": "His book",
+    "featuredCta": "Read about the book",
+    "latestEyebrow": "Latest",
+    "reviewsHeading": "Latest reviews",
+    "seeAllReviews": "See all reviews",
+    "blogEyebrow": "From the blog",
+    "blogHeading": "From the blog",
+    "readBlog": "Read the blog"
   },
   "about": {
     "title": "About"

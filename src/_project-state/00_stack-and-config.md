@@ -185,3 +185,21 @@
 **Mobile-menu architecture note**
 
 - Base UI Dialog's transition-gated unmount/focus (CSS `transitionend` / rAF) is unreliable — it leaves a closed-but-focusable panel when transitions are zeroed (**`prefers-reduced-motion`**) or in throttled renderers. Mitigation: the `Sheet` is **transition-free**; the mobile menu **conditionally renders** the panel on `open` (synchronous unmount) and manages **focus-in / focus-return explicitly** (rAF-free). Base UI still provides the focus trap, Escape, backdrop close, modal isolation, and dialog ARIA. The single entrance animation uses **Framer Motion**, gated by `useReducedMotion`.
+
+---
+
+## 2026-06-07 — Phase 1.07 (Home page)
+
+**No new dependencies.** Built entirely on the already-installed stack (next-intl, Sanity, `@sanity/image-url`, next/image, Tailwind v4 tokens, framer-motion not used here — the Home reveal is pure CSS).
+
+**Config change — `next.config.ts` `images.remotePatterns`**
+- Added `images.remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io", pathname: "/images/ndqmaath/**" }]` so `next/image` can optimize Sanity-hosted covers. Scoped to this project's image path (the docs advise "be as specific as possible"). Works regardless of the `--webpack` flag. The wrapper `createNextIntlPlugin(...)` is unchanged.
+- Default image `quality` (75) is used, so Next 16's `images.qualities` allowlist is not required.
+
+**Schema/content**
+- `author` singleton gained `tagline` (`localizedString`, **mk-required** via `requireMk`) and `heroIntro` (`localizedText`, optional) for the CMS-editable hero. TypeGen regenerated (`schema.json` + `sanity.types.ts`): now **8** typed queries (4 original + 4 `HOME_*`), 23 schema types.
+- Seed (`build-seed.mjs`) updated: author hero text (`[PLACEHOLDER]`, all three languages) and the MK-only review re-dated newest (so Home's "latest 3" window exercises the mk→en→sr fallback + "available in" note). Re-imported with `--replace`.
+
+**Build/data note (not a config change, recorded for future phases)**
+- The build-time Sanity `client.fetch` (`useCdn: true`) is cached in `.next/cache`, which is what keeps the locale homes statically prerendered (`●`). After a dataset re-import, an **incremental** local rebuild can serve the previous result until `.next` is cleared (`Remove-Item -Recurse -Force .next`). Clean CI/Vercel builds start with no cache, so this is local-only. A content-refresh strategy (ISR / `revalidate` / Sanity webhooks) is deferred to a later phase.
+- `dev`/`build` remain pinned to `--webpack` (1.02 constraint unchanged).
