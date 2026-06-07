@@ -9,7 +9,7 @@
 - Group rows by area (config, app/pages, i18n, components, lib, messages, sanity, styles, project-state, docs). Keep descriptions to one line.
 - This file is the fast way for any Claude to understand the repo without reading all the code.
 
-> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 1.10._
+> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 1.11._
 
 ### Root config
 | File | Description |
@@ -24,7 +24,7 @@
 | `postcss.config.mjs` | PostCSS loading `@tailwindcss/postcss` (Tailwind v4). |
 | `.gitignore` | Ignores `node_modules`, `.next`, `.env*` (**with `!.env.example` exception**), the local dossier, etc. |
 | `.env.local` | Local env — real Sanity project id/dataset/apiVersion. **Gitignored, never committed.** |
-| `.env.example` | **Committed** env template (empty values; no secrets) — Sanity vars + **(1.09) review-search vars** (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`, empty for Part-1). |
+| `.env.example` | **Committed** env template (empty values; no secrets) — Sanity vars + **(1.09) review-search vars** (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`) + **(1.11)** `NEXT_PUBLIC_FORMSPREE_ENDPOINT` (empty for Part-1; filled in 2.02). |
 | `sanity.config.ts` | **Embedded Studio config** — basePath `/studio`, schema, `structureTool`+structure (singletons), `visionTool`, singleton action/template restrictions. |
 | `sanity.cli.ts` | **Sanity CLI config** — `api` (projectId/dataset) + `typegen` (paths). |
 | `schema.json` | **Generated** — extracted schema for TypeGen. |
@@ -37,8 +37,8 @@
 |---|---|
 | `src/app/[locale]/layout.tsx` | Root layout for all locales: fonts, tokens, `<html lang>`, `generateStaticParams`, `setRequestLocale`, provider; **mounts SkipToContent → SiteHeader → `<main id="content">` → SiteFooter** (1.06; temp top bar removed). |
 | `src/app/[locale]/page.tsx` | **Real Style A Home (1.07)** — fetches the 4 `HOME_*` queries and composes Hero / Featured book / Latest reviews / From the blog (server, localized). |
-| `src/app/[locale]/contact/page.tsx` | **TEMP 1.06 stub** — PageHeader + one localized line (real Contact → 1.11). |
-| `src/app/[locale]/privacy/page.tsx` | **TEMP 1.06 stub** — PageHeader + one localized line (real Privacy → 1.11). |
+| `src/app/[locale]/contact/page.tsx` | **Real Style A Contact (1.11)** — `PageHeader` (title+intro) + two-column (`ContactForm` left, `ContactLinks` right; form-first on mobile); minimal `generateMetadata`. Static (`●`). |
+| `src/app/[locale]/privacy/page.tsx` | **Real Style A Privacy (1.11)** — `<h1>` + §6.16 double rule + lede + six `<h2>`/`<p>` sections in `max-w-prose` (semantic HTML, not Portable Text); minimal `generateMetadata`. Static (`●`). |
 | `src/app/[locale]/reviews/page.tsx` | **Real Style A Reviews list (1.09)** — `REVIEWS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter, progressively-enhanced `ReviewSearch` over the SSR `ReviewsList`. Dynamic (`ƒ`, reads `searchParams.topic`). |
 | `src/app/[locale]/reviews/[slug]/page.tsx` | **Real Style A single review (1.09)** — `REVIEW_BY_SLUG_QUERY` (React-`cache()`d, shared with `generateMetadata`); back link/breadcrumb, `<h1>`+double rule, meta, Portable Text body **with §3.6 drop cap**, sticky `ReviewBookAside`, foot topic chips; `generateStaticParams` (locales×slugs), `notFound()`. |
 | `src/app/[locale]/blog/page.tsx` | **Real Style A Blog list (1.10)** — `POSTS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter (chips derived from posts → no dead chips), single-column `PostCard` stack, empty state. **No search box.** Dynamic (`ƒ`, reads `searchParams.topic`). |
@@ -104,6 +104,11 @@
 | `src/components/ui/button.tsx` | shadcn Button (Base UI) **restyled to Style A §6.1** — default/outline/ghost variants, §2.5-safe (`primary-strong` fills, never caramel-behind-text). |
 | `src/components/ui/separator.tsx` | shadcn Separator (Base UI) — hairline; orientation from prop. |
 | `src/components/ui/sheet.tsx` | shadcn Sheet (Base UI Dialog) **restyled to Style A**, transition-free (robust mount/unmount); used by the mobile menu. |
+| `src/components/ui/input.tsx` | **(1.11)** Style-A text input (§6.12) — hand-rolled native `<input>` (no new dep); 48px, border-strong, focus → caramel border + soft ring, error via `aria-invalid` (colour-only width → no layout shift). |
+| `src/components/ui/label.tsx` | **(1.11)** Style-A `<label>` (§6.12) — hand-rolled native element (no Radix dep); Lora 500/15px; required `*` + "(optional)" passed in by the form. |
+| `src/components/ui/textarea.tsx` | **(1.11)** Style-A `<textarea>` (§6.12) — hand-rolled native element; min-h 140px, vertical resize; same focus/error treatment as `input`. |
+| `src/components/contact/contact-form.tsx` | **(1.11)** `'use client'` — the accessible Contact form (Name*/Email*/Subject/Message* + honeypot `_gotcha`); client validation + focus-first-error + `aria-invalid`/`aria-describedby`; idle/submitting/success/error/preview states via a polite `aria-live` region + focused success panel; **env-gated** submit (`NEXT_PUBLIC_FORMSPREE_ENDPOINT`) — preview notice when empty, AJAX to Formspree when set; progressively enhanced (`method=POST`+`action`). |
+| `src/components/contact/contact-links.tsx` | **(1.11)** Server — Dalibor's links beside the form, from `lib/site-links` (no hardcoded URLs) with localized `links.*Desc` descriptions; email slot rendered but inert until 2.02; externals `target=_blank rel="noopener noreferrer"`. |
 | `src/components/layout/site-header.tsx` | **Style A sticky header** (Server Component) — wordmark→home, desktop nav, switcher, mobile menu. |
 | `src/components/layout/primary-nav.tsx` | Desktop primary nav (`'use client'`) — `aria-current` + caramel active underline; reads `lib/nav`. |
 | `src/components/layout/mobile-menu.tsx` | Accessible mobile menu (`'use client'`) — Base UI Dialog panel, explicit focus-in/return, Framer entrance (reduced-motion gated). |
@@ -137,7 +142,7 @@
 |---|---|
 | `src/lib/utils.ts` | `cn` (clsx + tailwind-merge) — from shadcn init. |
 | `src/lib/nav.ts` | Primary-nav source of truth (`primaryNav` + `isNavItemActive`). |
-| `src/lib/site-links.ts` | **Provisional** external links + email (data-only; finalized 2.01/2.02). |
+| `src/lib/site-links.ts` | **Provisional** external links + email (data-only; finalized 2.01/2.02). Read by the footer **and `ContactLinks`**. **(1.11)** added empty `interviewVis` slot (Kanal VIS "Vis a Vis" — confirm/fill in 2.01). |
 | `src/lib/datetime.ts` | **(1.07)** `formatMonthYear` / `formatFullDate` for cards (Intl; sr→`sr-Latn`). |
 | `src/lib/strings.ts` | **(1.07)** `monogramOf` — first letter for the no-cover placeholder (strips the `[PLACEHOLDER]` marker). |
 | `src/lib/search/types.ts` | **(1.09)** The Reviews search contract — `ReviewSummary` / `SearchRequest` / `SearchResponse` / `SearchMode`. |
@@ -145,7 +150,7 @@
 | `src/lib/search/keyword.ts` | **(1.09)** Always-on keyword fallback — `normalizeForSearch` (diacritic/case fold), `blocksToPlainText`, `keywordSearch` (AND-match). |
 | `src/lib/search/embeddings.ts` | **(1.09)** Voyage wrapper (server-only) — the SOLE Voyage access point: `embedQuery`/`embedDocuments`, `EMBEDDING_MODEL` (=`voyage-3.5`), `EMBEDDING_DIMENSIONS` (=1024). |
 | `src/lib/search/supabase.ts` | **(1.09)** Server-only service-role Supabase client (`getSupabaseAdmin`); bypasses RLS, never imported client-side. |
-| `src/messages/{en,mk,sr}.json` | UI strings — `nav` / `common` / per-page titles / `footer` / `home` / `book` / **`reviews`** (1.09) / **`blog`** (1.10: `eyebrow`, `lede`, `topicsLabel`, `allTopics`, `empty`, `backToBlog`, `breadcrumbLabel` — eyebrow/lede provisional) namespaces (mk Cyrillic; en/sr Latin). |
+| `src/messages/{en,mk,sr}.json` | UI strings — `nav` / `common` / per-page titles / `footer` / `home` / `book` / **`reviews`** (1.09) / **`blog`** (1.10) / **`contact`** + **`privacy`** (1.11: full namespaces — contact intro/`form.*`/`links.*`, privacy intro + six `sections.*`; mk/sr copy is a plain-language placeholder pending Dalibor) namespaces (mk Cyrillic; en/sr Latin). **(1.11)** removed the now-unused `common.comingSoon`. |
 | `src/messages/.gitkeep`, `src/styles/.gitkeep` | Folder placeholders. |
 
 ### Static assets — `public/`
@@ -160,7 +165,7 @@
 | `file-map.md` | This file. |
 | `00_stack-and-config.md` | Append-only stack/config log (1.02 → 1.09; unchanged in 1.10 — no stack change). |
 | `Part-X-Phase-YY-Completion.md` | Blank completion-report template. |
-| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-10-Completion.md` | Per-phase completion reports. |
+| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-11-Completion.md` | Per-phase completion reports. |
 
 ### Design handovers + mockups — `docs/`
 | File | Description |

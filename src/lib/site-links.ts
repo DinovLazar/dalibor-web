@@ -14,8 +14,17 @@ export const siteLinks = {
   instagram: "https://www.instagram.com/daliborac/",
   facebook: "https://www.facebook.com/plecicd/",
   booksa: "https://booksa.hr/suradnici/dalibor-plecic",
-  /** Bulgarian interview; the Kanal VIS video is a second candidate (2.01). */
+  /**
+   * Primary interview slot — the Bulgarian YouTube interview ("В читАлнЯта").
+   * Read by the footer and the Contact page's "Interviews" link.
+   */
   interview: "https://www.youtube.com/watch?v=Jgt3ZrJevkM",
+  /**
+   * Second interview candidate — Kanal VIS "Vis a Vis". URL is in the research
+   * dossier but not yet lifted here; PROVISIONAL — confirm/fill in 2.01. Empty
+   * for now so nothing renders a fabricated link.
+   */
+  interviewVis: "",
   /** Optional extra writing hubs — rendered only where the footer has room. */
   versopolis: "https://www.versopolis.com/author/54/dalibor-plecic",
   linkedin: "https://www.linkedin.com/in/plecicdalibor/",

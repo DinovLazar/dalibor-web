@@ -18,7 +18,6 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "menu": "Menu",
-    "comingSoon": "This page is coming soon.",
     "availableIn": "Available in: {langs}"
   },
   "home": {
@@ -71,10 +70,75 @@
     "findIt": "Find the book"
   },
   "contact": {
-    "title": "Contact"
+    "title": "Get in touch",
+    "intro": "Questions, interview requests, translation work, or a few words about a book — write below and your message will reach Dalibor directly.",
+    "metaDescription": "Get in touch with Dalibor Plečić — interview requests, translation work, or a note about a book.",
+    "form": {
+      "name": "Your name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "optional": "(optional)",
+      "requiredHint": "Required fields are marked with *.",
+      "send": "Send message",
+      "sending": "Sending…",
+      "success": "Thank you — your message has been sent. Dalibor will get back to you.",
+      "sendAnother": "Send another message",
+      "error": "Something went wrong and your message wasn't sent. Please try again, or email directly.",
+      "preview": "This form isn't connected yet — it goes live when the site launches.",
+      "subjectLine": "New message from {name}",
+      "privacyNote": "By sending this form you agree to how we handle your details, described in our <link>privacy policy</link>.",
+      "errors": {
+        "nameRequired": "Please enter your name.",
+        "emailRequired": "Please enter your email address.",
+        "emailInvalid": "Please enter a valid email address.",
+        "messageRequired": "Please write a message."
+      }
+    },
+    "links": {
+      "heading": "Find Dalibor elsewhere",
+      "email": "Email",
+      "emailDesc": "Write directly",
+      "instagram": "Instagram",
+      "instagramDesc": "@daliborac",
+      "facebook": "Facebook",
+      "facebookDesc": "Updates and announcements",
+      "booksa": "Booksa",
+      "booksaDesc": "His reviews and criticism",
+      "interviews": "Interviews",
+      "interviewsDesc": "Selected conversations and media"
+    }
   },
   "privacy": {
-    "title": "Privacy Policy"
+    "title": "Privacy",
+    "intro": "This site is a personal home for Dalibor Plečić's writing, and it collects as little information as possible. This page explains what the contact form collects and how those details are handled.",
+    "metaDescription": "How the contact form on this site collects and handles your details.",
+    "sections": {
+      "collect": {
+        "title": "What the form collects",
+        "body": "When you use the contact form, you share your name, your email address, and your message. Nothing else is collected, and the rest of the site works without giving any details."
+      },
+      "handle": {
+        "title": "How your message is handled",
+        "body": "Messages are delivered by Formspree, a form-handling service, which forwards them to Dalibor's inbox. Your details are used only to read and reply to your message. They are not sold, rented, or shared for marketing."
+      },
+      "retention": {
+        "title": "How long it is kept",
+        "body": "Your message is kept only as long as needed to correspond with you, then deleted."
+      },
+      "cookies": {
+        "title": "Tracking and cookies",
+        "body": "This site does not use analytics, advertising, or tracking cookies. Your language choice is carried in the web address, not stored on your device."
+      },
+      "choices": {
+        "title": "Your choices",
+        "body": "You can ask to see a copy of what you sent, or ask for it to be deleted, by getting in touch at the email on the contact page."
+      },
+      "changes": {
+        "title": "Changes to this page",
+        "body": "If this policy changes, the updated version will be posted here."
+      }
+    }
   },
   "notFound": {
     "title": "This page isn't here"

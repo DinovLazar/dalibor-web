@@ -10,7 +10,6 @@
     "openMenu": "Otvori meni",
     "closeMenu": "Zatvori meni",
     "menu": "Meni",
-    "comingSoon": "Ova stranica je u pripremi.",
     "availableIn": "Dostupno na: {langs}"
   },
   "home": {
@@ -60,8 +59,77 @@
     "whereToFind": "Gde da je nađete",
     "findIt": "Pronađite knjigu"
   },
-  "contact": { "title": "Kontakt" },
-  "privacy": { "title": "Politika privatnosti" },
+  "contact": {
+    "title": "Kontakt",
+    "intro": "Pitanja, pozivi za intervju, prevodi ili nekoliko reči o nekoj knjizi — napišite ispod i poruka će stići direktno Daliboru.",
+    "metaDescription": "Kontaktirajte Dalibora Plečića — pozivi za intervju, prevodi ili poruka o nekoj knjizi.",
+    "form": {
+      "name": "Vaše ime",
+      "email": "Imejl",
+      "subject": "Naslov",
+      "message": "Poruka",
+      "optional": "(opciono)",
+      "requiredHint": "Polja označena sa * su obavezna.",
+      "send": "Pošalji poruku",
+      "sending": "Slanje…",
+      "success": "Hvala — poruka je poslata. Dalibor će vam odgovoriti.",
+      "sendAnother": "Pošalji novu poruku",
+      "error": "Nešto nije uspelo i poruka nije poslata. Pokušajte ponovo ili pišite direktno na imejl.",
+      "preview": "Formular još nije povezan — proradiće kada sajt bude objavljen.",
+      "subjectLine": "Nova poruka od {name}",
+      "privacyNote": "Slanjem formulara prihvatate način na koji obrađujemo vaše podatke, opisan u <link>politici privatnosti</link>.",
+      "errors": {
+        "nameRequired": "Unesite vaše ime.",
+        "emailRequired": "Unesite vašu imejl adresu.",
+        "emailInvalid": "Unesite ispravnu imejl adresu.",
+        "messageRequired": "Napišite poruku."
+      }
+    },
+    "links": {
+      "heading": "Pronađite Dalibora i na:",
+      "email": "Imejl",
+      "emailDesc": "Pišite direktno",
+      "instagram": "Instagram",
+      "instagramDesc": "@daliborac",
+      "facebook": "Facebook",
+      "facebookDesc": "Novosti i objave",
+      "booksa": "Booksa",
+      "booksaDesc": "Njegove kritike i eseji",
+      "interviews": "Intervjui",
+      "interviewsDesc": "Izabrani razgovori i medijski nastupi"
+    }
+  },
+  "privacy": {
+    "title": "Privatnost",
+    "intro": "Ovaj sajt je lični dom za pisanje Dalibora Plečića i prikuplja što je moguće manje podataka. Ova stranica objašnjava šta prikuplja kontakt formular i kako se ti podaci koriste.",
+    "metaDescription": "Kako kontakt formular na ovom sajtu prikuplja i koristi vaše podatke.",
+    "sections": {
+      "collect": {
+        "title": "Šta formular prikuplja",
+        "body": "Kada koristite kontakt formular, delite vaše ime, vašu imejl adresu i vašu poruku. Ništa drugo se ne prikuplja, a ostatak sajta radi bez ostavljanja bilo kakvih podataka."
+      },
+      "handle": {
+        "title": "Kako se postupa s porukom",
+        "body": "Poruke isporučuje Formspree, servis za obradu formulara, koji ih prosleđuje na Daliborov imejl. Vaši podaci se koriste samo da bi se poruka pročitala i da bi se na nju odgovorilo. Ne prodaju se, ne iznajmljuju niti dele u marketinške svrhe."
+      },
+      "retention": {
+        "title": "Koliko dugo se čuva",
+        "body": "Vaša poruka se čuva samo onoliko koliko je potrebno za prepisku, a zatim se briše."
+      },
+      "cookies": {
+        "title": "Praćenje i kolačići",
+        "body": "Ovaj sajt ne koristi analitiku, oglašavanje niti kolačiće za praćenje. Vaš izbor jezika prenosi se kroz veb-adresu, a ne čuva se na vašem uređaju."
+      },
+      "choices": {
+        "title": "Vaša prava",
+        "body": "Možete zatražiti kopiju onoga što ste poslali ili zatražiti da se obriše, putem imejla navedenog na kontakt stranici."
+      },
+      "changes": {
+        "title": "Izmene ove stranice",
+        "body": "Ako se politika promeni, ažurirana verzija biće objavljena ovde."
+      }
+    }
+  },
   "notFound": { "title": "Ova stranica ne postoji" },
   "footer": {
     "contactHeading": "Kontakt",
