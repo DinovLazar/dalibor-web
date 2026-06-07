@@ -153,3 +153,35 @@
 - Seed import: `npx sanity dataset import sanity/seed/seed.ndjson --dataset production --replace` (idempotent; the dataset had been seeded once already). The placeholder cover is uploaded via the `_sanityAsset` `image@file://./placeholder-cover.png` directive (asset ref merged while preserving `_type` + localized `alt`).
 - `@sanity/image-url`: use the **named** `createImageUrlBuilder` (the default export is deprecated); it builds `cdn.sanity.io` URLs.
 - `dev`/`build` remain pinned to `--webpack` (1.02 constraint unchanged).
+
+---
+
+## 2026-06-07 — Phase 1.06 (Core layout & shared components: shadcn/ui + header/footer/nav)
+
+**Added dependencies (exact resolved versions)**
+
+| Package | Installed | In `package.json` | Where |
+|---|---|---|---|
+| @base-ui/react | 1.5.0 | `^1.5.0` | dependencies |
+| lucide-react | 1.17.0 | `^1.17.0` | dependencies |
+| framer-motion | 12.40.0 | `^12.40.0` | dependencies |
+| class-variance-authority | 0.7.1 | `^0.7.1` | dependencies |
+| clsx | 2.1.1 | `^2.1.1` | dependencies |
+| tailwind-merge | 3.6.0 | `^3.6.0` | dependencies |
+| tw-animate-css | 1.4.0 | `^1.4.0` | dependencies |
+| shadcn | 4.10.0 | `^4.10.0` | **devDependencies** |
+
+- Installed via the official shadcn CLI (`npx shadcn@latest init -d`, then `add separator sheet`; `button` came from init). Clean install under **React 19.2.4 / Next 16.2.7 / Tailwind 4.3.0** — no peer conflicts, no `--force`/`--legacy-peer-deps`. `framer-motion@12` is React-19-compatible (also deduped via `sanity`'s `motion@12`).
+- `--webpack` `dev`/`build` scripts unchanged.
+
+**shadcn/ui setup — deviations from the plan (reported per "no silent ratifications")**
+
+- **Base UI, not Radix.** The current CLI (`shadcn@4.10`) defaults to **Base UI** (`style: "base-nova"`, `@base-ui/react`); `init -d --base radix` needs an interactive "switch base?" confirmation that `-d` does not auto-answer. The plan's locked sub-choice was "shadcn/ui (Radix UI)". Per the 1.06 brief ("use the current CLI; report deviations"), kept Base UI — React 19 / Next 16 / TW4 compatible, same lineage, equivalent Dialog a11y. `components.json` records `base-nova`.
+- **`shadcn init` overwrites `globals.css` destructively.** It injected a neutral oklch `:root`, a `.dark` block, an `@theme inline` var-remap that **clobbered `--color-primary` (→ caramel) and `--color-border`**, and an `@layer base { body { @apply bg-background text-foreground } }`. Restored the Style A `globals.css` and instead added a controlled set of **shadcn alias tokens mapped to the literal Style A hexes** (`--color-background/foreground/card/card-foreground/popover/popover-foreground/muted/muted-foreground/accent/accent-foreground/secondary/secondary-foreground/primary-foreground/input/ring/destructive/destructive-foreground`) + a `--radius` scale (10px base). **`--color-primary` (caramel) and `--color-border` (hairline) are deliberately NOT remapped** (preserves §2.5). No dark mode (Decision #14): dropped the `.dark` + `@custom-variant dark` blocks.
+- **Primitives made self-sufficient.** Dropped the `@import "shadcn/tailwind.css"` line; the restyled `button`/`separator`/`sheet` use standard Tailwind v4 `data-[...]` variants instead of that file's custom variants, so the build does not depend on the `shadcn` package's CSS subpath. Kept `@import "tw-animate-css"` (standard shadcn TW4 setup; currently unused by chrome).
+- **`shadcn` moved to devDependencies** (init had added it to `dependencies`; it's CLI-only, not a runtime dep).
+- **lucide-react 1.x removed brand icons** (`Instagram/Facebook/Youtube`). Re-created them as MIT Lucide-outline components in `src/components/brand-icons.tsx`. Generic icons still from `lucide-react`. Icon stroke-width set to 1.75 per handover §5.
+
+**Mobile-menu architecture note**
+
+- Base UI Dialog's transition-gated unmount/focus (CSS `transitionend` / rAF) is unreliable — it leaves a closed-but-focusable panel when transitions are zeroed (**`prefers-reduced-motion`**) or in throttled renderers. Mitigation: the `Sheet` is **transition-free**; the mobile menu **conditionally renders** the panel on `open` (synchronous unmount) and manages **focus-in / focus-return explicitly** (rAF-free). Base UI still provides the focus trap, Escape, backdrop close, modal isolation, and dialog ARIA. The single entrance animation uses **Framer Motion**, gated by `useReducedMotion`.

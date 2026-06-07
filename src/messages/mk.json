@@ -1,11 +1,16 @@
 {
-  "nav": { "home": "Почетна", "about": "За Далибор", "reviews": "Критики", "blog": "Блог", "book": "Книга", "contact": "Контакт" },
+  "nav": { "home": "Почетна", "about": "За Далибор", "reviews": "Критики", "blog": "Блог", "book": "Книга", "contact": "Контакт", "primaryLabel": "Главна навигација" },
   "common": {
     "siteName": "Далибор Плечиќ",
+    "wordmark": "Dalibor Plečić",
     "loadMore": "Прикажи повеќе",
     "searchPlaceholder": "Пребарувај критики по тема…",
     "skipToContent": "Прескокни до содржината",
     "languageSwitcherLabel": "Промени јазик",
+    "openMenu": "Отвори мени",
+    "closeMenu": "Затвори мени",
+    "menu": "Мени",
+    "comingSoon": "Оваа страница допрва се подготвува.",
     "availableIn": "Достапно на: {langs}"
   },
   "home": { "title": "Критичар, преведувач и писател" },
@@ -15,5 +20,21 @@
   "book": { "title": "Книгата" },
   "contact": { "title": "Контакт" },
   "privacy": { "title": "Политика за приватност" },
-  "notFound": { "title": "Оваа страница ја нема" }
+  "notFound": { "title": "Оваа страница ја нема" },
+  "footer": {
+    "contactHeading": "Контакт",
+    "socialHeading": "Социјални мрежи",
+    "writingHeading": "Пишување",
+    "interviewsHeading": "Интервјуа",
+    "email": "Е-пошта",
+    "emailPending": "Наскоро",
+    "instagram": "Instagram",
+    "facebook": "Facebook",
+    "booksa": "Booksa",
+    "versopolis": "Versopolis",
+    "partizanska": "Partizanska knjiga",
+    "interview": "YouTube / TV",
+    "privacy": "Приватност",
+    "copyright": "© {year} Далибор Плечиќ. Сите права задржани."
+  }
 }

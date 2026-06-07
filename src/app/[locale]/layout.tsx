@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Lora, Playfair_Display } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { LanguageSwitcher } from "@/components/language-switcher";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SkipToContent } from "@/components/layout/skip-to-content";
 import { routing } from "@/i18n/routing";
 
 import "../globals.css";
@@ -53,18 +55,19 @@ export default async function LocaleLayout({
   // Opt this locale into static rendering.
   setRequestLocale(locale);
 
+  const t = await getTranslations("common");
+
   return (
     <html lang={locale} className={`${playfair.variable} ${lora.variable}`}>
       <body className="flex min-h-dvh flex-col">
         <NextIntlClientProvider>
-          {/* TEMPORARY — replaced by the Style A header in 1.06. This plain bar
-              exists only to mount the language switcher so trilingual routing is
-              demonstrable this phase; it is NOT the designed sticky header. */}
-          <header className="mx-auto flex w-full max-w-shell items-center justify-between gap-4 border-b border-border px-5 py-3">
-            <span className="font-display text-h4">Dalibor Plečić</span>
-            <LanguageSwitcher />
-          </header>
-          <main className="flex-1">{children}</main>
+          {/* First focusable element — jumps keyboard users straight to <main>. */}
+          <SkipToContent>{t("skipToContent")}</SkipToContent>
+          <SiteHeader />
+          <main id="content" tabIndex={-1} className="flex-1 outline-none">
+            {children}
+          </main>
+          <SiteFooter />
         </NextIntlClientProvider>
       </body>
     </html>

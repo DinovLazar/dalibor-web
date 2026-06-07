@@ -1,11 +1,16 @@
 {
-  "nav": { "home": "Početna", "about": "O autoru", "reviews": "Kritike", "blog": "Blog", "book": "Knjiga", "contact": "Kontakt" },
+  "nav": { "home": "Početna", "about": "O autoru", "reviews": "Kritike", "blog": "Blog", "book": "Knjiga", "contact": "Kontakt", "primaryLabel": "Glavna navigacija" },
   "common": {
     "siteName": "Dalibor Plečić",
+    "wordmark": "Dalibor Plečić",
     "loadMore": "Učitaj još",
     "searchPlaceholder": "Pretraži kritike po temi…",
     "skipToContent": "Preskoči na sadržaj",
     "languageSwitcherLabel": "Promeni jezik",
+    "openMenu": "Otvori meni",
+    "closeMenu": "Zatvori meni",
+    "menu": "Meni",
+    "comingSoon": "Ova stranica je u pripremi.",
     "availableIn": "Dostupno na: {langs}"
   },
   "home": { "title": "Kritičar, prevodilac i pisac" },
@@ -15,5 +20,21 @@
   "book": { "title": "Knjiga" },
   "contact": { "title": "Kontakt" },
   "privacy": { "title": "Politika privatnosti" },
-  "notFound": { "title": "Ova stranica ne postoji" }
+  "notFound": { "title": "Ova stranica ne postoji" },
+  "footer": {
+    "contactHeading": "Kontakt",
+    "socialHeading": "Društvene mreže",
+    "writingHeading": "Pisanje",
+    "interviewsHeading": "Intervjui",
+    "email": "E-pošta",
+    "emailPending": "Uskoro",
+    "instagram": "Instagram",
+    "facebook": "Facebook",
+    "booksa": "Booksa",
+    "versopolis": "Versopolis",
+    "partizanska": "Partizanska knjiga",
+    "interview": "YouTube / TV",
+    "privacy": "Privatnost",
+    "copyright": "© {year} Dalibor Plečić. Sva prava zadržana."
+  }
 }

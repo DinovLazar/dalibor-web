@@ -9,12 +9,13 @@
 - Group rows by area (config, app/pages, i18n, components, lib, messages, sanity, styles, project-state, docs). Keep descriptions to one line.
 - This file is the fast way for any Claude to understand the repo without reading all the code.
 
-> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 1.05._
+> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 1.06._
 
 ### Root config
 | File | Description |
 |---|---|
-| `package.json` | Manifest — deps (next, react, next-intl, **sanity, next-sanity, @sanity/vision, @sanity/image-url, styled-components**) + scripts (`dev`/`build` use `--webpack`; **`typegen`** = schema extract + generate). |
+| `package.json` | Manifest — deps (next, react, next-intl, sanity+toolchain, **@base-ui/react, lucide-react, framer-motion, class-variance-authority, clsx, tailwind-merge, tw-animate-css**; `shadcn` in devDeps) + scripts (`dev`/`build` use `--webpack`; `typegen` = schema extract + generate). |
+| `components.json` | **New (1.06).** shadcn/ui config — `base-nova` (Base UI) style, css → `globals.css`, aliases (`@/components`, `@/lib/utils`, `@/components/ui`). |
 | `package-lock.json` | npm lockfile (exact installed tree). |
 | `next.config.ts` | Next.js config, wrapped with `createNextIntlPlugin('./src/i18n/request.ts')`. |
 | `tsconfig.json` | TS config; `@/*` → `./src/*`; includes root `*.ts` (so `sanity.config.ts`/`sanity.cli.ts` are checked). |
@@ -34,8 +35,10 @@
 ### App / pages — `src/app/`
 | File | Description |
 |---|---|
-| `src/app/[locale]/layout.tsx` | Root layout for all locales: fonts, tokens, `<html lang>`, `generateStaticParams`, `setRequestLocale`, provider, TEMP top bar (→ 1.06). |
+| `src/app/[locale]/layout.tsx` | Root layout for all locales: fonts, tokens, `<html lang>`, `generateStaticParams`, `setRequestLocale`, provider; **mounts SkipToContent → SiteHeader → `<main id="content">` → SiteFooter** (1.06; temp top bar removed). |
 | `src/app/[locale]/page.tsx` | Placeholder Home — resolves per-locale UI strings (real Home → 1.07). |
+| `src/app/[locale]/contact/page.tsx` | **TEMP 1.06 stub** — PageHeader + one localized line (real Contact → 1.11). |
+| `src/app/[locale]/privacy/page.tsx` | **TEMP 1.06 stub** — PageHeader + one localized line (real Privacy → 1.11). |
 | `src/app/[locale]/reviews/page.tsx` | **TEMP 1.05 proof** — lists review titles from Sanity (+ cover/no-image + "available in"). |
 | `src/app/[locale]/blog/page.tsx` | **TEMP 1.05 proof** — lists post titles from Sanity. |
 | `src/app/[locale]/about/page.tsx` | **TEMP 1.05 proof** — reads the `author` singleton. |
@@ -43,7 +46,7 @@
 | `src/app/studio/layout.tsx` | **Second root layout** — `<html>`/`<body>` for the non-localized Studio branch. |
 | `src/app/studio/[[...tool]]/page.tsx` | `/studio` route (server) — metadata/viewport (`robots:noindex`) + `force-static`. |
 | `src/app/studio/[[...tool]]/Studio.tsx` | `'use client'` wrapper rendering `<NextStudio config>` (imports `sanity.config`). |
-| `src/app/globals.css` | Global stylesheet — Tailwind v4 import + Style A `@theme` tokens. |
+| `src/app/globals.css` | Global stylesheet — Tailwind v4 + `tw-animate-css` imports + Style A `@theme` tokens **+ shadcn semantic alias tokens (1.06) mapped to Style A** (`--color-primary`/`--color-border` kept as caramel/hairline; no dark mode). |
 | `src/app/favicon.ico` | Default favicon. |
 
 ### i18n — `src/i18n/`
@@ -89,14 +92,28 @@
 ### Components — `src/components/`
 | File | Description |
 |---|---|
-| `src/components/language-switcher.tsx` | Accessible MK·EN·SR inline switcher (design §6.4); preserves the current path. |
+| `src/components/ui/button.tsx` | shadcn Button (Base UI) **restyled to Style A §6.1** — default/outline/ghost variants, §2.5-safe (`primary-strong` fills, never caramel-behind-text). |
+| `src/components/ui/separator.tsx` | shadcn Separator (Base UI) — hairline; orientation from prop. |
+| `src/components/ui/sheet.tsx` | shadcn Sheet (Base UI Dialog) **restyled to Style A**, transition-free (robust mount/unmount); used by the mobile menu. |
+| `src/components/layout/site-header.tsx` | **Style A sticky header** (Server Component) — wordmark→home, desktop nav, switcher, mobile menu. |
+| `src/components/layout/primary-nav.tsx` | Desktop primary nav (`'use client'`) — `aria-current` + caramel active underline; reads `lib/nav`. |
+| `src/components/layout/mobile-menu.tsx` | Accessible mobile menu (`'use client'`) — Base UI Dialog panel, explicit focus-in/return, Framer entrance (reduced-motion gated). |
+| `src/components/layout/site-footer.tsx` | **Style A footer** (Server Component) — 4 link groups from `lib/site-links` + copyright + Privacy link. |
+| `src/components/layout/container.tsx` | Shell-width wrapper + §4.6 responsive gutters. |
+| `src/components/layout/section.tsx` | §4.1 vertical-rhythm section wrapper. |
+| `src/components/layout/page-header.tsx` | Eyebrow + title + description page/section head. |
+| `src/components/layout/skip-to-content.tsx` | Visible-on-focus skip link (targets `#content`). |
+| `src/components/brand-icons.tsx` | Instagram/Facebook/YouTube glyphs (MIT Lucide outlines; lucide-react 1.x removed brand icons). |
+| `src/components/language-switcher.tsx` | Accessible MK·EN·SR inline switcher (§6.4); preserves the current path; `className`/`onNavigate` props. |
 | `src/components/.gitkeep` | Original folder placeholder. |
 
 ### lib / messages / styles — `src/`
 | File | Description |
 |---|---|
-| `src/lib/.gitkeep` | Reserved for non-Sanity helpers (search, embeddings…). |
-| `src/messages/{en,mk,sr}.json` | UI strings — identical 20-key structure (mk Cyrillic; en/sr Latin). |
+| `src/lib/utils.ts` | `cn` (clsx + tailwind-merge) — from shadcn init. |
+| `src/lib/nav.ts` | Primary-nav source of truth (`primaryNav` + `isNavItemActive`). |
+| `src/lib/site-links.ts` | **Provisional** external links + email (data-only; finalized 2.01/2.02). |
+| `src/messages/{en,mk,sr}.json` | UI strings — `nav` / `common` / per-page titles / **`footer`** namespaces (mk Cyrillic; en/sr Latin). |
 | `src/messages/.gitkeep`, `src/styles/.gitkeep` | Folder placeholders. |
 
 ### Static assets — `public/`
@@ -107,11 +124,11 @@
 ### Project-state — `src/_project-state/`
 | File | Description |
 |---|---|
-| `current-state.md` | Live snapshot (end of 1.05). |
+| `current-state.md` | Live snapshot (end of 1.06). |
 | `file-map.md` | This file. |
-| `00_stack-and-config.md` | Append-only stack/config log (1.02 → 1.05). |
+| `00_stack-and-config.md` | Append-only stack/config log (1.02 → 1.06). |
 | `Part-X-Phase-YY-Completion.md` | Blank completion-report template. |
-| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-05-Completion.md` | Per-phase completion reports. |
+| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-06-Completion.md` | Per-phase completion reports. |
 
 ### Design handovers + mockups — `docs/`
 | File | Description |

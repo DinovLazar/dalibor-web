@@ -5,14 +5,20 @@
     "reviews": "Reviews",
     "blog": "Blog",
     "book": "Book",
-    "contact": "Contact"
+    "contact": "Contact",
+    "primaryLabel": "Primary navigation"
   },
   "common": {
     "siteName": "Dalibor Plečić",
+    "wordmark": "Dalibor Plečić",
     "loadMore": "Load more",
     "searchPlaceholder": "Search reviews by topic…",
     "skipToContent": "Skip to content",
     "languageSwitcherLabel": "Change language",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menu": "Menu",
+    "comingSoon": "This page is coming soon.",
     "availableIn": "Available in: {langs}"
   },
   "home": {
@@ -38,5 +44,21 @@
   },
   "notFound": {
     "title": "This page isn't here"
+  },
+  "footer": {
+    "contactHeading": "Contact",
+    "socialHeading": "Social",
+    "writingHeading": "Writing",
+    "interviewsHeading": "Interviews",
+    "email": "Email",
+    "emailPending": "Coming soon",
+    "instagram": "Instagram",
+    "facebook": "Facebook",
+    "booksa": "Booksa",
+    "versopolis": "Versopolis",
+    "partizanska": "Partizanska knjiga",
+    "interview": "YouTube / TV",
+    "privacy": "Privacy",
+    "copyright": "© {year} Dalibor Plečić. All rights reserved."
   }
 }

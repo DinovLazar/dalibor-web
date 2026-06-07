@@ -3,7 +3,7 @@
 > **Location in repo:** `src/_project-state/current-state.md`
 > A live snapshot of the repo. **Claude Code updates this at the end of every phase.** It reflects what actually exists — if it ever disagrees with the Plan, this file (and the live code) wins.
 
-**Last updated:** 2026-06-06 — Phase 1.05 complete (Sanity CMS + content models + embedded Studio at `/studio`)
+**Last updated:** 2026-06-07 — Phase 1.06 complete (Style A header / footer / nav + shadcn/ui + shared layout primitives)
 
 **Project:** Dalibor Plečić personal website — a trilingual (Macedonian default / English / Serbian), literary "well-made hardcover book" site consolidating his book reviews, blog, his own book, and an About page.
 
@@ -15,15 +15,17 @@
 - **1.03 — Design system & visual direction:** ✅ complete. Handover + four HTML mockups in `docs/design-handovers/`.
 - **1.04 — Languages + Routing Foundation:** ✅ complete. next-intl v4 `[locale]` shell (mk/en/sr), root → `/mk`, switcher, Playfair+Lora, Style A tokens, trilingual UI strings.
 - **1.05 — Sanity CMS + content models:** ✅ complete. Embedded Studio at `/studio`, five content types with field-level `{mk,en,sr}` localization, TypeGen, placeholder seed, connect-to-site proof. Report: `Part-1-Phase-05-Completion.md`.
-- **Next → 1.06** — real Style A header / footer / nav with shadcn/ui (replaces the temporary top bar; the thin 1.05 proof routes get replaced by styled pages in 1.06–1.10).
+- **1.06 — Core layout & shared components:** ✅ complete. shadcn/ui initialized + themed to Style A (Base UI base); real Style A header (sticky, wordmark, nav w/ active indicator, restyled MK·EN·SR switcher, accessible mobile menu), Style A footer (link groups from `site-links` + copyright + Privacy), shared primitives (Container/Section/PageHeader), skip-to-content link, trilingual chrome; `contact`/`privacy` stubs. Temp top bar removed. Report: `Part-1-Phase-06-Completion.md`.
+- **Next → 1.07** — real Style A Home page (hero, featured book, latest reviews, from-the-blog) inside the new chrome. The remaining thin proof/stub routes get styled in 1.08–1.11.
 
 ## Tech stack (current)
 *Locked plan: Next.js (App Router) · TypeScript · Tailwind · shadcn/ui · Lucide · Framer Motion · next-intl · Sanity · Formspree · Vercel AI SDK + Voyage + Supabase (pgvector) · Vercel · Playfair Display + Lora.*
 
-**Installed now:** Next.js 16.2.7 · React 19.2.4 · TypeScript 5.9.3 · Tailwind CSS 4.3.0 · ESLint 9 · next-intl 4.13.0 · **Sanity 5.30.0 · next-sanity 13.0.11 · @sanity/vision 5.30.0 · @sanity/image-url 2.1.1 · styled-components 6.4.2**. shadcn/ui · Lucide · Framer Motion → 1.06+. AI search stack → 1.09. Exact pins + notes in `00_stack-and-config.md`.
+**Installed now:** Next.js 16.2.7 · React 19.2.4 · TypeScript 5.9.3 · Tailwind CSS 4.3.0 · ESLint 9 · next-intl 4.13.0 · Sanity 5.30.0 + toolchain · **shadcn/ui (Base UI `@base-ui/react` 1.5.0) · lucide-react 1.17.0 · framer-motion 12.40.0 · class-variance-authority 0.7.1 · clsx 2.1.1 · tailwind-merge 3.6.0 · tw-animate-css 1.4.0** (+ `shadcn` 4.10.0 in devDeps). AI search stack → 1.09. Exact pins + notes in `00_stack-and-config.md`.
 
 ## What exists now
-- **Trilingual App Router shell** under `src/app/[locale]/` (mk/en/sr). `[locale]/layout.tsx` is a root layout (fonts, tokens, `<html lang>`, provider, temporary top bar). No `src/app/layout.tsx` (next-intl pattern).
+- **Trilingual App Router shell** under `src/app/[locale]/` (mk/en/sr). `[locale]/layout.tsx` is a root layout (fonts, tokens, `<html lang>`, provider) that now mounts the **real Style A chrome**: skip-to-content link → `<SiteHeader>` → `<main id="content" tabIndex=-1>` → `<SiteFooter>`. No `src/app/layout.tsx` (next-intl pattern).
+- **Style A chrome (1.06):** sticky header (cream@85% + 8px blur + hairline; wordmark→home; desktop nav with caramel active underline + `aria-current`; restyled MK·EN·SR switcher; accessible Base UI Dialog mobile menu with focus trap/return + Escape + reduced-motion-gated Framer entrance); walnut footer (4 link groups from `site-links` + copyright + Privacy link). Shared primitives `Container`/`Section`/`PageHeader` + `SkipToContent`. shadcn primitives `Button`/`Separator`/`Sheet` restyled to Style A; `cn` in `src/lib/utils.ts`; nav source in `src/lib/nav.ts`; provisional links in `src/lib/site-links.ts`; brand icons in `src/components/brand-icons.tsx`.
 - **Embedded Sanity Studio** at `/studio` — `src/app/studio/` is a **second root layout** sibling (its own `<html>`/`<body>`), so it is not localized. `[[...tool]]/page.tsx` (server: metadata/viewport/`force-static`) + `Studio.tsx` (`'use client'` → `<NextStudio config>`).
 - **Sanity config** at repo root: `sanity.config.ts` (Studio: schema, structure w/ singletons, vision) + `sanity.cli.ts` (CLI: api + typegen).
 - **Content model** in `src/sanity/schemaTypes/`: `post`, `review`, `book` (singleton), `author` (singleton), `topic`, shared `blockContent`, reusable localized `image`, and `localizedString/Text/BlockContent`. Field-level localization = plain `{mk,en,sr}` objects (NOT the i18n-array plugin — see report). Validation: mk-required titles, required slug, alt-required-when-image-set.
@@ -35,11 +37,14 @@
 
 ## Pages built
 - **Placeholder Home** per locale (`/mk`,`/en`,`/sr`) — from 1.04.
-- **Thin connect-to-site proof routes** (1.05, temporary): `[locale]/reviews`, `/blog`, `/about`, `/book` — fetch from Sanity, render localized titles (+ cover / no-image); MK-only review falls back to mk + shows "available in: MK" on `/en`/`/sr`. Replaced by styled pages in 1.06–1.10.
-- **`/studio`** — embedded Sanity Studio.
+- **Thin connect-to-site proof routes** (1.05, temporary): `[locale]/reviews`, `/blog`, `/about`, `/book` — fetch from Sanity, render localized titles (+ cover / no-image); MK-only review falls back to mk + shows "available in: MK" on `/en`/`/sr`. Now render **inside the new chrome**, unchanged otherwise. Replaced by styled pages in 1.08–1.10.
+- **Thin `contact` + `privacy` stubs** (1.06, temporary): `PageHeader` + one localized "coming soon" line, so every nav/footer link resolves inside the chrome. Real pages in 1.11.
+- **`/studio`** — embedded Sanity Studio (its own root layout; **no site chrome** — confirmed).
 
 ## Components built
-- **`language-switcher.tsx`** — from 1.04. (Styled header/footer/nav → 1.06.)
+- **`language-switcher.tsx`** — 1.04 logic, restyled to §6.4 in 1.06 (+ `className`/`onNavigate`).
+- **Layout (1.06):** `layout/site-header.tsx`, `layout/primary-nav.tsx` (client), `layout/mobile-menu.tsx` (client), `layout/site-footer.tsx`, `layout/container.tsx`, `layout/section.tsx`, `layout/page-header.tsx`, `layout/skip-to-content.tsx`.
+- **shadcn primitives (1.06, Style A):** `ui/button.tsx`, `ui/separator.tsx`, `ui/sheet.tsx`. Plus `brand-icons.tsx`.
 
 ## Integrations wired
 - **next-intl** (routing/proxy/request/navigation) — 1.04.
@@ -62,7 +67,9 @@ Other scripts: `npm run build`, `npm run lint`, `npm start`.
 - **21 moderate `npm audit`** findings (transitive in the Sanity toolchain) — revisit on upstream bumps. (Supersedes 1.02's 2 postcss findings.)
 - **критика vs рецензија** terminology still open (UI strings provisional, from 1.04).
 - **Sanity images via `next/image`** (remotePatterns for `cdn.sanity.io`) — set up with the real styled pages (1.06–1.10); the proof uses plain `<img>`.
-- Styled header/footer/nav + shadcn/ui → 1.06; real pages → 1.06–1.10; SEO/metadata/hreflang/sitemap → 1.12; Dalibor's live login + Studio deploy → 2.04; AI search → 1.09/2.03.
+- Styled header/footer/nav + shadcn/ui → ✅ done (1.06). Real pages → 1.07–1.11; SEO/metadata/hreflang/sitemap → 1.12; Dalibor's live login + Studio deploy → 2.04; AI search → 1.09/2.03.
+- **`site-links.ts` is provisional** — confirm external URLs in 2.01, email in 2.02 (footer email slot is rendered but inert).
+- **shadcn on Base UI (`base-nova`), not Radix** (current CLI default) — see `00_stack-and-config.md` for the deviation + globals.css reconciliation. `tw-animate-css` imported but currently unused.
 
 ## Known issues
 - None blocking. (Webpack/WASM fallback unchanged; after deleting route files, clear `.next` to drop stale generated types.)

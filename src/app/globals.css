@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @theme {
   /* ---------- Fonts (wired to next/font CSS vars, Appendix C) ---------- */
@@ -33,12 +34,47 @@
   --color-focus: #875621;          /* focus ring                      */
   --color-error: #8F3526;          /* form error text + border (6.67:1)*/
 
+  /* ---------- shadcn/ui semantic aliases → Style A (1.06) ----------
+     shadcn primitives reference generic tokens (bg-background, text-foreground,
+     ring-ring, …). We map them to the locked Style A palette so every primitive
+     inherits Hardcover, not a neutral default. NOTE: `--color-primary` (caramel)
+     and `--color-border` (hairline) already exist above and are reused as-is.
+     Per §2.5 caramel must never host normal text, so `--color-primary` is left as
+     the ≥3:1 accent and text-bearing fills use `--color-primary-strong` (the
+     restyled Button does exactly this). Values are the literal locked hexes so
+     they cannot drift. */
+  --color-background: #F4EDE1;          /* = --color-bg            */
+  --color-foreground: #2E2218;          /* = --color-text          */
+  --color-card: #EBE0CE;                /* = --color-surface       */
+  --color-card-foreground: #2E2218;     /* = --color-text          */
+  --color-popover: #F4EDE1;             /* = --color-bg            */
+  --color-popover-foreground: #2E2218;  /* = --color-text          */
+  --color-muted: #EBE0CE;               /* = --color-surface       */
+  --color-muted-foreground: #6F5D46;    /* = --color-text-muted    */
+  --color-accent: #EBE0CE;              /* = --color-surface       */
+  --color-accent-foreground: #2E2218;   /* = --color-text          */
+  --color-secondary: #EBE0CE;           /* = --color-surface       */
+  --color-secondary-foreground: #2E2218;/* = --color-text          */
+  --color-primary-foreground: #FBF7EF;  /* = --color-on-primary    */
+  --color-input: #82745F;               /* = --color-border-strong */
+  --color-ring: #875621;                /* = --color-focus         */
+  --color-destructive: #8F3526;         /* = --color-error         */
+  --color-destructive-foreground: #FBF7EF;
+
   /* ---------- Radius ---------- */
   --radius-image: 0.375rem;   /* 6px  */
   --radius-button: 0.625rem;  /* 10px */
   --radius-input: 0.625rem;   /* 10px */
   --radius-card: 0.875rem;    /* 14px */
   --radius-pill: 9999px;
+
+  /* shadcn radius scale → 10px base (matches --radius-button) so any future
+     shadcn primitive's rounded-sm/md/lg/xl is on the Style A scale. */
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
 
   /* ---------- Shadow (warm, subtle) ---------- */
   --shadow-card:       0 1px 2px rgb(46 34 24 / 0.04), 0 6px 18px rgb(46 34 24 / 0.06);
