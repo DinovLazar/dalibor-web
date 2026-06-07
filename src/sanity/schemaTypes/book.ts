@@ -46,7 +46,8 @@ export const book = defineType({
               name: "url",
               title: "URL",
               type: "url",
-              validation: (Rule) => Rule.uri({scheme: ["http", "https"]}),
+              validation: (Rule) =>
+                Rule.uri({scheme: ["http", "https"]}).required(),
             }),
           ],
           preview: {select: {title: "label.mk", subtitle: "url"}},

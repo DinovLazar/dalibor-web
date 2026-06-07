@@ -28,7 +28,12 @@
   "about": { "title": "За Далибор" },
   "reviews": { "title": "Критики" },
   "blog": { "title": "Блог" },
-  "book": { "title": "Книгата" },
+  "book": {
+    "title": "Книгата",
+    "byline": "од {name}",
+    "whereToFind": "Каде да ја најдете",
+    "findIt": "Најдете ја книгата"
+  },
   "contact": { "title": "Контакт" },
   "privacy": { "title": "Политика за приватност" },
   "notFound": { "title": "Оваа страница ја нема" },

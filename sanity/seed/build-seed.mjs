@@ -318,11 +318,25 @@ const book = {
     `${P} A prose debut`,
     `${P} Prozni debi`,
   ),
-  genre: loc(`${P} проза`, `${P} prose`, `${P} proza`),
+  // genre intentionally left UNSET — sources disagree (novel vs. story
+  // collection); resolved with Dalibor in 2.01. The field exists in the schema
+  // (editable) but is never seeded. Do not add a hardcoded genre/format here.
   description: locBlocks(
-    [`${P} Placeholder-опис на книгата на Далибор. Жанрот е намерно општ (изворите не се согласуваат).`],
-    [`${P} Placeholder description of Dalibor's book. The genre is kept generic on purpose (sources disagree).`],
-    [`${P} Placeholder opis Daliborove knjige. Žanr je namerno opšti (izvori se ne slažu).`],
+    [
+      `${P} Ова е placeholder-опис на книгата на Далибор. Вистинскиот текст и податоците за книгата доаѓаат во фаза 2.01.`,
+      `${P} Втор placeholder-параграф — тука ќе стои подолг опис на книгата, за да се види ритамот на читање во колоната за текст.`,
+      `${P} Трет placeholder-параграф. Ниту еден податок овде не е вистинит додека не се потврди со Далибор.`,
+    ],
+    [
+      `${P} This is a placeholder description of Dalibor's book. The real text and book facts arrive in phase 2.01.`,
+      `${P} A second placeholder paragraph — a longer description of the book sits here so the reading rhythm of the text column is visible.`,
+      `${P} A third placeholder paragraph. None of this is real until confirmed with Dalibor.`,
+    ],
+    [
+      `${P} Ovo je placeholder opis Daliborove knjige. Pravi tekst i podaci o knjizi stižu u fazi 2.01.`,
+      `${P} Drugi placeholder pasus — ovde stoji duži opis knjige, da se vidi ritam čitanja u koloni sa tekstom.`,
+      `${P} Treći placeholder pasus. Ništa od ovoga nije stvarno dok se ne potvrdi sa Daliborom.`,
+    ],
   ),
   publisher: `${P} PNV Publikacii`,
   publicationYear: 2022,
@@ -362,9 +376,21 @@ const author = {
     `${P} Kratka bio za početnu / podnožje.`,
   ),
   bio: locBlocks(
-    [`${P} Placeholder-биографија. Вистинскиот текст доаѓа во 2.02.`],
-    [`${P} Placeholder biography. The real text arrives in 2.02.`],
-    [`${P} Placeholder biografija. Pravi tekst stiže u 2.02.`],
+    [
+      `${P} Ова е placeholder-биографија на Далибор Плечиќ. Вистинскиот текст доаѓа во фаза 2.02.`,
+      `${P} Втор placeholder-параграф — тука ќе стои подолг разказ за неговото пишување, преводи и критика, за да се види двоколонскиот распоред.`,
+      `${P} Трет placeholder-параграф. Сите податоци овде се привремени додека не се потврдат со Далибор.`,
+    ],
+    [
+      `${P} This is a placeholder biography of Dalibor Plečić. The real text arrives in phase 2.02.`,
+      `${P} A second placeholder paragraph — a longer account of his writing, translation, and criticism sits here so the two-column layout is visible.`,
+      `${P} A third placeholder paragraph. Everything here is provisional until confirmed with Dalibor.`,
+    ],
+    [
+      `${P} Ovo je placeholder biografija Dalibora Plečića. Pravi tekst stiže u fazi 2.02.`,
+      `${P} Drugi placeholder pasus — ovde stoji duži prikaz njegovog pisanja, prevoda i kritike, da se vidi raspored u dve kolone.`,
+      `${P} Treći placeholder pasus. Sve ovde je privremeno dok se ne potvrdi sa Daliborom.`,
+    ],
   ),
   socialLinks: [
     {_key: key(), _type: "socialLink", platform: `${P} Booksa`, url: "https://example.com/placeholder-booksa"},

@@ -43,7 +43,10 @@
     "title": "Blog"
   },
   "book": {
-    "title": "The Book"
+    "title": "The Book",
+    "byline": "by {name}",
+    "whereToFind": "Where to find it",
+    "findIt": "Find the book"
   },
   "contact": {
     "title": "Contact"

@@ -203,3 +203,18 @@
 **Build/data note (not a config change, recorded for future phases)**
 - The build-time Sanity `client.fetch` (`useCdn: true`) is cached in `.next/cache`, which is what keeps the locale homes statically prerendered (`●`). After a dataset re-import, an **incremental** local rebuild can serve the previous result until `.next` is cleared (`Remove-Item -Recurse -Force .next`). Clean CI/Vercel builds start with no cache, so this is local-only. A content-refresh strategy (ISR / `revalidate` / Sanity webhooks) is deferred to a later phase.
 - `dev`/`build` remain pinned to `--webpack` (1.02 constraint unchanged).
+
+---
+
+## 2026-06-07 — Phase 1.08 (About + Book pages + shared Portable Text renderer)
+
+**New dependency — `@portabletext/react` `^6.2.0`** (promoted to a **direct** dependency in `package.json`). It was already present transitively via `next-sanity`/`sanity`; making it direct guarantees it survives a clean install. RSC-compatible (renders as a server component — no `"use client"`, no client hooks). Used by `src/components/portable-text.tsx`.
+
+**Schema/content**
+- `book.purchaseLinks[].url` is now `.required()` (was URL-validated only) — the single schema edit this phase. All other fields the brief mentioned (`author.bio`, `book.description`, `purchaseLinks`, flat `publisher`/`publicationYear`) already existed from 1.05/1.07 and were **reused**; the "portrait" reuses the existing `author.photo`. **No `format` field added.**
+- **Discrepancy guard:** the seeded `book.genre` value was **removed** from `build-seed.mjs` (the field remains in the schema, editable, but is never seeded and never rendered). Seed `author.bio` + `book.description` expanded to 3 `[PLACEHOLDER]` paragraphs each (mk/en/sr). Regenerated + re-imported (`--replace`).
+- TypeGen regenerated: still **8** typed queries — `AUTHOR_QUERY` removed, `ABOUT_QUERY` added, `BOOK_QUERY` repurposed for the Book page (now selects `description`/`purchaseLinks` + a cross-document `"authorName"`, drops `genre`).
+
+**i18n** — added `book.byline` / `book.whereToFind` / `book.findIt` to `messages/{en,mk,sr}.json` (mk Cyrillic; en/sr Latin; `byline` uses the `{name}` ICU param).
+
+**No other config changes.** `next.config.ts`, the next-intl plugin wrapper, and the `--webpack` pin are unchanged. Page-load reveal still uses the pure-CSS `.reveal` classes (no Framer Motion).

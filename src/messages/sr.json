@@ -28,7 +28,12 @@
   "about": { "title": "O autoru" },
   "reviews": { "title": "Kritike" },
   "blog": { "title": "Blog" },
-  "book": { "title": "Knjiga" },
+  "book": {
+    "title": "Knjiga",
+    "byline": "od {name}",
+    "whereToFind": "Gde da je nađete",
+    "findIt": "Pronađite knjigu"
+  },
   "contact": { "title": "Kontakt" },
   "privacy": { "title": "Politika privatnosti" },
   "notFound": { "title": "Ova stranica ne postoji" },

@@ -349,25 +349,32 @@ export type POSTS_QUERY_RESULT = Array<{
 
 // Source: src/sanity/lib/queries.ts
 // Variable: BOOK_QUERY
-// Query: *[_type == "book"][0]{    _id,    title,    tagline,    genre,    coverImage,    publisher,    publicationYear  }
+// Query: *[_type == "book"][0]{    _id,    title,    coverImage,    description,    purchaseLinks,    publisher,    publicationYear,    "authorName": *[_type == "author"][0].name  }
 export type BOOK_QUERY_RESULT = {
   _id: string;
   title: LocalizedString | null;
-  tagline: LocalizedString | null;
-  genre: LocalizedString | null;
   coverImage: LocalizedImage | null;
+  description: LocalizedBlockContent | null;
+  purchaseLinks: Array<{
+    label?: LocalizedString;
+    url?: string;
+    _type: "purchaseLink";
+    _key: string;
+  }> | null;
   publisher: string | null;
   publicationYear: number | null;
+  authorName: LocalizedString | null;
 } | null;
 
 // Source: src/sanity/lib/queries.ts
-// Variable: AUTHOR_QUERY
-// Query: *[_type == "author"][0]{    _id,    name,    roles,    shortBio,    photo  }
-export type AUTHOR_QUERY_RESULT = {
+// Variable: ABOUT_QUERY
+// Query: *[_type == "author"][0]{    _id,    name,    roles,    tagline,    bio,    photo  }
+export type ABOUT_QUERY_RESULT = {
   _id: string;
   name: LocalizedString | null;
   roles: LocalizedString | null;
-  shortBio: LocalizedText | null;
+  tagline: LocalizedString | null;
+  bio: LocalizedBlockContent | null;
   photo: LocalizedImage | null;
 } | null;
 
@@ -429,8 +436,8 @@ declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    excerpt,\n    coverImage,\n    bookAuthor,\n    publishedAt\n  }\n': REVIEWS_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    title,\n    excerpt,\n    publishedAt\n  }\n': POSTS_QUERY_RESULT;
-    '\n  *[_type == "book"][0]{\n    _id,\n    title,\n    tagline,\n    genre,\n    coverImage,\n    publisher,\n    publicationYear\n  }\n': BOOK_QUERY_RESULT;
-    '\n  *[_type == "author"][0]{\n    _id,\n    name,\n    roles,\n    shortBio,\n    photo\n  }\n': AUTHOR_QUERY_RESULT;
+    '\n  *[_type == "book"][0]{\n    _id,\n    title,\n    coverImage,\n    description,\n    purchaseLinks,\n    publisher,\n    publicationYear,\n    "authorName": *[_type == "author"][0].name\n  }\n': BOOK_QUERY_RESULT;
+    '\n  *[_type == "author"][0]{\n    _id,\n    name,\n    roles,\n    tagline,\n    bio,\n    photo\n  }\n': ABOUT_QUERY_RESULT;
     '\n  *[_type == "review" && defined(slug.current)]\n    | order(coalesce(publishedAt, _createdAt) desc)[0...3]{\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    excerpt,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, title }\n  }\n': HOME_REVIEWS_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]\n    | order(coalesce(publishedAt, _createdAt) desc)[0...3]{\n    _id,\n    "slug": slug.current,\n    title,\n    excerpt,\n    publishedAt\n  }\n': HOME_POSTS_QUERY_RESULT;
     '\n  *[_type == "book"][0]{\n    _id,\n    title,\n    tagline,\n    coverImage,\n    publisher,\n    publicationYear\n  }\n': HOME_FEATURED_BOOK_QUERY_RESULT;

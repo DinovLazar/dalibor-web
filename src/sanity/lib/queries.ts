@@ -28,24 +28,34 @@ export const POSTS_QUERY = defineQuery(`
   }
 `);
 
+/**
+ * The Book page (Phase 1.08). The book singleton + the author's localized name
+ * (via a cross-document sub-query) for the "by …" credit, in one fetch. No
+ * `genre`: sources disagree (novel vs. story collection) and it is resolved with
+ * Dalibor in 2.01, so the page asserts no genre/format.
+ */
 export const BOOK_QUERY = defineQuery(`
   *[_type == "book"][0]{
     _id,
     title,
-    tagline,
-    genre,
     coverImage,
+    description,
+    purchaseLinks,
     publisher,
-    publicationYear
+    publicationYear,
+    "authorName": *[_type == "author"][0].name
   }
 `);
 
-export const AUTHOR_QUERY = defineQuery(`
+/** The About page (Phase 1.08): the author singleton — name, roles, tagline (the
+ * page header) + the long-form bio (Portable Text) + portrait (`photo`). */
+export const ABOUT_QUERY = defineQuery(`
   *[_type == "author"][0]{
     _id,
     name,
     roles,
-    shortBio,
+    tagline,
+    bio,
     photo
   }
 `);
