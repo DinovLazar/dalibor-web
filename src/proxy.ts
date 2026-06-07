@@ -1,3 +1,4 @@
+import type { NextRequest } from "next/server";
 import createMiddleware from "next-intl/middleware";
 
 import { routing } from "./i18n/routing";
@@ -7,10 +8,28 @@ import { routing } from "./i18n/routing";
  * request handler is filename-agnostic, so `createMiddleware` mounts here
  * unchanged and handles the `/` → `/mk` redirect plus all locale routing.
  */
-export default createMiddleware(routing);
+const handleI18nRouting = createMiddleware(routing);
+
+export default function proxy(request: NextRequest) {
+  // Belt-and-braces guard: the embedded Sanity Studio must NEVER be
+  // locale-prefixed/redirected. The matcher below already excludes /studio,
+  // but we observed a dev server serving a stale compiled matcher that
+  // redirected /studio → /mk/studio (404). This in-code guard makes the
+  // exclusion unconditional regardless of how the matcher is compiled.
+  if (
+    request.nextUrl.pathname === "/studio" ||
+    request.nextUrl.pathname.startsWith("/studio/")
+  ) {
+    return;
+  }
+  return handleI18nRouting(request);
+}
 
 export const config = {
   // Run on every pathname except API routes, Next.js internals, Vercel
-  // internals, and any path containing a dot (static files).
-  matcher: "/((?!api|_next|_vercel|.*\\..*).*)",
+  // internals, the embedded Sanity Studio (`/studio` + sub-paths — it must NOT
+  // be locale-prefixed/redirected), and any path containing a dot (static
+  // files). The Studio talks to Sanity's own domains, so no other exclusions
+  // are needed.
+  matcher: "/((?!api|_next|_vercel|studio|.*\\..*).*)",
 };

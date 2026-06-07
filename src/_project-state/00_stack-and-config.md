@@ -115,3 +115,41 @@
 **Notes**
 - Deleting an `app/` route file can leave a stale generated type under `.next/dev/types/…`; clear `.next` before rebuilding.
 - `.claude/launch.json` added (config `prod`, `autoPort:true`) to drive the Preview tool for visual checks.
+
+---
+
+## 2026-06-06 — Phase 1.05 (Sanity CMS + content models + embedded Studio)
+
+**Added dependencies (exact resolved versions)**
+
+| Package | Installed | In `package.json` |
+|---|---|---|
+| sanity | 5.30.0 | `^5.30.0` |
+| next-sanity | 13.0.11 | `^13.0.11` |
+| @sanity/vision | 5.30.0 | `^5.30.0` |
+| @sanity/image-url | 2.1.1 | `^2.1.1` |
+| styled-components | 6.4.2 | `^6.4.2` |
+
+- Installed the latest stable of each. **React 19.2.4 / Next 16.2.7 satisfy every peer** (sanity `react ^19.2.2`; next-sanity `react ^19.2.3`, `next ^16`, `sanity ^5.29 || ^6`). No ERESOLVE, **no `--force`/`--legacy-peer-deps`**. `styled-components` added explicitly (Studio peer). Node 24.14.0 satisfies the toolchain `engines` (`>=22.12`).
+- Evaluated `sanity-plugin-internationalized-array@5.1.3` (version-compatible with Studio v5) but **removed it** — it cannot cleanly localize Portable Text, and the model needs localized rich text. Used the plain `{mk,en,sr}` **object** shape uniformly instead (fallback in `src/sanity/lib/localize.ts`). Full rationale in the 1.05 completion report.
+- **21 moderate `npm audit`** findings appeared (transitive in the Sanity toolchain). `npm audit fix --force` would break (downgrades) — not applied; revisit on upstream bumps. (Supersedes 1.02's 2 postcss-in-next findings.)
+
+**Sanity project + env**
+- Project id **`ndqmaath`** ("Dalibor Plečić Website"); **`production`** dataset set **Public**; CORS origin `http://localhost:3000` (allow credentials).
+- Env vars (names only — all PUBLIC, no token): `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` (=`production`), `NEXT_PUBLIC_SANITY_API_VERSION` (=`2026-06-06`). `.env.local` gitignored; **`.env.example` committed** (added `!.env.example` negation to `.gitignore`).
+
+**Config + conventions wired this phase**
+- Embedded Studio at **`/studio`** (basePath) — root `sanity.config.ts` (schema + `structureTool`/structure + `visionTool` + singleton enforcement) and `sanity.cli.ts` (`api` + `typegen`).
+- Read client (`src/sanity/lib/client.ts`): **`perspective:'published'` + `useCdn:true`, no token.**
+- **Localization shape:** plain `{mk,en,sr}` objects for ALL localized fields (NOT the i18n-array plugin); graceful fallback mk→en→sr.
+- **Singletons:** `book` + `author` — pinned `documentId` in `structure.ts` + create/delete/duplicate/unpublish + template restrictions in `sanity.config.ts`.
+- **TypeGen:** `npm run typegen` = `sanity schema extract && sanity typegen generate`. Config lives in the `sanity.cli.ts` **`typegen`** key (the standalone `sanity-typegen.json` is deprecated and not used). Outputs `schema.json` (root) + `src/sanity/sanity.types.ts` (gitignored by ESLint, type-checked by tsc).
+- **Proxy:** `src/proxy.ts` matcher excludes `/studio` (`(?!api|_next|_vercel|studio|.*\..*)`).
+- **Second root layout:** `src/app/studio/layout.tsx` renders the Studio branch's `<html>`/`<body>` (sibling of `[locale]`, no top-level `app/layout.tsx`) — valid multiple-root-layouts setup; build confirms `○ /studio/[[...tool]]`.
+- **Folders:** code in `src/sanity/`; the Plan's root `sanity/` repurposed for seed data (`sanity/seed/`).
+
+**Notes / gotchas**
+- Sanity CLI env: ran `schema extract` / `typegen` / `dataset import` with the three `NEXT_PUBLIC_SANITY_*` vars injected inline (robust regardless of whether the CLI auto-loads `.env.local`). Next loads `.env.local` for `dev`/`build` automatically.
+- Seed import: `npx sanity dataset import sanity/seed/seed.ndjson --dataset production --replace` (idempotent; the dataset had been seeded once already). The placeholder cover is uploaded via the `_sanityAsset` `image@file://./placeholder-cover.png` directive (asset ref merged while preserving `_type` + localized `alt`).
+- `@sanity/image-url`: use the **named** `createImageUrlBuilder` (the default export is deprecated); it builds `cdn.sanity.io` URLs.
+- `dev`/`build` remain pinned to `--webpack` (1.02 constraint unchanged).

@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Sanity TypeGen output (generated) + seed tooling/data (not app code):
+    "src/sanity/sanity.types.ts",
+    "sanity/seed/**",
   ]),
 ]);
 
