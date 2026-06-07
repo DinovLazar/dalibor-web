@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/layout/container";
-import { Cover } from "@/components/home/cover";
+import { Cover } from "@/components/cover";
 import { buttonVariants } from "@/components/ui/button";
 import { localizedValue } from "@/sanity/lib/localize";
 import type { HOME_FEATURED_BOOK_QUERY_RESULT } from "@/sanity/sanity.types";

@@ -13,6 +13,10 @@ import { cn } from "@/lib/utils";
  * placeholder: a parchment block with an inset hairline frame, a `book-open`
  * glyph, and the work's monogram. No skeuomorphism.
  *
+ * Shared by the Home / Book / Reviews surfaces. Pure of server-only deps (the
+ * Sanity image builder needs only the public project id/dataset), so it renders
+ * in client components too — the Reviews search results reuse it on the client.
+ *
  * `decorative` covers (the cover inside a card whose title already names the
  * link) get `alt=""` so screen readers don't hear duplicate link text (§6.6).
  * The placeholder is purely visual, so it is always `aria-hidden`.

@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { Link } from "@/i18n/navigation";
-import { Cover } from "@/components/home/cover";
+import { Cover } from "@/components/cover";
 import { availableLanguages, localizedValue } from "@/sanity/lib/localize";
 import type { AppLocale } from "@/sanity/lib/localize";
 import type { HOME_REVIEWS_QUERY_RESULT } from "@/sanity/sanity.types";

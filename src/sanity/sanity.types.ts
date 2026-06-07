@@ -324,27 +324,126 @@ export type AllSanitySchemaTypes =
   | Geopoint;
 
 // Source: src/sanity/lib/queries.ts
-// Variable: REVIEWS_QUERY
-// Query: *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {    _id,    "slug": slug.current,    reviewTitle,    excerpt,    coverImage,    bookAuthor,    publishedAt  }
-export type REVIEWS_QUERY_RESULT = Array<{
+// Variable: REVIEWS_LIST_QUERY
+// Query: *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {    _id,    "slug": slug.current,    reviewTitle,    bookTitle,    bookAuthor,    excerpt,    coverImage,    publishedAt,    "topics": topics[]->{ _id, "slug": slug.current, title }  }
+export type REVIEWS_LIST_QUERY_RESULT = Array<{
   _id: string;
   slug: string | null;
   reviewTitle: LocalizedString | null;
+  bookTitle: LocalizedString | null;
+  bookAuthor: string | null;
   excerpt: LocalizedText | null;
   coverImage: LocalizedImage | null;
-  bookAuthor: string | null;
   publishedAt: string | null;
+  topics: Array<{
+    _id: string;
+    slug: string | null;
+    title: LocalizedString | null;
+  }> | null;
 }>;
 
 // Source: src/sanity/lib/queries.ts
-// Variable: POSTS_QUERY
-// Query: *[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {    _id,    "slug": slug.current,    title,    excerpt,    publishedAt  }
-export type POSTS_QUERY_RESULT = Array<{
+// Variable: REVIEWS_SEARCH_QUERY
+// Query: *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {    _id,    "slug": slug.current,    reviewTitle,    bookTitle,    bookAuthor,    excerpt,    coverImage,    publishedAt,    body,    "topics": topics[]->{ _id, "slug": slug.current, title }  }
+export type REVIEWS_SEARCH_QUERY_RESULT = Array<{
+  _id: string;
+  slug: string | null;
+  reviewTitle: LocalizedString | null;
+  bookTitle: LocalizedString | null;
+  bookAuthor: string | null;
+  excerpt: LocalizedText | null;
+  coverImage: LocalizedImage | null;
+  publishedAt: string | null;
+  body: LocalizedBlockContent | null;
+  topics: Array<{
+    _id: string;
+    slug: string | null;
+    title: LocalizedString | null;
+  }> | null;
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: REVIEW_BY_SLUG_QUERY
+// Query: *[_type == "review" && slug.current == $slug][0]{    _id,    "slug": slug.current,    reviewTitle,    bookTitle,    bookAuthor,    publisher,    publicationYear,    excerpt,    body,    coverImage,    publishedAt,    source,    "topics": topics[]->{ _id, "slug": slug.current, title }  }
+export type REVIEW_BY_SLUG_QUERY_RESULT = {
+  _id: string;
+  slug: string | null;
+  reviewTitle: LocalizedString | null;
+  bookTitle: LocalizedString | null;
+  bookAuthor: string | null;
+  publisher: string | null;
+  publicationYear: number | null;
+  excerpt: LocalizedText | null;
+  body: LocalizedBlockContent | null;
+  coverImage: LocalizedImage | null;
+  publishedAt: string | null;
+  source: {
+    sourceName?: string;
+    sourceUrl?: string;
+  } | null;
+  topics: Array<{
+    _id: string;
+    slug: string | null;
+    title: LocalizedString | null;
+  }> | null;
+} | null;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: REVIEW_SLUGS_QUERY
+// Query: *[_type == "review" && defined(slug.current)]{ "slug": slug.current }
+export type REVIEW_SLUGS_QUERY_RESULT = Array<{
+  slug: string | null;
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: TOPICS_QUERY
+// Query: *[_type == "topic" && defined(slug.current)] | order(title.mk asc){    _id,    "slug": slug.current,    title  }
+export type TOPICS_QUERY_RESULT = Array<{
+  _id: string;
+  slug: string | null;
+  title: LocalizedString | null;
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: POSTS_LIST_QUERY
+// Query: *[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {    _id,    "slug": slug.current,    title,    excerpt,    coverImage,    publishedAt,    "topics": topics[]->{ _id, "slug": slug.current, title }  }
+export type POSTS_LIST_QUERY_RESULT = Array<{
   _id: string;
   slug: string | null;
   title: LocalizedString | null;
   excerpt: LocalizedText | null;
+  coverImage: LocalizedImage | null;
   publishedAt: string | null;
+  topics: Array<{
+    _id: string;
+    slug: string | null;
+    title: LocalizedString | null;
+  }> | null;
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: POST_BY_SLUG_QUERY
+// Query: *[_type == "post" && slug.current == $slug][0]{    _id,    "slug": slug.current,    title,    excerpt,    body,    coverImage,    publishedAt,    "topics": topics[]->{ _id, "slug": slug.current, title }  }
+export type POST_BY_SLUG_QUERY_RESULT = {
+  _id: string;
+  slug: string | null;
+  title: LocalizedString | null;
+  excerpt: LocalizedText | null;
+  body: LocalizedBlockContent | null;
+  coverImage: LocalizedImage | null;
+  publishedAt: string | null;
+  topics: Array<{
+    _id: string;
+    slug: string | null;
+    title: LocalizedString | null;
+  }> | null;
+} | null;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: POST_SLUGS_QUERY
+// Query: *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
+export type POST_SLUGS_QUERY_RESULT = Array<{
+  slug: string | null;
 }>;
 
 // Source: src/sanity/lib/queries.ts
@@ -434,8 +533,14 @@ export type HOME_HERO_QUERY_RESULT = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    excerpt,\n    coverImage,\n    bookAuthor,\n    publishedAt\n  }\n': REVIEWS_QUERY_RESULT;
-    '\n  *[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    title,\n    excerpt,\n    publishedAt\n  }\n': POSTS_QUERY_RESULT;
+    '\n  *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    excerpt,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': REVIEWS_LIST_QUERY_RESULT;
+    '\n  *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    excerpt,\n    coverImage,\n    publishedAt,\n    body,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': REVIEWS_SEARCH_QUERY_RESULT;
+    '\n  *[_type == "review" && slug.current == $slug][0]{\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    publisher,\n    publicationYear,\n    excerpt,\n    body,\n    coverImage,\n    publishedAt,\n    source,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': REVIEW_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "review" && defined(slug.current)]{ "slug": slug.current }\n': REVIEW_SLUGS_QUERY_RESULT;
+    '\n  *[_type == "topic" && defined(slug.current)] | order(title.mk asc){\n    _id,\n    "slug": slug.current,\n    title\n  }\n': TOPICS_QUERY_RESULT;
+    '\n  *[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    title,\n    excerpt,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': POSTS_LIST_QUERY_RESULT;
+    '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    "slug": slug.current,\n    title,\n    excerpt,\n    body,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': POST_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }\n': POST_SLUGS_QUERY_RESULT;
     '\n  *[_type == "book"][0]{\n    _id,\n    title,\n    coverImage,\n    description,\n    purchaseLinks,\n    publisher,\n    publicationYear,\n    "authorName": *[_type == "author"][0].name\n  }\n': BOOK_QUERY_RESULT;
     '\n  *[_type == "author"][0]{\n    _id,\n    name,\n    roles,\n    tagline,\n    bio,\n    photo\n  }\n': ABOUT_QUERY_RESULT;
     '\n  *[_type == "review" && defined(slug.current)]\n    | order(coalesce(publishedAt, _createdAt) desc)[0...3]{\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    excerpt,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, title }\n  }\n': HOME_REVIEWS_QUERY_RESULT;

@@ -37,10 +37,32 @@
     "title": "About"
   },
   "reviews": {
-    "title": "Reviews"
+    "title": "Reviews",
+    "eyebrow": "Archive",
+    "lede": "Readings of books from the region and beyond.",
+    "searchHelp": "Try a theme — e.g. memory, exile, language. Search by idea, not just by title.",
+    "searchSubmit": "Search",
+    "clearSearch": "Clear search",
+    "topicsLabel": "Filter by topic",
+    "allTopics": "All",
+    "resultsFor": "Showing reviews about “{query}”",
+    "emptyTitle": "Nothing on that theme — yet",
+    "emptyBody": "Try another word, or browse all reviews.",
+    "empty": "No reviews to show yet.",
+    "backToReviews": "Back to Reviews",
+    "breadcrumbLabel": "Breadcrumb",
+    "reviewedBook": "Reviewed book",
+    "source": "Source"
   },
   "blog": {
-    "title": "Blog"
+    "title": "Blog",
+    "eyebrow": "Notes",
+    "lede": "Essays and notes on books, translation, and reading.",
+    "topicsLabel": "Filter by topic",
+    "allTopics": "All",
+    "empty": "No posts to show yet.",
+    "backToBlog": "Back to Blog",
+    "breadcrumbLabel": "Breadcrumb"
   },
   "book": {
     "title": "The Book",

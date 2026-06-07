@@ -26,8 +26,34 @@
     "readBlog": "Na blog"
   },
   "about": { "title": "O autoru" },
-  "reviews": { "title": "Kritike" },
-  "blog": { "title": "Blog" },
+  "reviews": {
+    "title": "Kritike",
+    "eyebrow": "Arhiva",
+    "lede": "Čitanja knjiga iz regiona i šire.",
+    "searchHelp": "Probajte temu — npr. memorija, egzil, jezik. Pretražujte po ideji, ne samo po naslovu.",
+    "searchSubmit": "Pretraži",
+    "clearSearch": "Obriši pretragu",
+    "topicsLabel": "Filtriraj po temi",
+    "allTopics": "Sve",
+    "resultsFor": "Prikazane kritike za „{query}“",
+    "emptyTitle": "Još uvek ništa na tu temu",
+    "emptyBody": "Probajte drugu reč ili pregledajte sve kritike.",
+    "empty": "Još uvek nema kritika za prikaz.",
+    "backToReviews": "Nazad na kritike",
+    "breadcrumbLabel": "Navigaciona putanja",
+    "reviewedBook": "Recenzirana knjiga",
+    "source": "Izvor"
+  },
+  "blog": {
+    "title": "Blog",
+    "eyebrow": "Beleške",
+    "lede": "Eseji i beleške o knjigama, prevodu i čitanju.",
+    "topicsLabel": "Filtriraj po temi",
+    "allTopics": "Sve",
+    "empty": "Još uvek nema objava za prikaz.",
+    "backToBlog": "Nazad na blog",
+    "breadcrumbLabel": "Navigaciona putanja"
+  },
   "book": {
     "title": "Knjiga",
     "byline": "od {name}",

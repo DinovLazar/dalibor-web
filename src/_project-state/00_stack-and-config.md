@@ -218,3 +218,32 @@
 **i18n** — added `book.byline` / `book.whereToFind` / `book.findIt` to `messages/{en,mk,sr}.json` (mk Cyrillic; en/sr Latin; `byline` uses the `{name}` ICU param).
 
 **No other config changes.** `next.config.ts`, the next-intl plugin wrapper, and the `--webpack` pin are unchanged. Page-load reveal still uses the pure-CSS `.reveal` classes (no Framer Motion).
+
+---
+
+## 2026-06-07 — Phase 1.09 (Reviews list + topic search + single-review pages; AI-search stack built dormant)
+
+**Added dependencies (exact resolved versions)**
+
+| Package | Installed | In `package.json` | Where |
+|---|---|---|---|
+| ai | 6.0.197 | `^6.0.197` | dependencies |
+| voyage-ai-provider | 4.0.0 | `^4.0.0` | dependencies |
+| @supabase/supabase-js | 2.107.0 | `^2.107.0` | dependencies |
+| server-only | 0.0.1 | `^0.0.1` | dependencies |
+
+- Clean install under **React 19.2.4 / Next 16.2.7 / Tailwind 4.3.0** — no peer conflicts, no `--force`/`--legacy-peer-deps`. `voyage-ai-provider@4` declares no `ai` peer; both it and `ai@6` resolve to the single hoisted `@ai-sdk/provider@3`, so `embed`/`embedMany` accept the Voyage `EmbeddingModelV3` with **no provider-spec mismatch and no `@ts-ignore`**.
+- `--webpack` `dev`/`build` scripts unchanged.
+- **`npm audit`** is now **19 moderate** (transitive; Sanity toolchain + the new ai/supabase chains). `--force` would break (downgrades); not applied — revisit on upstream bumps.
+
+**AI-search decisions recorded here (built in 1.09, goes live in 2.03)**
+
+- **Two-tier, semantic-with-keyword-fallback, all server-side.** Semantic runs only when `VOYAGE_API_KEY` + `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` are all present (derived from env presence, single-sourced via `semanticConfigured()`); otherwise the always-on keyword path runs. The semantic path is wrapped in `try/catch` so a runtime failure also falls back. The API returns an honest `mode: 'semantic' | 'keyword'` flag. The browser only ever calls our own `POST /api/reviews/search`.
+- **Embedding model + dimension:** `VOYAGE_MODEL` defaults to **`voyage-3.5`** (multilingual, 1024-dim, cheap); the pgvector column is **`vector(1024)`** (documented constant `EMBEDDING_DIMENSIONS = 1024`). `voyage-3.5` and `voyage-4` both default to 1024 dims, so 2.03 can pick the final model without touching the migration. **The migration was NOT run.**
+- **Voyage ↔ AI SDK — flagged deviation (no first-party provider):** Voyage is reached through the **community `voyage-ai-provider`** via the Vercel AI SDK core (`ai`: `embed`/`embedMany`). All Voyage access is isolated behind `src/lib/search/embeddings.ts` (`embedQuery`/`embedDocuments`), so 2.03 can swap to the Vercel AI Gateway or a direct REST call without touching call sites. Verified API: `createVoyage().embeddingModel('voyage-3.5')` (the `textEmbeddingModel` alias is deprecated), `providerOptions.voyage.inputType: 'query'|'document'`.
+- **Vector store:** Supabase pgvector, **HNSW** index with `vector_cosine_ops`, cosine distance (`<=>`), **one embedding row per review** (language-neutral slug; the multilingual model matches cross-lingually from a single combined-language source). Match logic lives in the `match_reviews` SQL RPC (invoked via `supabase.rpc(...)`); topic-scoping is applied to the hydrated Sanity set in JS (topics aren't in the vector table — no `.eq()` chained onto the RPC). Migration file: `supabase/migrations/0001_review_embeddings.sql` (written, **not executed**).
+- **Server-only isolation:** `embeddings.ts`, `supabase.ts`, `reviews-search.ts` start with `import "server-only"`; the Voyage/Supabase modules are additionally **dynamically imported** inside the configured branch so the keyword path never loads them.
+
+**Env vars (names only — values only in gitignored `.env.local`, set in 2.03):** `VOYAGE_API_KEY`, `VOYAGE_MODEL` (=`voyage-3.5`), `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (server-only — never `NEXT_PUBLIC`), `SANITY_WEBHOOK_SECRET` (guards the dormant re-index route). Template added to `.env.example`.
+
+**No other config changes.** `next.config.ts`, the next-intl plugin wrapper, the proxy matcher (already excludes `/api`), and the `--webpack` pin are unchanged.

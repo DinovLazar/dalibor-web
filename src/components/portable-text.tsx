@@ -16,6 +16,10 @@ import { cn } from "@/lib/utils";
  * Reused by About + Book now and by single review / blog / book pages later, so
  * it stays self-contained and styles every block type the `blockContent` schema
  * allows (normal · h2–h4 · blockquote · bullet/number lists · strong/em/link).
+ *
+ * Opt-in `dropCap` adds the `article-body` class so the first paragraph gets the
+ * §3.6 Playfair caramel initial (CSS lives in globals.css); off by default, so
+ * About + Book stay unchanged.
  */
 
 /** The value shape `@portabletext/react` accepts (a single block or an array). */
@@ -95,15 +99,24 @@ const components: PortableTextComponents = {
 
 export function PortableText({
   value,
+  dropCap = false,
   className,
 }: {
   value?: PortableTextValue | null;
+  /** Opt-in §3.6 drop cap on the first paragraph (adds `.article-body`). */
+  dropCap?: boolean;
   className?: string;
 }) {
   if (!value || (Array.isArray(value) && value.length === 0)) return null;
 
   return (
-    <div className={cn("max-w-prose text-body text-text", className)}>
+    <div
+      className={cn(
+        "max-w-prose text-body text-text",
+        dropCap && "article-body",
+        className,
+      )}
+    >
       <PortableTextReact value={value} components={components} />
     </div>
   );

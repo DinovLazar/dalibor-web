@@ -129,6 +129,34 @@ const topics = [
 
 const posts = [
   {
+    // Partial-language (mk + en, no sr) — dated newest so it leads the list and
+    // exercises the mk→en→sr fallback + the "available in: MK · EN" note (§6.13)
+    // on /sr. Realistic, too: a fresh note often exists in Macedonian + English
+    // before a Serbian version is written.
+    _id: "post-on-rereading",
+    _type: "post",
+    title: loc(
+      `${P} За препрочитувањето`,
+      `${P} On rereading`,
+      // sr intentionally omitted
+    ),
+    slug: {_type: "slug", current: "placeholder-on-rereading"},
+    excerpt: loc(
+      `${P} Зошто најдобрите книги стануваат подобри при второто читање.`,
+      `${P} Why the best books get better the second time around.`,
+    ),
+    body: locBlocks(
+      [
+        `${P} Ова е placeholder-запис достапен само на македонски и англиски. На /sr треба да се прикаже преку fallback, со ознака „Достапно на: MK · EN“.`,
+      ],
+      [
+        `${P} This is a placeholder post available only in Macedonian and English. On /sr it should fall back, with the "available in: MK · EN" note.`,
+      ],
+    ),
+    topics: [ref("topic-translation")],
+    publishedAt: "2026-05-28T09:00:00Z",
+  },
+  {
     _id: "post-translation-as-reading",
     _type: "post",
     title: loc(

@@ -6,26 +6,124 @@ import {defineQuery} from "next-sanity";
  * `{mk, en, sr}` objects and resolved on the server with `localizedValue`.
  */
 
-export const REVIEWS_QUERY = defineQuery(`
+/* ---------------------------------------------------------------------------
+ * Reviews — list, search source, single, and slug projections (Phase 1.09).
+ *
+ * These supersede the thin 1.05 proof-route `REVIEWS_QUERY`. Localized fields
+ * are fetched whole ({mk,en,sr}) and resolved with `localizedValue` at render
+ * time; topic references are dereferenced to `{ slug, title }` so cards can
+ * render chips and the page can filter by topic slug server-side.
+ * ------------------------------------------------------------------------- */
+
+/** Every published review with the fields the Style A list card needs. */
+export const REVIEWS_LIST_QUERY = defineQuery(`
   *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {
     _id,
     "slug": slug.current,
     reviewTitle,
+    bookTitle,
+    bookAuthor,
     excerpt,
     coverImage,
-    bookAuthor,
-    publishedAt
+    publishedAt,
+    "topics": topics[]->{ _id, "slug": slug.current, title }
   }
 `);
 
-export const POSTS_QUERY = defineQuery(`
+/**
+ * Search source — the list-card fields plus the localized `body` so the keyword
+ * fallback can match against a plain-text flattening of the review. One fetch is
+ * reused by both the keyword path and (to hydrate matched slugs) the semantic
+ * path in `src/lib/search/reviews-search.ts`.
+ */
+export const REVIEWS_SEARCH_QUERY = defineQuery(`
+  *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {
+    _id,
+    "slug": slug.current,
+    reviewTitle,
+    bookTitle,
+    bookAuthor,
+    excerpt,
+    coverImage,
+    publishedAt,
+    body,
+    "topics": topics[]->{ _id, "slug": slug.current, title }
+  }
+`);
+
+/** One review by its language-neutral slug — the full single-review page. */
+export const REVIEW_BY_SLUG_QUERY = defineQuery(`
+  *[_type == "review" && slug.current == $slug][0]{
+    _id,
+    "slug": slug.current,
+    reviewTitle,
+    bookTitle,
+    bookAuthor,
+    publisher,
+    publicationYear,
+    excerpt,
+    body,
+    coverImage,
+    publishedAt,
+    source,
+    "topics": topics[]->{ _id, "slug": slug.current, title }
+  }
+`);
+
+/** Just the slugs — for `generateStaticParams` on the single-review route. */
+export const REVIEW_SLUGS_QUERY = defineQuery(`
+  *[_type == "review" && defined(slug.current)]{ "slug": slug.current }
+`);
+
+/** All topics (slug + localized label) for the Reviews filter chips. */
+export const TOPICS_QUERY = defineQuery(`
+  *[_type == "topic" && defined(slug.current)] | order(title.mk asc){
+    _id,
+    "slug": slug.current,
+    title
+  }
+`);
+
+/* ---------------------------------------------------------------------------
+ * Blog — list, single, and slug projections (Phase 1.10).
+ *
+ * These supersede the thin 1.05 proof-route `POSTS_QUERY` (only that stub used
+ * it), mirroring the Reviews set: localized fields are fetched whole ({mk,en,sr})
+ * and resolved with `localizedValue` at render time; topic references are
+ * dereferenced to `{ slug, title }` so cards can render chips and the list can
+ * filter by topic slug server-side. The single post adds the localized `body`.
+ * ------------------------------------------------------------------------- */
+
+/** Every published post with the fields the Style A blog card needs. */
+export const POSTS_LIST_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {
     _id,
     "slug": slug.current,
     title,
     excerpt,
-    publishedAt
+    coverImage,
+    publishedAt,
+    "topics": topics[]->{ _id, "slug": slug.current, title }
   }
+`);
+
+/** One post by its language-neutral slug — the full single-post page. */
+export const POST_BY_SLUG_QUERY = defineQuery(`
+  *[_type == "post" && slug.current == $slug][0]{
+    _id,
+    "slug": slug.current,
+    title,
+    excerpt,
+    body,
+    coverImage,
+    publishedAt,
+    "topics": topics[]->{ _id, "slug": slug.current, title }
+  }
+`);
+
+/** Just the slugs — for `generateStaticParams` on the single-post route. */
+export const POST_SLUGS_QUERY = defineQuery(`
+  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
 `);
 
 /**

@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 
-import { Cover } from "@/components/home/cover";
+import { Cover } from "@/components/cover";
 import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";

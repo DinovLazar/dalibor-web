@@ -9,12 +9,12 @@
 - Group rows by area (config, app/pages, i18n, components, lib, messages, sanity, styles, project-state, docs). Keep descriptions to one line.
 - This file is the fast way for any Claude to understand the repo without reading all the code.
 
-> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 1.08._
+> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 1.10._
 
 ### Root config
 | File | Description |
 |---|---|
-| `package.json` | Manifest — deps (next, react, next-intl, sanity+toolchain, **@base-ui/react, lucide-react, framer-motion, class-variance-authority, clsx, tailwind-merge, tw-animate-css, @portabletext/react (1.08)**; `shadcn` in devDeps) + scripts (`dev`/`build` use `--webpack`; `typegen` = schema extract + generate). |
+| `package.json` | Manifest — deps (next, react, next-intl, sanity+toolchain, @base-ui/react, lucide-react, framer-motion, class-variance-authority, clsx, tailwind-merge, tw-animate-css, @portabletext/react, **ai, voyage-ai-provider, @supabase/supabase-js, server-only (1.09)**; `shadcn` in devDeps) + scripts (`dev`/`build` use `--webpack`; `typegen` = schema extract + generate). |
 | `components.json` | **New (1.06).** shadcn/ui config — `base-nova` (Base UI) style, css → `globals.css`, aliases (`@/components`, `@/lib/utils`, `@/components/ui`). |
 | `package-lock.json` | npm lockfile (exact installed tree). |
 | `next.config.ts` | Next.js config, wrapped with `createNextIntlPlugin('./src/i18n/request.ts')`; **(1.07)** `images.remotePatterns` allows `cdn.sanity.io/images/ndqmaath/**` for `next/image`. |
@@ -24,7 +24,7 @@
 | `postcss.config.mjs` | PostCSS loading `@tailwindcss/postcss` (Tailwind v4). |
 | `.gitignore` | Ignores `node_modules`, `.next`, `.env*` (**with `!.env.example` exception**), the local dossier, etc. |
 | `.env.local` | Local env — real Sanity project id/dataset/apiVersion. **Gitignored, never committed.** |
-| `.env.example` | **Committed** env template (empty values; no secrets). |
+| `.env.example` | **Committed** env template (empty values; no secrets) — Sanity vars + **(1.09) review-search vars** (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`, empty for Part-1). |
 | `sanity.config.ts` | **Embedded Studio config** — basePath `/studio`, schema, `structureTool`+structure (singletons), `visionTool`, singleton action/template restrictions. |
 | `sanity.cli.ts` | **Sanity CLI config** — `api` (projectId/dataset) + `typegen` (paths). |
 | `schema.json` | **Generated** — extracted schema for TypeGen. |
@@ -39,8 +39,12 @@
 | `src/app/[locale]/page.tsx` | **Real Style A Home (1.07)** — fetches the 4 `HOME_*` queries and composes Hero / Featured book / Latest reviews / From the blog (server, localized). |
 | `src/app/[locale]/contact/page.tsx` | **TEMP 1.06 stub** — PageHeader + one localized line (real Contact → 1.11). |
 | `src/app/[locale]/privacy/page.tsx` | **TEMP 1.06 stub** — PageHeader + one localized line (real Privacy → 1.11). |
-| `src/app/[locale]/reviews/page.tsx` | **TEMP 1.05 proof** — lists review titles from Sanity (+ cover/no-image + "available in"). |
-| `src/app/[locale]/blog/page.tsx` | **TEMP 1.05 proof** — lists post titles from Sanity. |
+| `src/app/[locale]/reviews/page.tsx` | **Real Style A Reviews list (1.09)** — `REVIEWS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter, progressively-enhanced `ReviewSearch` over the SSR `ReviewsList`. Dynamic (`ƒ`, reads `searchParams.topic`). |
+| `src/app/[locale]/reviews/[slug]/page.tsx` | **Real Style A single review (1.09)** — `REVIEW_BY_SLUG_QUERY` (React-`cache()`d, shared with `generateMetadata`); back link/breadcrumb, `<h1>`+double rule, meta, Portable Text body **with §3.6 drop cap**, sticky `ReviewBookAside`, foot topic chips; `generateStaticParams` (locales×slugs), `notFound()`. |
+| `src/app/[locale]/blog/page.tsx` | **Real Style A Blog list (1.10)** — `POSTS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter (chips derived from posts → no dead chips), single-column `PostCard` stack, empty state. **No search box.** Dynamic (`ƒ`, reads `searchParams.topic`). |
+| `src/app/[locale]/blog/[slug]/page.tsx` | **Real Style A single post (1.10)** — `POST_BY_SLUG_QUERY` (React-`cache()`d, shared with `generateMetadata`); back link/breadcrumb, `<h1>`+double rule, meta, Portable Text body **with §3.6 drop cap**, foot topic chips → `/blog?topic=`; **no book aside** (single `max-w-prose` column); `generateStaticParams` (locales×slugs), `notFound()`. |
+| `src/app/api/reviews/search/route.ts` | **(1.09)** `POST` search route — the only search surface the browser sees; calls `searchReviews` (semantic→keyword fallback), returns `{mode, results}`, never leaks keys/errors. |
+| `src/app/api/reviews/reindex/route.ts` | **(1.09) DORMANT** `POST` re-index route — env-gated + `x-webhook-secret`; embeds one review + upserts its vector row. Not called until the 2.03 Sanity webhook. |
 | `src/app/[locale]/about/page.tsx` | **Real Style A About (1.08)** — `ABOUT_QUERY`; name `<h1>` + roles/tagline, two-column 4:5 portrait (or placeholder) \| bio via Portable Text (stacks portrait-first), quiet Contact link. Degrades gracefully if no author doc. |
 | `src/app/[locale]/book/page.tsx` | **Real Style A Book (1.08)** — `BOOK_QUERY`; title `<h1>` + double rule, 2:3 `Cover` + "by …" credit + publisher·year + "where to find it" external buttons, description via Portable Text. **No genre/format** (discrepancy guard); `notFound()` if no book doc. |
 | `src/app/studio/layout.tsx` | **Second root layout** — `<html>`/`<body>` for the non-localized Studio branch. |
@@ -67,7 +71,7 @@
 |---|---|
 | `src/sanity/env.ts` | Reads + validates the public Sanity env vars. |
 | `src/sanity/structure.ts` | Studio desk structure; `book` + `author` singletons (pinned documentId). |
-| `src/sanity/sanity.types.ts` | **Generated** TypeGen output — schema types + 8 query result types (incl. `ABOUT_QUERY_RESULT` / `BOOK_QUERY_RESULT`, 1.08) + `@sanity/client` fetch augmentation. |
+| `src/sanity/sanity.types.ts` | **Generated** TypeGen output — schema types + **14** query result types (incl. `REVIEWS_LIST_QUERY_RESULT` / `REVIEW_BY_SLUG_QUERY_RESULT` / `TOPICS_QUERY_RESULT`, 1.09; `POSTS_LIST_QUERY_RESULT` / `POST_BY_SLUG_QUERY_RESULT` / `POST_SLUGS_QUERY_RESULT`, 1.10) + `@sanity/client` fetch augmentation. |
 | `src/sanity/schemaTypes/index.ts` | Schema registry (array of all types). |
 | `src/sanity/schemaTypes/slug.ts` | ASCII slug field + Cyrillic (mk/sr) transliteration + `slugify`. |
 | `src/sanity/schemaTypes/localized.ts` | `localizedString`/`Text`/`BlockContent` ({mk,en,sr}) + reusable `localizedImage` (hotspot + required alt) + `requireMk`. |
@@ -79,15 +83,20 @@
 | `src/sanity/schemaTypes/topic.ts` | `topic` taxonomy. |
 | `src/sanity/lib/client.ts` | Public read client (published perspective, `useCdn`, no token). |
 | `src/sanity/lib/image.ts` | `@sanity/image-url` builder (`urlForImage`). |
-| `src/sanity/lib/queries.ts` | **Eight** typed `defineQuery` queries: `REVIEWS_QUERY`, `POSTS_QUERY`, **`ABOUT_QUERY`** (1.08, author singleton), **`BOOK_QUERY`** (1.08, repurposed for the Book page — `description`/`purchaseLinks` + cross-doc `"authorName"`, no `genre`) + **4 Home-scoped (1.07)** `HOME_*`. (Generic `AUTHOR_QUERY` removed in 1.08.) |
-| `src/sanity/lib/localize.ts` | `localizedValue(field, locale)` (mk→en→sr) + `availableLanguages(field)`. |
+| `src/sanity/lib/queries.ts` | **Fourteen** typed `defineQuery` queries: **(1.09)** `REVIEWS_LIST_QUERY`, `REVIEWS_SEARCH_QUERY` (+`body`), `REVIEW_BY_SLUG_QUERY`, `REVIEW_SLUGS_QUERY`, `TOPICS_QUERY` — superseded the thin `REVIEWS_QUERY`; **(1.10)** `POSTS_LIST_QUERY` (card fields + topics), `POST_BY_SLUG_QUERY` (+`body`, single post), `POST_SLUGS_QUERY` (`generateStaticParams`) — superseded the thin `POSTS_QUERY`; + `ABOUT_QUERY`, `BOOK_QUERY`, 4 Home-scoped `HOME_*`. |
+| `src/sanity/lib/localize.ts` | `localizedValue(field, locale)` (mk→en→sr) + `availableLanguages(field)` + **(1.09)** `availableInLabel(langs, locale)` (the §6.13 "available in" string) + `resolveTopics(topics, locale)` (dereferenced topics → `{slug,label}[]`). |
 
 ### CMS seed — `sanity/`
 | File | Description |
 |---|---|
-| `sanity/seed/build-seed.mjs` | Generator — emits the placeholder cover PNG + `seed.ndjson`; **(1.07)** author has `tagline` + `heroIntro`; MK-only review dated newest; **(1.08)** `author.bio` + `book.description` expanded to 3 `[PLACEHOLDER]` paras each, `book.genre` removed from seed (discrepancy guard). |
-| `sanity/seed/seed.ndjson` | **Generated** — 13 `[PLACEHOLDER]` documents (3 posts, 4 reviews incl. 1 MK-only, book, author, 4 topics). |
+| `sanity/seed/build-seed.mjs` | Generator — emits the placeholder cover PNG + `seed.ndjson`; **(1.07)** author has `tagline` + `heroIntro`; MK-only review dated newest; **(1.08)** `author.bio` + `book.description` expanded to 3 `[PLACEHOLDER]` paras each, `book.genre` removed (discrepancy guard); **(1.10)** added a mk+en-only post (dated newest) for the blog "available in" demo. |
+| `sanity/seed/seed.ndjson` | **Generated** — 14 `[PLACEHOLDER]` documents (4 posts incl. 1 mk+en-only, 4 reviews incl. 1 MK-only, book, author, 4 topics). |
 | `sanity/seed/placeholder-cover.png` | **Generated** — clearly-marked 2:3 placeholder cover. |
+
+### CMS / search migrations — `supabase/`
+| File | Description |
+|---|---|
+| `supabase/migrations/0001_review_embeddings.sql` | **(1.09) Written, NOT run** (runs in 2.03) — `review_embeddings` table (`vector(1024)`), HNSW `vector_cosine_ops` index, RLS enabled, `match_reviews` RPC (cosine `<=>`). |
 
 ### Components — `src/components/`
 | File | Description |
@@ -110,8 +119,15 @@
 | `src/components/home/from-the-blog.tsx` | **(1.07)** "From the blog" section — heading + 2-up grid of `BlogCard` (sits flush under reviews). |
 | `src/components/home/blog-card.tsx` | **(1.07)** Date-ordered blog card (§6.7) — links to `/[locale]/blog/[slug]`; fallback + "available in" note. |
 | `src/components/home/section-heading.tsx` | **(1.07)** Eyebrow + H2 + optional "see all →" link (§6.15). |
-| `src/components/home/cover.tsx` | **(1.07)** Book-cover (§6.11) — `next/image` (`fill`+`sizes`, 2:3) or the graceful parchment placeholder (book-open glyph + monogram). |
-| `src/components/portable-text.tsx` | **(1.08)** Shared Style A Portable Text renderer (`@portabletext/react`) — locale-agnostic server component; styles every `blockContent` block/list/mark (Playfair h2–h4, Lora body, §6.10 quote, §3.5 lists, §2.2 links w/ focus ring + auto external new-tab/`rel`); `max-w-prose` measure; `null` when empty. Used by About + Book (and later content pages). |
+| `src/components/cover.tsx` | **(promoted 1.09, was `home/cover.tsx`)** Book-cover (§6.11) — `next/image` (`fill`+`sizes`, 2:3) or the graceful parchment placeholder (book-open glyph + monogram). No server-only deps → renders client-side too. Shared by Home / Book / Reviews. |
+| `src/components/reviews/review-card.tsx` | **(1.09)** Shared **sync** library-row card (§6.6) — already-localized props; rendered by both the SSR list and the client search results; reuses `Cover`/`monogramOf`/`formatMonthYear`. |
+| `src/components/reviews/reviews-list.tsx` | **(1.09)** SSR Reviews list (async server) — resolves each review + the "available in" note, renders `ReviewCard` rows or the empty state. |
+| `src/components/topic-filter.tsx` | **(generalized 1.10, was `reviews/topic-filter.tsx`)** Shared SSR topic-chip filter (§6.8) — `basePath` prop (`/reviews` or `/blog`); "All" + per-topic links to `?topic=<slug>`, active chip `aria-current`. Consumed by Reviews + Blog. |
+| `src/components/blog/post-card.tsx` | **(1.10)** Async server `PostCard` (§6.7/§7.5) — whole-card link, title/date/2-line excerpt, optional non-interactive topic chips (+N) + optional 72×72 square cover thumbnail, mk→en→sr fallback + "available in" note. |
+| `src/components/reviews/review-search.tsx` | **(1.09)** `'use client'` search box (§6.9) wrapping the SSR list; POSTs to `/api/reviews/search`, swaps in `ReviewResults`, Clear restores the list. No layout shift. |
+| `src/components/reviews/review-results.tsx` | **(1.09)** `'use client'` search results — header + Clear, the §6.9 empty state, or `ReviewCard` rows (rebuilds a minimal cover from `coverRef`). |
+| `src/components/reviews/review-book-aside.tsx` | **(1.09)** The §7.4 reviewed-book card (async server) — cover, "Reviewed book" eyebrow, title + alternate-script subtitle, author·year, publisher, original `source` link. |
+| `src/components/portable-text.tsx` | **(1.08, +1.09)** Shared Style A Portable Text renderer (`@portabletext/react`) — locale-agnostic server component; styles every `blockContent` block/list/mark (Playfair h2–h4, Lora body, §6.10 quote, §3.5 lists, §2.2 links w/ focus ring + auto external new-tab/`rel`); `max-w-prose` measure; `null` when empty. **(1.09) opt-in `dropCap` prop** adds `.article-body` for the §3.6 drop cap (single review/blog); About + Book unchanged. |
 | `src/components/brand-icons.tsx` | Instagram/Facebook/YouTube glyphs (MIT Lucide outlines; lucide-react 1.x removed brand icons). |
 | `src/components/language-switcher.tsx` | Accessible MK·EN·SR inline switcher (§6.4); preserves the current path; `className`/`onNavigate` props. |
 | `src/components/.gitkeep` | Original folder placeholder. |
@@ -124,7 +140,12 @@
 | `src/lib/site-links.ts` | **Provisional** external links + email (data-only; finalized 2.01/2.02). |
 | `src/lib/datetime.ts` | **(1.07)** `formatMonthYear` / `formatFullDate` for cards (Intl; sr→`sr-Latn`). |
 | `src/lib/strings.ts` | **(1.07)** `monogramOf` — first letter for the no-cover placeholder (strips the `[PLACEHOLDER]` marker). |
-| `src/messages/{en,mk,sr}.json` | UI strings — `nav` / `common` / per-page titles / **`footer`** / **`home`** (1.07) / **`book`** (1.08: `byline` w/ `{name}`, `whereToFind`, `findIt`) namespaces (mk Cyrillic; en/sr Latin). |
+| `src/lib/search/types.ts` | **(1.09)** The Reviews search contract — `ReviewSummary` / `SearchRequest` / `SearchResponse` / `SearchMode`. |
+| `src/lib/search/reviews-search.ts` | **(1.09)** Orchestrator (server-only) — one `REVIEWS_SEARCH_QUERY` fetch feeds both paths; semantic→keyword fallback, honest `mode`; exports `semanticConfigured()`. |
+| `src/lib/search/keyword.ts` | **(1.09)** Always-on keyword fallback — `normalizeForSearch` (diacritic/case fold), `blocksToPlainText`, `keywordSearch` (AND-match). |
+| `src/lib/search/embeddings.ts` | **(1.09)** Voyage wrapper (server-only) — the SOLE Voyage access point: `embedQuery`/`embedDocuments`, `EMBEDDING_MODEL` (=`voyage-3.5`), `EMBEDDING_DIMENSIONS` (=1024). |
+| `src/lib/search/supabase.ts` | **(1.09)** Server-only service-role Supabase client (`getSupabaseAdmin`); bypasses RLS, never imported client-side. |
+| `src/messages/{en,mk,sr}.json` | UI strings — `nav` / `common` / per-page titles / `footer` / `home` / `book` / **`reviews`** (1.09) / **`blog`** (1.10: `eyebrow`, `lede`, `topicsLabel`, `allTopics`, `empty`, `backToBlog`, `breadcrumbLabel` — eyebrow/lede provisional) namespaces (mk Cyrillic; en/sr Latin). |
 | `src/messages/.gitkeep`, `src/styles/.gitkeep` | Folder placeholders. |
 
 ### Static assets — `public/`
@@ -135,11 +156,11 @@
 ### Project-state — `src/_project-state/`
 | File | Description |
 |---|---|
-| `current-state.md` | Live snapshot (end of 1.08). |
+| `current-state.md` | Live snapshot (end of 1.10). |
 | `file-map.md` | This file. |
-| `00_stack-and-config.md` | Append-only stack/config log (1.02 → 1.08). |
+| `00_stack-and-config.md` | Append-only stack/config log (1.02 → 1.09; unchanged in 1.10 — no stack change). |
 | `Part-X-Phase-YY-Completion.md` | Blank completion-report template. |
-| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-08-Completion.md` | Per-phase completion reports. |
+| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-10-Completion.md` | Per-phase completion reports. |
 
 ### Design handovers + mockups — `docs/`
 | File | Description |
