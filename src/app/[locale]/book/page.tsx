@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -8,12 +10,37 @@ import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { PortableText } from "@/components/portable-text";
+import { JsonLd } from "@/components/seo/json-ld";
 import { buttonVariants } from "@/components/ui/button";
 import { routing } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { bookJsonLd } from "@/lib/seo/jsonld";
 import { client } from "@/sanity/lib/client";
-import { localizedValue } from "@/sanity/lib/localize";
+import { siteUrl } from "@/sanity/env";
+import { urlForImage } from "@/sanity/lib/image";
+import { contentLang, localizedValue } from "@/sanity/lib/localize";
 import { BOOK_QUERY } from "@/sanity/lib/queries";
 import { monogramOf } from "@/lib/strings";
+
+/** The book singleton, memoized per request so generateMetadata + the page
+ *  share one Sanity fetch. */
+const getBook = cache(() => client.fetch(BOOK_QUERY));
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const book = await getBook();
+  const title = book ? localizedValue(book.title, locale) : undefined;
+  return buildPageMetadata({
+    locale,
+    page: "book",
+    path: "/book",
+    title: title ?? undefined,
+  });
+}
 
 /**
  * The Style A Book page (§7.7, Phase 1.08 steps 11–13). Reads the `book`
@@ -42,7 +69,7 @@ export default async function BookPage({
   setRequestLocale(locale);
 
   const t = await getTranslations();
-  const book = await client.fetch(BOOK_QUERY);
+  const book = await getBook();
   if (!book) {
     notFound();
   }
@@ -53,8 +80,25 @@ export default async function BookPage({
   // Purchase links are optional and may be url-less; keep only the actionable ones.
   const links = book.purchaseLinks?.filter((l) => l.url) ?? [];
 
+  // Book structured data. GUARD: asserts no genre/format (sources disagree — see
+  // jsonld.ts). `inLanguage` is "mk" (his Macedonian-published book; confirm in
+  // 2.01 with the title/format). Cover image only when one is set.
+  const bookSchema = bookJsonLd({
+    name: title,
+    url: `${siteUrl}/${locale}/book`,
+    publisher: book.publisher ?? undefined,
+    datePublished: book.publicationYear
+      ? String(book.publicationYear)
+      : undefined,
+    inLanguage: "mk",
+    image: book.coverImage?.asset
+      ? urlForImage(book.coverImage).width(1200).url()
+      : undefined,
+  });
+
   return (
     <Section>
+      <JsonLd data={bookSchema} />
       <Container>
         {/* Header zone — cover left (desktop) / on top (mobile), details right. */}
         <div className="reveal grid gap-10 md:grid-cols-[220px_1fr] md:items-start">
@@ -118,9 +162,13 @@ export default async function BookPage({
           </div>
         </div>
 
-        {/* Description zone — long-form prose at the reading measure. */}
+        {/* Description zone — long-form prose at the reading measure. `lang` is
+            set only when the description falls back to another language (SC 3.1.2). */}
         <div className="reveal reveal-2 mt-10">
-          <PortableText value={localizedValue(book.description, locale)} />
+          <PortableText
+            value={localizedValue(book.description, locale)}
+            lang={contentLang(book.description, locale)}
+          />
         </div>
       </Container>
     </Section>

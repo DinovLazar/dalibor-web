@@ -1,7 +1,11 @@
 import { getTranslations } from "next-intl/server";
 
 import { Link } from "@/i18n/navigation";
-import { availableLanguages, localizedValue } from "@/sanity/lib/localize";
+import {
+  availableLanguages,
+  contentLang,
+  localizedValue,
+} from "@/sanity/lib/localize";
 import type { AppLocale } from "@/sanity/lib/localize";
 import type { HOME_POSTS_QUERY_RESULT } from "@/sanity/sanity.types";
 import { formatFullDate } from "@/lib/datetime";
@@ -27,6 +31,7 @@ export async function BlogCard({
   const title = localizedValue(post.title, locale) ?? "";
   const langs = availableLanguages(post.title);
   const missing = !langs.includes(locale as AppLocale);
+  const lang = contentLang(post.title, locale);
   const date = formatFullDate(post.publishedAt, locale);
   const excerpt = localizedValue(post.excerpt, locale);
 
@@ -37,7 +42,10 @@ export async function BlogCard({
       href={href}
       className="group/card block rounded-card border border-border bg-surface p-5 shadow-card outline-none transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
     >
-      <h3 className="font-display text-h4 text-text transition-colors group-hover/card:text-primary-strong">
+      <h3
+        lang={lang}
+        className="font-display text-h4 text-text transition-colors group-hover/card:text-primary-strong"
+      >
         {title}
       </h3>
       {date ? (
@@ -46,7 +54,9 @@ export async function BlogCard({
         </p>
       ) : null}
       {excerpt ? (
-        <p className="mt-2 line-clamp-2 text-body text-text-muted">{excerpt}</p>
+        <p lang={lang} className="mt-2 line-clamp-2 text-body text-text-muted">
+          {excerpt}
+        </p>
       ) : null}
       {missing && langs.length ? (
         <p className="mt-1.5 text-meta text-text-muted">

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { BookOpen } from "lucide-react";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -9,9 +10,19 @@ import { Section } from "@/components/layout/section";
 import { PostCard } from "@/components/blog/post-card";
 import { TopicFilter } from "@/components/topic-filter";
 import { routing } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import { client } from "@/sanity/lib/client";
 import { localizedValue } from "@/sanity/lib/localize";
 import { POSTS_LIST_QUERY, TOPICS_QUERY } from "@/sanity/lib/queries";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return buildPageMetadata({ locale, page: "blog", path: "/blog" });
+}
 
 /**
  * The real Style A Blog list (§7.5) — replaces the Phase 1.05 temporary proof

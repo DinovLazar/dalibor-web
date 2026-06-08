@@ -101,16 +101,24 @@ export function PortableText({
   value,
   dropCap = false,
   className,
+  lang,
 }: {
   value?: PortableTextValue | null;
   /** Opt-in §3.6 drop cap on the first paragraph (adds `.article-body`). */
   dropCap?: boolean;
   className?: string;
+  /**
+   * BCP-47 language of this content (WCAG 2.2 AA SC 3.1.2). Pass
+   * `contentLang(field, locale)` so the attribute is set only when the body is
+   * a fallback translation in a language other than the surrounding page.
+   */
+  lang?: string;
 }) {
   if (!value || (Array.isArray(value) && value.length === 0)) return null;
 
   return (
     <div
+      lang={lang}
       className={cn(
         "max-w-prose text-body text-text",
         dropCap && "article-body",

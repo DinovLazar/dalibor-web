@@ -12,6 +12,45 @@
     "menu": "Meni",
     "availableIn": "Dostupno na: {langs}"
   },
+  "metadata": {
+    "siteName": "Dalibor Plečić",
+    "default": {
+      "title": "Dalibor Plečić — pisac, kritičar i prevodilac",
+      "description": "Lični sajt Dalibora Plečića — pisac, književni kritičar i prevodilac: kritike knjiga, eseji o čitanju i prevođenju, i njegova knjiga."
+    },
+    "home": {
+      "title": "Dalibor Plečić — pisac, kritičar i prevodilac",
+      "description": "Dalibor Plečić — pisac, književni kritičar i prevodilac. Kritike knjiga, eseji o čitanju i prevođenju, i njegova knjiga — na makedonskom, engleskom i srpskom."
+    },
+    "about": {
+      "title": "O autoru",
+      "description": "O Daliboru Plečiću — pisac, književni kritičar, prevodilac i novinar: knjige koje čita, dela koja prevodi i tekstovi koje ovde objavljuje."
+    },
+    "book": {
+      "title": "Knjiga",
+      "description": "Knjiga Dalibora Plečića — potpun opis i gde da je nađete, na njegovom ličnom sajtu s kritikama, esejima i prevodima."
+    },
+    "reviews": {
+      "title": "Kritike",
+      "description": "Kritike knjiga Dalibora Plečića — čitanja beletristike i publicistike iz regiona i šire, s pretragom po temi."
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Eseji i beleške Dalibora Plečića o knjigama, čitanju i zanatu književnog prevođenja."
+    },
+    "contact": {
+      "title": "Kontakt",
+      "description": "Kontaktirajte Dalibora Plečića — pozivi za intervju, prevodi ili poruka o nekoj knjizi."
+    },
+    "privacy": {
+      "title": "Privatnost",
+      "description": "Kako kontakt formular na ovom sajtu prikuplja i koristi vaše podatke."
+    },
+    "notFound": {
+      "title": "Stranica nije pronađena",
+      "description": "Stranice koju ste tražili nema. Pogledajte kritike, blog ili se vratite na početnu."
+    }
+  },
   "home": {
     "title": "Kritičar, prevodilac i pisac",
     "readReviews": "Čitaj kritike",
@@ -62,7 +101,6 @@
   "contact": {
     "title": "Kontakt",
     "intro": "Pitanja, pozivi za intervju, prevodi ili nekoliko reči o nekoj knjizi — napišite ispod i poruka će stići direktno Daliboru.",
-    "metaDescription": "Kontaktirajte Dalibora Plečića — pozivi za intervju, prevodi ili poruka o nekoj knjizi.",
     "form": {
       "name": "Vaše ime",
       "email": "Imejl",
@@ -102,7 +140,6 @@
   "privacy": {
     "title": "Privatnost",
     "intro": "Ovaj sajt je lični dom za pisanje Dalibora Plečića i prikuplja što je moguće manje podataka. Ova stranica objašnjava šta prikuplja kontakt formular i kako se ti podaci koriste.",
-    "metaDescription": "Kako kontakt formular na ovom sajtu prikuplja i koristi vaše podatke.",
     "sections": {
       "collect": {
         "title": "Šta formular prikuplja",
@@ -130,7 +167,11 @@
       }
     }
   },
-  "notFound": { "title": "Ova stranica ne postoji" },
+  "notFound": {
+    "title": "Ova stranica ne postoji",
+    "body": "Stranica koju ste tražili možda je premeštena ili je veza neispravna.",
+    "cta": "Na početnu"
+  },
   "footer": {
     "contactHeading": "Kontakt",
     "socialHeading": "Društvene mreže",

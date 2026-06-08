@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import {
   availableInLabel,
   availableLanguages,
+  contentLang,
   localizedValue,
   resolveTopics,
 } from "@/sanity/lib/localize";
@@ -35,6 +36,9 @@ export async function PostCard({
   const excerpt = localizedValue(post.excerpt, locale);
   const topics = resolveTopics(post.topics, locale);
   const availableIn = availableInLabel(availableLanguages(post.title), locale);
+  // Mark the title/excerpt with their language only when the post falls back to a
+  // different one than the page (SC 3.1.2).
+  const lang = contentLang(post.title, locale);
 
   const href = post.slug ? `/blog/${post.slug}` : "/blog";
   const hasThumb = Boolean(post.coverImage?.asset);
@@ -65,16 +69,21 @@ export async function PostCard({
         ) : null}
 
         <div className="min-w-0 flex-1">
-          <h3 className="font-display text-h4 text-text transition-colors group-hover/card:text-primary-strong">
+          {/* h2: the card is the top-level item under the Blog list's page h1
+              (no intervening h2). Styled as h4 — visual size unchanged. */}
+          <h2
+            lang={lang}
+            className="font-display text-h4 text-text transition-colors group-hover/card:text-primary-strong"
+          >
             {title}
-          </h3>
+          </h2>
           {date ? (
             <p className="mt-1.5 text-meta font-medium text-text-muted">
               <time dateTime={post.publishedAt ?? undefined}>{date}</time>
             </p>
           ) : null}
           {excerpt ? (
-            <p className="mt-2 line-clamp-2 text-body text-text-muted">
+            <p lang={lang} className="mt-2 line-clamp-2 text-body text-text-muted">
               {excerpt}
             </p>
           ) : null}

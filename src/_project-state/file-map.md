@@ -9,7 +9,7 @@
 - Group rows by area (config, app/pages, i18n, components, lib, messages, sanity, styles, project-state, docs). Keep descriptions to one line.
 - This file is the fast way for any Claude to understand the repo without reading all the code.
 
-> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 1.11._
+> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 1.12 (Part 1 complete)._
 
 ### Root config
 | File | Description |
@@ -35,22 +35,27 @@
 ### App / pages — `src/app/`
 | File | Description |
 |---|---|
-| `src/app/[locale]/layout.tsx` | Root layout for all locales: fonts, tokens, `<html lang>`, `generateStaticParams`, `setRequestLocale`, provider; **mounts SkipToContent → SiteHeader → `<main id="content">` → SiteFooter** (1.06; temp top bar removed). |
-| `src/app/[locale]/page.tsx` | **Real Style A Home (1.07)** — fetches the 4 `HOME_*` queries and composes Hero / Featured book / Latest reviews / From the blog (server, localized). |
-| `src/app/[locale]/contact/page.tsx` | **Real Style A Contact (1.11)** — `PageHeader` (title+intro) + two-column (`ContactForm` left, `ContactLinks` right; form-first on mobile); minimal `generateMetadata`. Static (`●`). |
-| `src/app/[locale]/privacy/page.tsx` | **Real Style A Privacy (1.11)** — `<h1>` + §6.16 double rule + lede + six `<h2>`/`<p>` sections in `max-w-prose` (semantic HTML, not Portable Text); minimal `generateMetadata`. Static (`●`). |
-| `src/app/[locale]/reviews/page.tsx` | **Real Style A Reviews list (1.09)** — `REVIEWS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter, progressively-enhanced `ReviewSearch` over the SSR `ReviewsList`. Dynamic (`ƒ`, reads `searchParams.topic`). |
-| `src/app/[locale]/reviews/[slug]/page.tsx` | **Real Style A single review (1.09)** — `REVIEW_BY_SLUG_QUERY` (React-`cache()`d, shared with `generateMetadata`); back link/breadcrumb, `<h1>`+double rule, meta, Portable Text body **with §3.6 drop cap**, sticky `ReviewBookAside`, foot topic chips; `generateStaticParams` (locales×slugs), `notFound()`. |
-| `src/app/[locale]/blog/page.tsx` | **Real Style A Blog list (1.10)** — `POSTS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter (chips derived from posts → no dead chips), single-column `PostCard` stack, empty state. **No search box.** Dynamic (`ƒ`, reads `searchParams.topic`). |
-| `src/app/[locale]/blog/[slug]/page.tsx` | **Real Style A single post (1.10)** — `POST_BY_SLUG_QUERY` (React-`cache()`d, shared with `generateMetadata`); back link/breadcrumb, `<h1>`+double rule, meta, Portable Text body **with §3.6 drop cap**, foot topic chips → `/blog?topic=`; **no book aside** (single `max-w-prose` column); `generateStaticParams` (locales×slugs), `notFound()`. |
+| `src/app/[locale]/layout.tsx` | Root layout for all locales: fonts, tokens, `<html lang>`, `generateStaticParams`, `setRequestLocale`, provider; **mounts SkipToContent → SiteHeader → `<main id="content">` → SiteFooter** (1.06). **(1.12)** `generateMetadata` sets `metadataBase` (env base), the `%s — siteName` title template + default title/description, and default OG/Twitter. |
+| `src/app/sitemap.ts` | **(1.12)** Native `MetadataRoute.Sitemap` — every static route × 3 locales + every review/blog slug × 3, each carrying mk/en/sr + `x-default` hreflang alternates; uses the env base URL. |
+| `src/app/robots.ts` | **(1.12)** `MetadataRoute.Robots` — allow all, disallow `/studio` + `/api`, points at `/sitemap.xml`, declares host (env base). |
+| `src/app/[locale]/opengraph-image.tsx` | **(1.12)** Default branded OG card via `next/og` `ImageResponse` (Style A wordmark + caramel rule + localized role line; no photography). Loads bundled static subset fonts (full Latin/Latin-ext/Cyrillic coverage via a font stack); `generateStaticParams` → one 1200×630 card per locale. |
+| `src/app/[locale]/twitter-image.tsx` | **(1.12)** Twitter share card — re-exports the `opengraph-image` generator (single source of truth). |
+| `src/app/[locale]/not-found.tsx` | **(1.12)** Localized, accessible 404 in Style A chrome (`notFound` namespace); emits a `noindex` robots tag (+ HTTP 404). |
+| `src/app/[locale]/page.tsx` | **Real Style A Home (1.07)** — fetches the 4 `HOME_*` queries and composes Hero / Featured book / Latest reviews / From the blog (server, localized). **(1.12)** `generateMetadata` (absolute title) + `Person` JSON-LD. |
+| `src/app/[locale]/contact/page.tsx` | **Real Style A Contact (1.11)** — `PageHeader` (title+intro) + two-column (`ContactForm` left, `ContactLinks` right; form-first on mobile). **(1.12)** `generateMetadata` via `buildPageMetadata`. Static (`●`). |
+| `src/app/[locale]/privacy/page.tsx` | **Real Style A Privacy (1.11)** — `<h1>` + §6.16 double rule + lede + six `<h2>`/`<p>` sections in `max-w-prose`. **(1.12)** `generateMetadata` via `buildPageMetadata`. Static (`●`). |
+| `src/app/[locale]/reviews/page.tsx` | **Real Style A Reviews list (1.09)** — `REVIEWS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter, progressively-enhanced `ReviewSearch` over the SSR `ReviewsList`. **(1.12)** `generateMetadata`. Dynamic (`ƒ`). |
+| `src/app/[locale]/reviews/[slug]/page.tsx` | **Real Style A single review (1.09)** — `REVIEW_BY_SLUG_QUERY` (`cache()`d, shared w/ metadata); back link/breadcrumb, `<h1>`+double rule, Portable Text body w/ drop cap, sticky `ReviewBookAside`, topic chips; `generateStaticParams`, `notFound()`. **(1.12)** full `generateMetadata` (og:type article) + `Article`+`BreadcrumbList` JSON-LD + `lang` on title/body. |
+| `src/app/[locale]/blog/page.tsx` | **Real Style A Blog list (1.10)** — `POSTS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter (no dead chips), `PostCard` stack, empty state. **No search box.** **(1.12)** `generateMetadata`. Dynamic (`ƒ`). |
+| `src/app/[locale]/blog/[slug]/page.tsx` | **Real Style A single post (1.10)** — `POST_BY_SLUG_QUERY` (`cache()`d, shared w/ metadata); back link/breadcrumb, `<h1>`+double rule, Portable Text body w/ drop cap, topic chips; no book aside; `generateStaticParams`, `notFound()`. **(1.12)** full `generateMetadata` (og:type article) + `BlogPosting`+`BreadcrumbList` JSON-LD + `lang` on title/body. |
 | `src/app/api/reviews/search/route.ts` | **(1.09)** `POST` search route — the only search surface the browser sees; calls `searchReviews` (semantic→keyword fallback), returns `{mode, results}`, never leaks keys/errors. |
 | `src/app/api/reviews/reindex/route.ts` | **(1.09) DORMANT** `POST` re-index route — env-gated + `x-webhook-secret`; embeds one review + upserts its vector row. Not called until the 2.03 Sanity webhook. |
-| `src/app/[locale]/about/page.tsx` | **Real Style A About (1.08)** — `ABOUT_QUERY`; name `<h1>` + roles/tagline, two-column 4:5 portrait (or placeholder) \| bio via Portable Text (stacks portrait-first), quiet Contact link. Degrades gracefully if no author doc. |
-| `src/app/[locale]/book/page.tsx` | **Real Style A Book (1.08)** — `BOOK_QUERY`; title `<h1>` + double rule, 2:3 `Cover` + "by …" credit + publisher·year + "where to find it" external buttons, description via Portable Text. **No genre/format** (discrepancy guard); `notFound()` if no book doc. |
+| `src/app/[locale]/about/page.tsx` | **Real Style A About (1.08)** — `ABOUT_QUERY`; name `<h1>` + roles/tagline, two-column portrait \| bio via Portable Text, quiet Contact link. **(1.12)** `generateMetadata` + `Person` JSON-LD + `lang` on the bio fallback. |
+| `src/app/[locale]/book/page.tsx` | **Real Style A Book (1.08)** — `BOOK_QUERY` (React-`cache()`d, shared w/ metadata); title `<h1>` + double rule, `Cover` + credit + publisher·year + purchase buttons, description via Portable Text. **No genre/format** (guard). **(1.12)** `generateMetadata` (title from doc) + `Book` JSON-LD (no genre/format) + `lang` on the description fallback. |
 | `src/app/studio/layout.tsx` | **Second root layout** — `<html>`/`<body>` for the non-localized Studio branch. |
 | `src/app/studio/[[...tool]]/page.tsx` | `/studio` route (server) — metadata/viewport (`robots:noindex`) + `force-static`. |
 | `src/app/studio/[[...tool]]/Studio.tsx` | `'use client'` wrapper rendering `<NextStudio config>` (imports `sanity.config`). |
-| `src/app/globals.css` | Global stylesheet — Tailwind v4 + `tw-animate-css` imports + Style A `@theme` tokens **+ shadcn semantic alias tokens (1.06) mapped to Style A** (`--color-primary`/`--color-border` kept as caramel/hairline; no dark mode) **+ the `.reveal` page-load animation (1.07, §8, reduced-motion-gated)**. |
+| `src/app/globals.css` | Global stylesheet — Tailwind v4 + `tw-animate-css` imports + Style A `@theme` tokens **+ shadcn semantic alias tokens (1.06)** + the `.reveal` page-load animation (1.07) **+ (1.12) `scroll-margin-top` on focusable targets/headings (SC 2.4.11 — clear of the sticky header)**. |
 | `src/app/favicon.ico` | Default favicon. |
 
 ### i18n — `src/i18n/`
@@ -63,13 +68,13 @@
 ### Routing / types — `src/`
 | File | Description |
 |---|---|
-| `src/proxy.ts` | next-intl `createMiddleware` as the Next 16 Proxy + matcher (**excludes `/studio`**). |
+| `src/proxy.ts` | next-intl `createMiddleware` as the Next 16 Proxy + matcher (**excludes `/studio`** and **(1.12) `/sitemap.xml` + `/robots.txt`** — matcher + in-code guard). |
 | `src/global.d.ts` | next-intl `AppConfig` augmentation (`Locale` + `Messages`). |
 
 ### Sanity — `src/sanity/`
 | File | Description |
 |---|---|
-| `src/sanity/env.ts` | Reads + validates the public Sanity env vars. |
+| `src/sanity/env.ts` | Reads + validates the public Sanity env vars. **(1.12)** also exports `siteUrl` (`NEXT_PUBLIC_SITE_URL`, optional, localhost fallback, trailing slash stripped) — the base for every canonical/hreflang/OG/sitemap/robots URL. |
 | `src/sanity/structure.ts` | Studio desk structure; `book` + `author` singletons (pinned documentId). |
 | `src/sanity/sanity.types.ts` | **Generated** TypeGen output — schema types + **14** query result types (incl. `REVIEWS_LIST_QUERY_RESULT` / `REVIEW_BY_SLUG_QUERY_RESULT` / `TOPICS_QUERY_RESULT`, 1.09; `POSTS_LIST_QUERY_RESULT` / `POST_BY_SLUG_QUERY_RESULT` / `POST_SLUGS_QUERY_RESULT`, 1.10) + `@sanity/client` fetch augmentation. |
 | `src/sanity/schemaTypes/index.ts` | Schema registry (array of all types). |
@@ -83,8 +88,8 @@
 | `src/sanity/schemaTypes/topic.ts` | `topic` taxonomy. |
 | `src/sanity/lib/client.ts` | Public read client (published perspective, `useCdn`, no token). |
 | `src/sanity/lib/image.ts` | `@sanity/image-url` builder (`urlForImage`). |
-| `src/sanity/lib/queries.ts` | **Fourteen** typed `defineQuery` queries: **(1.09)** `REVIEWS_LIST_QUERY`, `REVIEWS_SEARCH_QUERY` (+`body`), `REVIEW_BY_SLUG_QUERY`, `REVIEW_SLUGS_QUERY`, `TOPICS_QUERY` — superseded the thin `REVIEWS_QUERY`; **(1.10)** `POSTS_LIST_QUERY` (card fields + topics), `POST_BY_SLUG_QUERY` (+`body`, single post), `POST_SLUGS_QUERY` (`generateStaticParams`) — superseded the thin `POSTS_QUERY`; + `ABOUT_QUERY`, `BOOK_QUERY`, 4 Home-scoped `HOME_*`. |
-| `src/sanity/lib/localize.ts` | `localizedValue(field, locale)` (mk→en→sr) + `availableLanguages(field)` + **(1.09)** `availableInLabel(langs, locale)` (the §6.13 "available in" string) + `resolveTopics(topics, locale)` (dereferenced topics → `{slug,label}[]`). |
+| `src/sanity/lib/queries.ts` | **Fourteen** typed `defineQuery` queries (reviews/blog list+single+slugs, topics, about, book, 4 Home `HOME_*`). **(1.12)** `REVIEW_BY_SLUG_QUERY` + `POST_BY_SLUG_QUERY` also select `_updatedAt` (JSON-LD `dateModified`). |
+| `src/sanity/lib/localize.ts` | `localizedValue(field, locale)` (mk→en→sr) + `availableLanguages(field)` + **(1.09)** `availableInLabel(...)` + `resolveTopics(...)` + **(1.12)** `resolvedLanguage(field, locale)` (which lang resolved) + `contentLang(field, locale)` / `contentLangFromList(langs, locale)` (the `lang` attr value for fallback content — SC 3.1.2). |
 
 ### CMS seed — `sanity/`
 | File | Description |
@@ -112,7 +117,7 @@
 | `src/components/layout/site-header.tsx` | **Style A sticky header** (Server Component) — wordmark→home, desktop nav, switcher, mobile menu. |
 | `src/components/layout/primary-nav.tsx` | Desktop primary nav (`'use client'`) — `aria-current` + caramel active underline; reads `lib/nav`. |
 | `src/components/layout/mobile-menu.tsx` | Accessible mobile menu (`'use client'`) — Base UI Dialog panel, explicit focus-in/return, Framer entrance (reduced-motion gated). |
-| `src/components/layout/site-footer.tsx` | **Style A footer** (Server Component) — 4 link groups from `lib/site-links` + copyright + Privacy link. |
+| `src/components/layout/site-footer.tsx` | **Style A footer** (Server Component) — 4 link groups from `lib/site-links` + copyright + Privacy link. **(1.12)** "Coming soon" note bumped to AA contrast; Privacy link given a ≥24px hit area (SC 2.5.8). |
 | `src/components/layout/container.tsx` | Shell-width wrapper + §4.6 responsive gutters. |
 | `src/components/layout/section.tsx` | §4.1 vertical-rhythm section wrapper. |
 | `src/components/layout/page-header.tsx` | Eyebrow + title + description page/section head. |
@@ -132,7 +137,8 @@
 | `src/components/reviews/review-search.tsx` | **(1.09)** `'use client'` search box (§6.9) wrapping the SSR list; POSTs to `/api/reviews/search`, swaps in `ReviewResults`, Clear restores the list. No layout shift. |
 | `src/components/reviews/review-results.tsx` | **(1.09)** `'use client'` search results — header + Clear, the §6.9 empty state, or `ReviewCard` rows (rebuilds a minimal cover from `coverRef`). |
 | `src/components/reviews/review-book-aside.tsx` | **(1.09)** The §7.4 reviewed-book card (async server) — cover, "Reviewed book" eyebrow, title + alternate-script subtitle, author·year, publisher, original `source` link. |
-| `src/components/portable-text.tsx` | **(1.08, +1.09)** Shared Style A Portable Text renderer (`@portabletext/react`) — locale-agnostic server component; styles every `blockContent` block/list/mark (Playfair h2–h4, Lora body, §6.10 quote, §3.5 lists, §2.2 links w/ focus ring + auto external new-tab/`rel`); `max-w-prose` measure; `null` when empty. **(1.09) opt-in `dropCap` prop** adds `.article-body` for the §3.6 drop cap (single review/blog); About + Book unchanged. |
+| `src/components/portable-text.tsx` | **(1.08, +1.09, +1.12)** Shared Style A Portable Text renderer (`@portabletext/react`) — locale-agnostic server component; styles every `blockContent` block/list/mark (Playfair h2–h4, Lora body, §6.10 quote, §3.5 lists, §2.2 links w/ focus ring + auto external new-tab/`rel`); `max-w-prose` measure; `null` when empty. **(1.09) opt-in `dropCap`**; **(1.12) opt-in `lang`** (SC 3.1.2 — set on the body wrapper only when content falls back to another language). |
+| `src/components/seo/json-ld.tsx` | **(1.12)** Server component that renders one or more `<script type="application/ld+json">` tags from the `jsonld` builders; escapes `<` to prevent `</script>` breakout. |
 | `src/components/brand-icons.tsx` | Instagram/Facebook/YouTube glyphs (MIT Lucide outlines; lucide-react 1.x removed brand icons). |
 | `src/components/language-switcher.tsx` | Accessible MK·EN·SR inline switcher (§6.4); preserves the current path; `className`/`onNavigate` props. |
 | `src/components/.gitkeep` | Original folder placeholder. |
@@ -142,7 +148,10 @@
 |---|---|
 | `src/lib/utils.ts` | `cn` (clsx + tailwind-merge) — from shadcn init. |
 | `src/lib/nav.ts` | Primary-nav source of truth (`primaryNav` + `isNavItemActive`). |
-| `src/lib/site-links.ts` | **Provisional** external links + email (data-only; finalized 2.01/2.02). Read by the footer **and `ContactLinks`**. **(1.11)** added empty `interviewVis` slot (Kanal VIS "Vis a Vis" — confirm/fill in 2.01). |
+| `src/lib/site-links.ts` | **Provisional** external links + email (data-only; finalized 2.01/2.02). Read by the footer, `ContactLinks`, **and the Person JSON-LD `sameAs` (1.12)**. **(1.11)** added empty `interviewVis` slot (Kanal VIS "Vis a Vis" — confirm/fill in 2.01). |
+| `src/lib/seo/metadata.ts` | **(1.12)** `buildPageMetadata({locale,page,path,title?,description?,absoluteTitle?,ogType?})` → Next `Metadata` with title (template-aware), description, self canonical, mk/en/sr + x-default hreflang, OG + Twitter; references the OG image route on non-root pages (Home uses the file convention). |
+| `src/lib/seo/jsonld.ts` | **(1.12)** Pure schema.org builders — `personJsonLd` (no birth/nationality/location; `sameAs` from site-links), `articleJsonLd` (Article/BlogPosting), `bookJsonLd` (no genre/format), `breadcrumbJsonLd`. |
+| `src/lib/seo/og-fonts/*.ttf` | **(1.12)** Bundled static subset TTFs (Playfair latin/latin-ext 700; Lora latin/latin-ext/cyrillic 400) read by the OG image — OFL-licensed; static (Satori can't parse variable fonts). |
 | `src/lib/datetime.ts` | **(1.07)** `formatMonthYear` / `formatFullDate` for cards (Intl; sr→`sr-Latn`). |
 | `src/lib/strings.ts` | **(1.07)** `monogramOf` — first letter for the no-cover placeholder (strips the `[PLACEHOLDER]` marker). |
 | `src/lib/search/types.ts` | **(1.09)** The Reviews search contract — `ReviewSummary` / `SearchRequest` / `SearchResponse` / `SearchMode`. |
@@ -150,7 +159,7 @@
 | `src/lib/search/keyword.ts` | **(1.09)** Always-on keyword fallback — `normalizeForSearch` (diacritic/case fold), `blocksToPlainText`, `keywordSearch` (AND-match). |
 | `src/lib/search/embeddings.ts` | **(1.09)** Voyage wrapper (server-only) — the SOLE Voyage access point: `embedQuery`/`embedDocuments`, `EMBEDDING_MODEL` (=`voyage-3.5`), `EMBEDDING_DIMENSIONS` (=1024). |
 | `src/lib/search/supabase.ts` | **(1.09)** Server-only service-role Supabase client (`getSupabaseAdmin`); bypasses RLS, never imported client-side. |
-| `src/messages/{en,mk,sr}.json` | UI strings — `nav` / `common` / per-page titles / `footer` / `home` / `book` / **`reviews`** (1.09) / **`blog`** (1.10) / **`contact`** + **`privacy`** (1.11: full namespaces — contact intro/`form.*`/`links.*`, privacy intro + six `sections.*`; mk/sr copy is a plain-language placeholder pending Dalibor) namespaces (mk Cyrillic; en/sr Latin). **(1.11)** removed the now-unused `common.comingSoon`. |
+| `src/messages/{en,mk,sr}.json` | UI strings — `nav` / `common` / per-page titles / `footer` / `home` / `book` / **`reviews`** (1.09) / **`blog`** (1.10) / **`contact`** + **`privacy`** (1.11: full namespaces — contact intro/`form.*`/`links.*`, privacy intro + six `sections.*`; mk/sr copy is a plain-language placeholder pending Dalibor) namespaces (mk Cyrillic; en/sr Latin). **(1.11)** removed the now-unused `common.comingSoon`. **(1.12)** added the `metadata` namespace (`siteName` + per-page `title`/`description`, incl. `default` + `notFound`) — the source for every page's SEO copy; expanded `notFound` with `body`/`cta`; dropped `contact`/`privacy` `metaDescription` (superseded). **Metadata copy is working text → finalized in 2.01.** |
 | `src/messages/.gitkeep`, `src/styles/.gitkeep` | Folder placeholders. |
 
 ### Static assets — `public/`
@@ -161,11 +170,11 @@
 ### Project-state — `src/_project-state/`
 | File | Description |
 |---|---|
-| `current-state.md` | Live snapshot (end of 1.10). |
+| `current-state.md` | Live snapshot (end of 1.12 — Part 1 complete). |
 | `file-map.md` | This file. |
-| `00_stack-and-config.md` | Append-only stack/config log (1.02 → 1.09; unchanged in 1.10 — no stack change). |
+| `00_stack-and-config.md` | Append-only stack/config log (1.02 → 1.12). |
 | `Part-X-Phase-YY-Completion.md` | Blank completion-report template. |
-| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-11-Completion.md` | Per-phase completion reports. |
+| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-12-Completion.md` | Per-phase completion reports. |
 
 ### Design handovers + mockups — `docs/`
 | File | Description |

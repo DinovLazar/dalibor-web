@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SkipToContent } from "@/components/layout/skip-to-content";
 import { routing } from "@/i18n/routing";
+import { siteUrl } from "@/sanity/env";
 
 import "../globals.css";
 
@@ -31,10 +32,45 @@ const lora = Lora({
   display: "swap",
 });
 
-// Minimal per-locale metadata only. hreflang / full metadata system land in 1.12.
-export const metadata: Metadata = {
-  title: "Dalibor Plečić",
-};
+/**
+ * Site-wide metadata defaults (Phase 1.12), localized per request:
+ *  - `metadataBase` (from NEXT_PUBLIC_SITE_URL) so every relative URL — notably
+ *    the file-convention `opengraph-image` — resolves to an absolute URL;
+ *  - a `title.template` ("%s — siteName") that wraps every child page's title,
+ *    plus a default title for routes that set none (e.g. error boundaries);
+ *  - default description + Open Graph/Twitter, overridden per page by
+ *    `buildPageMetadata`.
+ * Per-page canonical, hreflang, and og:type are set by each page's
+ * `generateMetadata` via `@/lib/seo/metadata`.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const resolved = hasLocale(routing.locales, locale)
+    ? locale
+    : routing.defaultLocale;
+  const t = await getTranslations({ locale: resolved, namespace: "metadata" });
+  const siteName = t("siteName");
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: t("default.title"),
+      template: `%s — ${siteName}`,
+    },
+    description: t("default.description"),
+    openGraph: {
+      type: "website",
+      siteName,
+      title: t("default.title"),
+      description: t("default.description"),
+    },
+    twitter: { card: "summary_large_image" },
+  };
+}
 
 // Prerender all three locale roots.
 export function generateStaticParams() {

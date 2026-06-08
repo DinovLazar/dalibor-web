@@ -9,12 +9,19 @@ import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { Section } from "@/components/layout/section";
 import { PortableText } from "@/components/portable-text";
+import { JsonLd } from "@/components/seo/json-ld";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { client } from "@/sanity/lib/client";
+import { siteUrl } from "@/sanity/env";
+import { urlForImage } from "@/sanity/lib/image";
 import {
   availableInLabel,
   availableLanguages,
+  contentLang,
   localizedValue,
   resolveTopics,
+  resolvedLanguage,
 } from "@/sanity/lib/localize";
 import { POST_BY_SLUG_QUERY, POST_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { formatFullDate } from "@/lib/datetime";
@@ -53,10 +60,14 @@ export async function generateMetadata({
   const post = await getPost(slug);
   if (!post) return {};
 
-  return {
-    title: `${localizedValue(post.title, locale) ?? ""} · Dalibor Plečić`,
+  return buildPageMetadata({
+    locale,
+    page: "blog",
+    path: `/blog/${slug}`,
+    title: localizedValue(post.title, locale) ?? "",
     description: localizedValue(post.excerpt, locale) ?? undefined,
-  };
+    ogType: "article",
+  });
 }
 
 export default async function BlogPostPage({
@@ -85,14 +96,35 @@ export default async function BlogPostPage({
   const body = localizedValue(post.body, locale);
   const topics = resolveTopics(post.topics, locale);
 
+  // Structured data: BlogPosting (the post) + BreadcrumbList (Home › Blog › title).
+  const canonical = `${siteUrl}/${locale}/blog/${slug}`;
+  const articleSchema = articleJsonLd({
+    type: "BlogPosting",
+    headline: title,
+    url: canonical,
+    datePublished: post.publishedAt ?? undefined,
+    dateModified: post._updatedAt ?? undefined,
+    inLanguage: resolvedLanguage(post.body, locale) ?? locale,
+    image: post.coverImage?.asset
+      ? urlForImage(post.coverImage).width(1200).url()
+      : undefined,
+    description: localizedValue(post.excerpt, locale) ?? undefined,
+  });
+  const breadcrumbSchema = breadcrumbJsonLd([
+    { name: t("nav.home"), url: `${siteUrl}/${locale}` },
+    { name: t("nav.blog"), url: `${siteUrl}/${locale}/blog` },
+    { name: title, url: canonical },
+  ]);
+
   return (
     <Section>
+      <JsonLd data={[articleSchema, breadcrumbSchema]} />
       <div className="mx-auto w-full max-w-prose px-5 sm:px-8">
         {/* Head — back link, breadcrumb, title, §6.16 double rule, date / note. */}
         <div className="reveal">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            className="inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             <ArrowLeft className="size-[18px]" strokeWidth={1.75} aria-hidden />{" "}
             {t("blog.backToBlog")}
@@ -119,7 +151,10 @@ export default async function BlogPostPage({
             </span>
           </nav>
 
-          <h1 className="mt-4 font-display text-h1 text-text max-sm:text-[2.125rem]">
+          <h1
+            lang={contentLang(post.title, locale)}
+            className="mt-4 font-display text-h1 text-text max-sm:text-[2.125rem]"
+          >
             {title}
           </h1>
 
@@ -146,7 +181,7 @@ export default async function BlogPostPage({
 
         {/* Body — prose at the reading measure with §3.6 drop cap. */}
         <div className="reveal reveal-2 mt-6">
-          <PortableText value={body} dropCap />
+          <PortableText value={body} dropCap lang={contentLang(post.body, locale)} />
 
           {topics.length ? (
             <ul className="mt-8 flex flex-wrap gap-2">
@@ -167,7 +202,7 @@ export default async function BlogPostPage({
 
           <Link
             href="/blog"
-            className="mt-6 inline-flex items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            className="mt-6 inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             <ArrowLeft className="size-[18px]" strokeWidth={1.75} aria-hidden />{" "}
             {t("blog.backToBlog")}

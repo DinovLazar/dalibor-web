@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { MenuIcon, XIcon } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { LazyMotion, m, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 import { Link, usePathname } from "@/i18n/navigation";
@@ -25,7 +25,14 @@ import { cn } from "@/lib/utils";
  * returns to the trigger). Controlled so the trigger reflects state via
  * `aria-expanded` and the panel closes on navigation / language switch. The
  * hamburger sits top-right; opening swaps it for the X close in the same corner.
+ *
+ * Animation uses Framer's `LazyMotion` + the lightweight `m` component (1.12): the
+ * DOM animation features load lazily only when the panel first mounts, keeping the
+ * full Framer bundle out of the header's upfront JS on every page.
  */
+const loadFeatures = () =>
+  import("framer-motion").then((mod) => mod.domAnimation);
+
 export function MobileMenu({ className }: { className?: string }) {
   const [open, setOpen] = React.useState(false);
   const t = useTranslations();
@@ -77,7 +84,8 @@ export function MobileMenu({ className }: { className?: string }) {
       {open && (
       <SheetContent side="top" showCloseButton={false} className="gap-0 px-5 pb-6">
         <SheetTitle className="sr-only">{t("common.menu")}</SheetTitle>
-        <motion.div
+        <LazyMotion features={loadFeatures} strict>
+        <m.div
           ref={contentRef}
           initial={reduce ? false : { opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -139,7 +147,8 @@ export function MobileMenu({ className }: { className?: string }) {
           <div className="flex justify-center pt-4">
             <LanguageSwitcher onNavigate={close} />
           </div>
-        </motion.div>
+        </m.div>
+        </LazyMotion>
       </SheetContent>
       )}
     </Sheet>

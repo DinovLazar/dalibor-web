@@ -99,6 +99,15 @@ body {
 }
 h1,h2,h3,h4,.font-display { font-family: var(--font-display); }
 
+/* WCAG 2.2 AA — SC 2.4.11 Focus Not Obscured (Minimum). The header is sticky
+   (64px desktop / 56px mobile), so when a focusable target or an in-page anchor
+   is scrolled into view it could sit behind the bar. `scroll-margin-top` leaves
+   it clear (matches the single-review aside's 88px sticky offset). Purely a
+   scroll affordance — no visual layout impact. */
+:is(a, button, input, textarea, select, summary, [tabindex], h1, h2, h3, h4) {
+  scroll-margin-top: 5.5rem;
+}
+
 /* Cyrillic eyebrow tracking tweak (§3.4) */
 :lang(mk) .eyebrow, :lang(sr) .eyebrow { letter-spacing: 0.06em; }
 

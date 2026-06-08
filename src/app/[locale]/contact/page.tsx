@@ -9,6 +9,7 @@ import { Section } from "@/components/layout/section";
 import { ContactForm } from "@/components/contact/contact-form";
 import { ContactLinks } from "@/components/contact/contact-links";
 import { routing } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
 /**
  * The real Style A Contact page (§7.8) — replaces the Phase 1.06 stub. A short
@@ -28,12 +29,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) return {};
-  const t = await getTranslations({ locale, namespace: "contact" });
-  return {
-    title: t("title"),
-    description: t("metaDescription"),
-  };
+  return buildPageMetadata({ locale, page: "contact", path: "/contact" });
 }
 
 export default async function ContactPage({

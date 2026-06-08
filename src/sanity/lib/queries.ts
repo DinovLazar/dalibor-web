@@ -55,6 +55,7 @@ export const REVIEWS_SEARCH_QUERY = defineQuery(`
 export const REVIEW_BY_SLUG_QUERY = defineQuery(`
   *[_type == "review" && slug.current == $slug][0]{
     _id,
+    _updatedAt,
     "slug": slug.current,
     reviewTitle,
     bookTitle,
@@ -111,6 +112,7 @@ export const POSTS_LIST_QUERY = defineQuery(`
 export const POST_BY_SLUG_QUERY = defineQuery(`
   *[_type == "post" && slug.current == $slug][0]{
     _id,
+    _updatedAt,
     "slug": slug.current,
     title,
     excerpt,

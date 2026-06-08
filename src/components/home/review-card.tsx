@@ -2,7 +2,11 @@ import { getTranslations } from "next-intl/server";
 
 import { Link } from "@/i18n/navigation";
 import { Cover } from "@/components/cover";
-import { availableLanguages, localizedValue } from "@/sanity/lib/localize";
+import {
+  availableLanguages,
+  contentLang,
+  localizedValue,
+} from "@/sanity/lib/localize";
 import type { AppLocale } from "@/sanity/lib/localize";
 import type { HOME_REVIEWS_QUERY_RESULT } from "@/sanity/sanity.types";
 import { formatMonthYear } from "@/lib/datetime";
@@ -30,6 +34,7 @@ export async function ReviewCard({
   const title = localizedValue(review.reviewTitle, locale) ?? "";
   const langs = availableLanguages(review.reviewTitle);
   const missing = !langs.includes(locale as AppLocale);
+  const lang = contentLang(review.reviewTitle, locale);
 
   const author = review.bookAuthor?.trim() || undefined;
   const date = formatMonthYear(review.publishedAt, locale);
@@ -57,7 +62,10 @@ export async function ReviewCard({
         monogram={monogramOf(localizedValue(review.bookTitle, locale))}
       />
       <div className="flex min-w-0 flex-col gap-[7px]">
-        <h3 className="font-display text-h4 text-text transition-colors group-hover/card:text-primary-strong">
+        <h3
+          lang={lang}
+          className="font-display text-h4 text-text transition-colors group-hover/card:text-primary-strong"
+        >
           {title}
         </h3>
         {author || date ? (
@@ -70,7 +78,9 @@ export async function ReviewCard({
           </p>
         ) : null}
         {excerpt ? (
-          <p className="line-clamp-2 text-body text-text-muted">{excerpt}</p>
+          <p lang={lang} className="line-clamp-2 text-body text-text-muted">
+            {excerpt}
+          </p>
         ) : null}
         {topics.length ? (
           <ul className="mt-0.5 flex flex-wrap gap-2">

@@ -5,7 +5,7 @@ import { BookOpen } from "lucide-react";
 
 import { ReviewCard } from "@/components/reviews/review-card";
 import type { ReviewSummary } from "@/lib/search/types";
-import { availableInLabel } from "@/sanity/lib/localize";
+import { availableInLabel, contentLangFromList } from "@/sanity/lib/localize";
 import type { LocalizedImage } from "@/sanity/sanity.types";
 
 /**
@@ -39,7 +39,7 @@ export function ReviewResults({
         <button
           type="button"
           onClick={onClear}
-          className="shrink-0 text-meta font-medium text-primary-strong hover:underline outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+          className="shrink-0 inline-flex min-h-[24px] items-center text-meta font-medium text-primary-strong hover:underline outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
         >
           {t("reviews.clearSearch")}
         </button>
@@ -52,16 +52,16 @@ export function ReviewResults({
             className="mx-auto size-10 text-text-muted"
             strokeWidth={1.75}
           />
-          <h3 className="mt-4 font-display text-h4 text-text">
+          <h2 className="mt-4 font-display text-h4 text-text">
             {t("reviews.emptyTitle")}
-          </h3>
+          </h2>
           <p className="mt-2 text-body text-text-muted">
             {t("reviews.emptyBody")}
           </p>
           <button
             type="button"
             onClick={onClear}
-            className="mt-4 text-meta font-medium text-primary-strong hover:underline outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            className="mt-4 inline-flex min-h-[24px] items-center text-meta font-medium text-primary-strong hover:underline outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             {t("reviews.clearSearch")}
           </button>
@@ -94,6 +94,7 @@ export function ReviewResults({
                   publishedAt={r.date}
                   topics={r.topics}
                   availableIn={availableIn}
+                  contentLang={contentLangFromList(r.availableLanguages, locale)}
                 />
               </li>
             );

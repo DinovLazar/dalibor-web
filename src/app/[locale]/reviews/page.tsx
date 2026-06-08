@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -9,9 +10,19 @@ import { ReviewSearch } from "@/components/reviews/review-search";
 import { ReviewsList } from "@/components/reviews/reviews-list";
 import { TopicFilter } from "@/components/topic-filter";
 import { routing } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 import { client } from "@/sanity/lib/client";
 import { localizedValue } from "@/sanity/lib/localize";
 import { REVIEWS_LIST_QUERY, TOPICS_QUERY } from "@/sanity/lib/queries";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return buildPageMetadata({ locale, page: "reviews", path: "/reviews" });
+}
 
 /**
  * The real Style A Reviews list (§7.3) — replaces the Phase 1.05 connect-to-site

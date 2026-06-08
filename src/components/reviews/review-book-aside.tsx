@@ -2,7 +2,11 @@ import { ExternalLink } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { Cover } from "@/components/cover";
-import { localizedValue, type AppLocale } from "@/sanity/lib/localize";
+import {
+  contentLang,
+  localizedValue,
+  type AppLocale,
+} from "@/sanity/lib/localize";
 import type { REVIEW_BY_SLUG_QUERY_RESULT } from "@/sanity/sanity.types";
 import { monogramOf } from "@/lib/strings";
 
@@ -25,12 +29,17 @@ export async function ReviewBookAside({
   const t = await getTranslations();
 
   const bookTitle = localizedValue(review.bookTitle, locale) ?? "";
+  const bookTitleLang = contentLang(review.bookTitle, locale);
 
   // Alternate-script subtitle: first title in en→sr→mk that exists and differs
-  // from the shown one (so /mk surfaces the Latin form, and vice versa).
-  const subtitle = (["en", "sr", "mk"] as AppLocale[])
-    .map((l) => localizedValue(review.bookTitle, l))
-    .find((v) => v && v !== bookTitle);
+  // from the shown one (so /mk surfaces the Latin form, and vice versa). Its
+  // language is captured so the subtitle carries the right `lang` (SC 3.1.2 +
+  // correct Cyrillic italic shaping, handover §3.4).
+  const subtitleEntry = (["en", "sr", "mk"] as AppLocale[])
+    .map((l) => ({ lang: l, value: localizedValue(review.bookTitle, l) }))
+    .find((entry) => entry.value && entry.value !== bookTitle);
+  const subtitle = subtitleEntry?.value;
+  const subtitleLang = subtitleEntry?.lang;
 
   const authorYear = [review.bookAuthor, review.publicationYear]
     .filter(Boolean)
@@ -81,9 +90,13 @@ export async function ReviewBookAside({
           <p className="eyebrow text-eyebrow uppercase text-primary-strong">
             {t("reviews.reviewedBook")}
           </p>
-          <h2 className="mt-1 font-display text-h3 text-text">{bookTitle}</h2>
+          <h2 lang={bookTitleLang} className="mt-1 font-display text-h3 text-text">
+            {bookTitle}
+          </h2>
           {subtitle ? (
-            <p className="text-body italic text-text-muted">{subtitle}</p>
+            <p lang={subtitleLang} className="text-body italic text-text-muted">
+              {subtitle}
+            </p>
           ) : null}
           {authorYear ? (
             <p className="mt-2 text-meta font-medium text-text-muted">

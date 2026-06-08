@@ -20,6 +20,45 @@
     "menu": "Menu",
     "availableIn": "Available in: {langs}"
   },
+  "metadata": {
+    "siteName": "Dalibor Plečić",
+    "default": {
+      "title": "Dalibor Plečić — Writer, Critic & Translator",
+      "description": "The personal site of Dalibor Plečić — writer, literary critic and translator: book reviews, essays on reading and translation, and his own book."
+    },
+    "home": {
+      "title": "Dalibor Plečić — Writer, Critic & Translator",
+      "description": "Dalibor Plečić — writer, literary critic and translator. Book reviews, essays on reading and translation, and his own book, in Macedonian, English and Serbian."
+    },
+    "about": {
+      "title": "About",
+      "description": "About Dalibor Plečić — writer, literary critic, translator and journalist: the books he reads, the work he translates, and the writing he publishes here."
+    },
+    "book": {
+      "title": "The Book",
+      "description": "Dalibor Plečić's own book — a full description and where to find it, on his personal site of reviews, essays and translation."
+    },
+    "reviews": {
+      "title": "Reviews",
+      "description": "Book reviews by Dalibor Plečić — readings of fiction and non-fiction from the region and beyond, searchable by theme."
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Essays and notes by Dalibor Plečić on books, reading and the craft of literary translation."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Get in touch with Dalibor Plečić — interview requests, translation work, or a note about a book."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "How the contact form on this site collects and handles your details."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you were looking for isn't here. Browse the reviews, the blog, or return home."
+    }
+  },
   "home": {
     "title": "Critic, translator, and writer",
     "readReviews": "Read reviews",
@@ -72,7 +111,6 @@
   "contact": {
     "title": "Get in touch",
     "intro": "Questions, interview requests, translation work, or a few words about a book — write below and your message will reach Dalibor directly.",
-    "metaDescription": "Get in touch with Dalibor Plečić — interview requests, translation work, or a note about a book.",
     "form": {
       "name": "Your name",
       "email": "Email",
@@ -112,7 +150,6 @@
   "privacy": {
     "title": "Privacy",
     "intro": "This site is a personal home for Dalibor Plečić's writing, and it collects as little information as possible. This page explains what the contact form collects and how those details are handled.",
-    "metaDescription": "How the contact form on this site collects and handles your details.",
     "sections": {
       "collect": {
         "title": "What the form collects",
@@ -141,7 +178,9 @@
     }
   },
   "notFound": {
-    "title": "This page isn't here"
+    "title": "This page isn't here",
+    "body": "The page you were looking for may have moved, or the link may be broken.",
+    "cta": "Go to the homepage"
   },
   "footer": {
     "contactHeading": "Contact",

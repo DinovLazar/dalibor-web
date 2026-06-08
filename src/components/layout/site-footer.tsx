@@ -66,7 +66,7 @@ export async function SiteFooter() {
             <li className="inline-flex w-fit items-center gap-2 py-[5px] text-[0.9375rem] text-on-footer/[88%]">
               <MailIcon className="size-5 shrink-0" strokeWidth={1.75} aria-hidden="true" />
               <span>{t("email")}</span>
-              <span className="text-on-footer/60">· {t("emailPending")}</span>
+              <span className="text-on-footer/80">· {t("emailPending")}</span>
             </li>
           </FooterGroup>
 
@@ -103,7 +103,7 @@ export async function SiteFooter() {
           <Link
             href="/privacy"
             className={cn(
-              "rounded-sm transition-colors hover:text-on-footer hover:underline",
+              "inline-flex min-h-[24px] w-fit items-center rounded-sm transition-colors hover:text-on-footer hover:underline",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-footer",
             )}
           >

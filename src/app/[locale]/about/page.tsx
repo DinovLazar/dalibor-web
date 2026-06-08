@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
@@ -9,13 +10,25 @@ import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { PortableText } from "@/components/portable-text";
+import { JsonLd } from "@/components/seo/json-ld";
 import { buttonVariants } from "@/components/ui/button";
 import { routing } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { personJsonLd } from "@/lib/seo/jsonld";
 import { client } from "@/sanity/lib/client";
 import { urlForImage } from "@/sanity/lib/image";
-import { localizedValue } from "@/sanity/lib/localize";
+import { contentLang, localizedValue } from "@/sanity/lib/localize";
 import { ABOUT_QUERY } from "@/sanity/lib/queries";
 import { monogramOf } from "@/lib/strings";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return buildPageMetadata({ locale, page: "about", path: "/about" });
+}
 
 /**
  * The Style A About page (§7.2). Reads the `author` singleton from Sanity and
@@ -58,6 +71,8 @@ export default async function AboutPage({
 
   return (
     <Section>
+      {/* Person structured data — About is a canonical entity page (also on Home). */}
+      <JsonLd data={personJsonLd()} />
       <Container>
         {/* 1 · Page head — name (h1) over roles (eyebrow) + tagline (description). */}
         <PageHeader
@@ -102,8 +117,10 @@ export default async function AboutPage({
           </div>
 
           {/* Bio — Portable Text already constrains to the reading measure and
-              returns null when empty, so a missing bio degrades gracefully. */}
-          <PortableText value={bio} />
+              returns null when empty, so a missing bio degrades gracefully. The
+              `lang` is set only when the bio falls back to another language
+              (SC 3.1.2). */}
+          <PortableText value={bio} lang={contentLang(author?.bio, locale)} />
         </div>
 
         {/* 3 · Quiet link to Contact (§7.2). */}

@@ -5,6 +5,7 @@ import { ReviewCard } from "@/components/reviews/review-card";
 import {
   availableInLabel,
   availableLanguages,
+  contentLang,
   localizedValue,
   resolveTopics,
 } from "@/sanity/lib/localize";
@@ -70,6 +71,7 @@ export async function ReviewsList({
               excerpt={excerpt}
               topics={topics}
               availableIn={availableIn}
+              contentLang={contentLang(r.reviewTitle, locale)}
             />
           </li>
         );

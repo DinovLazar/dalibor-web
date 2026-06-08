@@ -9,13 +9,20 @@ import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { Section } from "@/components/layout/section";
 import { PortableText } from "@/components/portable-text";
+import { JsonLd } from "@/components/seo/json-ld";
 import { ReviewBookAside } from "@/components/reviews/review-book-aside";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { client } from "@/sanity/lib/client";
+import { siteUrl } from "@/sanity/env";
+import { urlForImage } from "@/sanity/lib/image";
 import {
   availableInLabel,
   availableLanguages,
+  contentLang,
   localizedValue,
   resolveTopics,
+  resolvedLanguage,
 } from "@/sanity/lib/localize";
 import { REVIEW_BY_SLUG_QUERY, REVIEW_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { formatFullDate } from "@/lib/datetime";
@@ -53,10 +60,14 @@ export async function generateMetadata({
   const review = await getReview(slug);
   if (!review) return {};
 
-  return {
-    title: `${localizedValue(review.reviewTitle, locale) ?? ""} · Dalibor Plečić`,
+  return buildPageMetadata({
+    locale,
+    page: "reviews",
+    path: `/reviews/${slug}`,
+    title: localizedValue(review.reviewTitle, locale) ?? "",
     description: localizedValue(review.excerpt, locale) ?? undefined,
-  };
+    ogType: "article",
+  });
 }
 
 export default async function ReviewPage({
@@ -85,14 +96,35 @@ export default async function ReviewPage({
   const body = localizedValue(review.body, locale);
   const topics = resolveTopics(review.topics, locale);
 
+  // Structured data: Article (the review) + BreadcrumbList (Home › Reviews › title).
+  const canonical = `${siteUrl}/${locale}/reviews/${slug}`;
+  const articleSchema = articleJsonLd({
+    type: "Article",
+    headline: title,
+    url: canonical,
+    datePublished: review.publishedAt ?? undefined,
+    dateModified: review._updatedAt ?? undefined,
+    inLanguage: resolvedLanguage(review.body, locale) ?? locale,
+    image: review.coverImage?.asset
+      ? urlForImage(review.coverImage).width(1200).url()
+      : undefined,
+    description: localizedValue(review.excerpt, locale) ?? undefined,
+  });
+  const breadcrumbSchema = breadcrumbJsonLd([
+    { name: t("nav.home"), url: `${siteUrl}/${locale}` },
+    { name: t("nav.reviews"), url: `${siteUrl}/${locale}/reviews` },
+    { name: title, url: canonical },
+  ]);
+
   return (
     <Section>
+      <JsonLd data={[articleSchema, breadcrumbSchema]} />
       <div className="mx-auto w-full max-w-[63rem] px-5 sm:px-8 lg:px-12">
         {/* Head — back link, breadcrumb, title, §6.16 double rule, date / note. */}
         <div className="reveal max-w-prose">
           <Link
             href="/reviews"
-            className="inline-flex items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            className="inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             <ArrowLeft className="size-[18px]" strokeWidth={1.75} aria-hidden />{" "}
             {t("reviews.backToReviews")}
@@ -119,7 +151,10 @@ export default async function ReviewPage({
             </span>
           </nav>
 
-          <h1 className="mt-4 font-display text-h1 text-text max-sm:text-[2.125rem]">
+          <h1
+            lang={contentLang(review.reviewTitle, locale)}
+            className="mt-4 font-display text-h1 text-text max-sm:text-[2.125rem]"
+          >
             {title}
           </h1>
 
@@ -147,7 +182,11 @@ export default async function ReviewPage({
         {/* Body + aside — prose at the reading measure, 18rem aside at lg. */}
         <div className="mt-6 grid gap-12 lg:grid-cols-[minmax(0,42rem)_18rem] lg:items-start">
           <div className="reveal reveal-2 min-w-0">
-            <PortableText value={body} dropCap />
+            <PortableText
+              value={body}
+              dropCap
+              lang={contentLang(review.body, locale)}
+            />
 
             {topics.length ? (
               <ul className="mt-8 flex flex-wrap gap-2">
@@ -168,7 +207,7 @@ export default async function ReviewPage({
 
             <Link
               href="/reviews"
-              className="mt-6 inline-flex items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+              className="mt-6 inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
             >
               <ArrowLeft className="size-[18px]" strokeWidth={1.75} aria-hidden />{" "}
               {t("reviews.backToReviews")}

@@ -27,6 +27,7 @@ export function ReviewCard({
   excerpt,
   topics,
   availableIn,
+  contentLang,
 }: {
   href: string;
   coverImage: LocalizedImage | null;
@@ -39,6 +40,12 @@ export function ReviewCard({
   topics: { slug: string; label: string }[];
   /** Pre-formatted "available in: …" note; shown only when provided (§6.13). */
   availableIn?: string;
+  /**
+   * BCP-47 language of the card's resolved title/excerpt, set only when it
+   * differs from the page locale (WCAG 2.2 AA SC 3.1.2). Pass
+   * `contentLang(field, locale)`.
+   */
+  contentLang?: string;
 }) {
   const date = formatMonthYear(publishedAt, locale);
   const shownTopics = topics.slice(0, 3);
@@ -59,9 +66,15 @@ export function ReviewCard({
         monogram={monogramOf(bookTitle ?? title)}
       />
       <div className="flex min-w-0 flex-col gap-[7px]">
-        <h3 className="font-display text-h4 text-text transition-colors group-hover/card:text-primary-strong">
+        {/* h2: on the Reviews list + search results the card is the top-level
+            item under the page h1 (no intervening h2), so h2 keeps the heading
+            order sequential. Styled as h4 — visual size unchanged. */}
+        <h2
+          lang={contentLang}
+          className="font-display text-h4 text-text transition-colors group-hover/card:text-primary-strong"
+        >
           {title}
-        </h3>
+        </h2>
         {bookAuthor || date ? (
           <p className="text-meta font-medium text-text-muted">
             {bookAuthor}
@@ -72,7 +85,9 @@ export function ReviewCard({
           </p>
         ) : null}
         {excerpt ? (
-          <p className="line-clamp-2 text-body text-text-muted">{excerpt}</p>
+          <p lang={contentLang} className="line-clamp-2 text-body text-text-muted">
+            {excerpt}
+          </p>
         ) : null}
         {shownTopics.length ? (
           <ul className="mt-0.5 flex flex-wrap gap-2">

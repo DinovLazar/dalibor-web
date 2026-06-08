@@ -364,9 +364,10 @@ export type REVIEWS_SEARCH_QUERY_RESULT = Array<{
 
 // Source: src/sanity/lib/queries.ts
 // Variable: REVIEW_BY_SLUG_QUERY
-// Query: *[_type == "review" && slug.current == $slug][0]{    _id,    "slug": slug.current,    reviewTitle,    bookTitle,    bookAuthor,    publisher,    publicationYear,    excerpt,    body,    coverImage,    publishedAt,    source,    "topics": topics[]->{ _id, "slug": slug.current, title }  }
+// Query: *[_type == "review" && slug.current == $slug][0]{    _id,    _updatedAt,    "slug": slug.current,    reviewTitle,    bookTitle,    bookAuthor,    publisher,    publicationYear,    excerpt,    body,    coverImage,    publishedAt,    source,    "topics": topics[]->{ _id, "slug": slug.current, title }  }
 export type REVIEW_BY_SLUG_QUERY_RESULT = {
   _id: string;
+  _updatedAt: string;
   slug: string | null;
   reviewTitle: LocalizedString | null;
   bookTitle: LocalizedString | null;
@@ -423,9 +424,10 @@ export type POSTS_LIST_QUERY_RESULT = Array<{
 
 // Source: src/sanity/lib/queries.ts
 // Variable: POST_BY_SLUG_QUERY
-// Query: *[_type == "post" && slug.current == $slug][0]{    _id,    "slug": slug.current,    title,    excerpt,    body,    coverImage,    publishedAt,    "topics": topics[]->{ _id, "slug": slug.current, title }  }
+// Query: *[_type == "post" && slug.current == $slug][0]{    _id,    _updatedAt,    "slug": slug.current,    title,    excerpt,    body,    coverImage,    publishedAt,    "topics": topics[]->{ _id, "slug": slug.current, title }  }
 export type POST_BY_SLUG_QUERY_RESULT = {
   _id: string;
+  _updatedAt: string;
   slug: string | null;
   title: LocalizedString | null;
   excerpt: LocalizedText | null;
@@ -535,11 +537,11 @@ declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    excerpt,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': REVIEWS_LIST_QUERY_RESULT;
     '\n  *[_type == "review" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    excerpt,\n    coverImage,\n    publishedAt,\n    body,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': REVIEWS_SEARCH_QUERY_RESULT;
-    '\n  *[_type == "review" && slug.current == $slug][0]{\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    publisher,\n    publicationYear,\n    excerpt,\n    body,\n    coverImage,\n    publishedAt,\n    source,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': REVIEW_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "review" && slug.current == $slug][0]{\n    _id,\n    _updatedAt,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    publisher,\n    publicationYear,\n    excerpt,\n    body,\n    coverImage,\n    publishedAt,\n    source,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': REVIEW_BY_SLUG_QUERY_RESULT;
     '\n  *[_type == "review" && defined(slug.current)]{ "slug": slug.current }\n': REVIEW_SLUGS_QUERY_RESULT;
     '\n  *[_type == "topic" && defined(slug.current)] | order(title.mk asc){\n    _id,\n    "slug": slug.current,\n    title\n  }\n': TOPICS_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)] | order(coalesce(publishedAt, _createdAt) desc) {\n    _id,\n    "slug": slug.current,\n    title,\n    excerpt,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': POSTS_LIST_QUERY_RESULT;
-    '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    "slug": slug.current,\n    title,\n    excerpt,\n    body,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': POST_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    _updatedAt,\n    "slug": slug.current,\n    title,\n    excerpt,\n    body,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': POST_BY_SLUG_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }\n': POST_SLUGS_QUERY_RESULT;
     '\n  *[_type == "book"][0]{\n    _id,\n    title,\n    coverImage,\n    description,\n    purchaseLinks,\n    publisher,\n    publicationYear,\n    "authorName": *[_type == "author"][0].name\n  }\n': BOOK_QUERY_RESULT;
     '\n  *[_type == "author"][0]{\n    _id,\n    name,\n    roles,\n    tagline,\n    bio,\n    photo\n  }\n': ABOUT_QUERY_RESULT;

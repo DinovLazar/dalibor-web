@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { routing } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
 /**
  * The real Style A Privacy page (§7.9) — replaces the Phase 1.06 stub. A calm,
@@ -36,12 +37,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) return {};
-  const t = await getTranslations({ locale, namespace: "privacy" });
-  return {
-    title: t("title"),
-    description: t("metaDescription"),
-  };
+  return buildPageMetadata({ locale, page: "privacy", path: "/privacy" });
 }
 
 export default async function PrivacyPage({
