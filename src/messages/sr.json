@@ -114,7 +114,7 @@
       "sendAnother": "Pošalji novu poruku",
       "error": "Nešto nije uspelo i poruka nije poslata. Pokušajte ponovo ili pišite direktno na imejl.",
       "preview": "Formular još nije povezan — proradiće kada sajt bude objavljen.",
-      "subjectLine": "Nova poruka od {name}",
+      "subjectLine": "Nova poruka sa vašeg sajta — {name}",
       "privacyNote": "Slanjem formulara prihvatate način na koji obrađujemo vaše podatke, opisan u <link>politici privatnosti</link>.",
       "errors": {
         "nameRequired": "Unesite vaše ime.",

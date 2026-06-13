@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { CircleAlert, CircleCheck, Info } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
@@ -15,18 +15,19 @@ import { cn } from "@/lib/utils";
  * ContactForm (§6.12, §7.8) — the site's single conversion point. A custom,
  * fully-accessible form built without `@formspree/react` (Decision §2.1): full
  * control over the Style A markup and the WCAG 2.2 AA wiring, and zero new
- * dependencies. Sending is built now and wired live in Phase 2.02.
+ * dependencies. Live since Phase 2.02 — sends to Formspree for real.
  *
  * Progressive enhancement (Decision §2.3): the <form> carries `method="POST"` and
- * `action={endpoint}`, so a no-JS submit still reaches Formspree once the endpoint
- * is set. With JS on, `onSubmit` always calls `preventDefault()`, validates, and
- * runs the AJAX path.
+ * `action={endpoint}`, so a no-JS submit still reaches Formspree. With JS on,
+ * `onSubmit` always calls `preventDefault()`, validates, and runs the AJAX path
+ * (the in-page focused success panel + polite error region, better than a reload).
  *
  * Env-gated submit (Decision §2.2): the endpoint is read from the public
  * `NEXT_PUBLIC_FORMSPREE_ENDPOINT` (Formspree endpoints live in a form's `action`,
- * so `NEXT_PUBLIC_` is correct). In Part 1 it is empty — a valid submit then
- * short-circuits to a neutral preview notice and sends nothing; when the variable
- * is present (2.02) it submits for real.
+ * so `NEXT_PUBLIC_` is correct). It is set in 2.02, so the live form submits for
+ * real. The gate is retained as a safety net: if the variable is ever absent
+ * (misconfig / a fresh checkout), a valid submit short-circuits to a neutral
+ * preview notice and sends nothing rather than POSTing to nowhere.
  *
  * Accessibility: every field has a programmatic <label>; required fields are marked
  * with `*` and explained by the legend; invalid fields set `aria-invalid` +
@@ -36,8 +37,9 @@ import { cn } from "@/lib/utils";
  * is a honeypot only (`_gotcha`) — reCAPTCHA is deferred to 2.02 if ever needed.
  */
 
-// Endpoint is empty in Part 1 (see .env.example) → preview mode. Read once at
-// module scope: NEXT_PUBLIC_ vars are inlined at build time.
+// Live endpoint (see .env.example / .env.local). Read once at module scope:
+// NEXT_PUBLIC_ vars are inlined at build time. Falls back to "" → preview mode
+// only if the variable is ever absent.
 const ENDPOINT = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT ?? "";
 
 // Pragmatic format check (non-empty local part, "@", non-empty domain with a dot).
@@ -52,6 +54,7 @@ const EMPTY: Fields = { name: "", email: "", subject: "", message: "" };
 
 export function ContactForm({ className }: { className?: string }) {
   const t = useTranslations("contact");
+  const locale = useLocale();
   const [fields, setFields] = useState<Fields>(EMPTY);
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
   const [status, setStatus] = useState<Status>("idle");
@@ -98,7 +101,8 @@ export function ContactForm({ className }: { className?: string }) {
       return;
     }
 
-    // Part 1: no endpoint → neutral preview notice, nothing sent.
+    // Safety net: if the endpoint is ever absent (misconfig) → neutral preview
+    // notice, nothing sent. With the endpoint set (2.02) this never triggers.
     if (!ENDPOINT) {
       setStatus("preview");
       return;
@@ -114,9 +118,13 @@ export function ContactForm({ className }: { className?: string }) {
         },
         body: JSON.stringify({
           name: fields.name,
+          // Formspree sets the email Reply-To from a field literally named `email`,
+          // so Dalibor's reply goes straight back to the visitor.
           email: fields.email,
           subject: fields.subject,
           message: fields.message,
+          // Active UI language (mk/en/sr) so Dalibor sees which language to reply in.
+          locale,
           _subject: t("form.subjectLine", { name: fields.name }),
           _gotcha: "",
         }),

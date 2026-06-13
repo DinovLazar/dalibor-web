@@ -124,7 +124,7 @@
       "sendAnother": "Send another message",
       "error": "Something went wrong and your message wasn't sent. Please try again, or email directly.",
       "preview": "This form isn't connected yet — it goes live when the site launches.",
-      "subjectLine": "New message from {name}",
+      "subjectLine": "New message from your website — {name}",
       "privacyNote": "By sending this form you agree to how we handle your details, described in our <link>privacy policy</link>.",
       "errors": {
         "nameRequired": "Please enter your name.",
