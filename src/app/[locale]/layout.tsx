@@ -8,7 +8,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SkipToContent } from "@/components/layout/skip-to-content";
 import { routing } from "@/i18n/routing";
-import { siteUrl } from "@/sanity/env";
+import { previewNoindex, siteUrl } from "@/sanity/env";
 
 import "../globals.css";
 
@@ -62,6 +62,12 @@ export async function generateMetadata({
       template: `%s — ${siteName}`,
     },
     description: t("default.description"),
+    // Preview safety-net (2.05): when PREVIEW_NOINDEX is on, emit a hard
+    // site-wide noindex. Set on the root layout so every child page inherits it
+    // (no page's `buildPageMetadata` sets `robots`, so none override this).
+    ...(previewNoindex
+      ? { robots: { index: false, follow: false } }
+      : {}),
     openGraph: {
       type: "website",
       siteName,

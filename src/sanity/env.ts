@@ -41,3 +41,19 @@ export const projectId = assertValue(
 export const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
 ).replace(/\/+$/, "");
+
+/**
+ * Preview safety-net (Phase 2.05). When `PREVIEW_NOINDEX` is truthy the whole
+ * site emits a hard `noindex, nofollow` (root metadata robots) AND a
+ * `Disallow: /` robots.txt — so a validation deploy can never be indexed,
+ * regardless of how Vercel's branch/target logic resolves. Read server-side at
+ * build time (these pages prerender statically), so it does NOT need to be a
+ * NEXT_PUBLIC_ var.
+ *
+ * Turn this ON for the noindexed validation deploy; turn it OFF (unset) only at
+ * the real launch (2.06) once the production domain + real content are in place.
+ * Accepts 1/true/yes/on (any case); anything else — including unset — is OFF.
+ */
+export const previewNoindex = /^(1|true|yes|on)$/i.test(
+  (process.env.PREVIEW_NOINDEX ?? "").trim(),
+);

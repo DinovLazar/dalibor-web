@@ -24,7 +24,7 @@
 | `postcss.config.mjs` | PostCSS loading `@tailwindcss/postcss` (Tailwind v4). |
 | `.gitignore` | Ignores `node_modules`, `.next`, `.env*` (**with `!.env.example` exception**), the local dossier, etc. |
 | `.env.local` | Local env — real Sanity project id/dataset/apiVersion + **(2.02)** the live `NEXT_PUBLIC_FORMSPREE_ENDPOINT`. **Gitignored, never committed.** |
-| `.env.example` | **Committed** env template (no real secrets) — Sanity vars + **(1.09) review-search vars** (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`) + **(1.11→2.02)** `NEXT_PUBLIC_FORMSPREE_ENDPOINT` (now a **placeholder** value + comment; the real endpoint lives in `.env.local` and is set on Vercel at deploy in 2.05). |
+| `.env.example` | **Committed** env template (no real secrets) — Sanity vars + **(1.09) review-search vars** (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`) + **(1.11→2.02)** `NEXT_PUBLIC_FORMSPREE_ENDPOINT` (placeholder value + comment; real endpoint in `.env.local`, set on Vercel at deploy) + **(2.05)** `NEXT_PUBLIC_SITE_URL` (now flagged REQUIRED on Vercel) + new `PREVIEW_NOINDEX` (server-side noindex gate). |
 | `sanity.config.ts` | **Embedded Studio config** — basePath `/studio`, schema, `structureTool`+structure (singletons), `visionTool`, singleton action/template restrictions. |
 | `sanity.cli.ts` | **Sanity CLI config** — `api` (projectId/dataset) + `typegen` (paths). |
 | `schema.json` | **Generated** — extracted schema for TypeGen. |
@@ -35,9 +35,9 @@
 ### App / pages — `src/app/`
 | File | Description |
 |---|---|
-| `src/app/[locale]/layout.tsx` | Root layout for all locales: fonts, tokens, `<html lang>`, `generateStaticParams`, `setRequestLocale`, provider; **mounts SkipToContent → SiteHeader → `<main id="content">` → SiteFooter** (1.06). **(1.12)** `generateMetadata` sets `metadataBase` (env base), the `%s — siteName` title template + default title/description, and default OG/Twitter. |
+| `src/app/[locale]/layout.tsx` | Root layout for all locales: fonts, tokens, `<html lang>`, `generateStaticParams`, `setRequestLocale`, provider; **mounts SkipToContent → SiteHeader → `<main id="content">` → SiteFooter** (1.06). **(1.12)** `generateMetadata` sets `metadataBase` (env base), the `%s — siteName` title template + default title/description, and default OG/Twitter. **(2.05)** emits a site-wide `robots: { index:false, follow:false }` when `previewNoindex` is on (inherited by every child page — no page sets `robots`). |
 | `src/app/sitemap.ts` | **(1.12)** Native `MetadataRoute.Sitemap` — every static route × 3 locales + every review/blog slug × 3, each carrying mk/en/sr + `x-default` hreflang alternates; uses the env base URL. |
-| `src/app/robots.ts` | **(1.12)** `MetadataRoute.Robots` — allow all, disallow `/studio` + `/api`, points at `/sitemap.xml`, declares host (env base). |
+| `src/app/robots.ts` | **(1.12)** `MetadataRoute.Robots` — allow all, disallow `/studio` + `/api`, points at `/sitemap.xml`, declares host (env base). **(2.05)** when `previewNoindex` is on, flips to a blanket `Disallow: /` (no sitemap/host) so a validation deploy can't be crawled. |
 | `src/app/[locale]/opengraph-image.tsx` | **(1.12)** Default branded OG card via `next/og` `ImageResponse` (Style A wordmark + caramel rule + localized role line; no photography). Loads bundled static subset fonts (full Latin/Latin-ext/Cyrillic coverage via a font stack); `generateStaticParams` → one 1200×630 card per locale. |
 | `src/app/[locale]/twitter-image.tsx` | **(1.12)** Twitter share card — re-exports the `opengraph-image` generator (single source of truth). |
 | `src/app/[locale]/not-found.tsx` | **(1.12)** Localized, accessible 404 in Style A chrome (`notFound` namespace); emits a `noindex` robots tag (+ HTTP 404). |
@@ -74,7 +74,7 @@
 ### Sanity — `src/sanity/`
 | File | Description |
 |---|---|
-| `src/sanity/env.ts` | Reads + validates the public Sanity env vars. **(1.12)** also exports `siteUrl` (`NEXT_PUBLIC_SITE_URL`, optional, localhost fallback, trailing slash stripped) — the base for every canonical/hreflang/OG/sitemap/robots URL. |
+| `src/sanity/env.ts` | Reads + validates the public Sanity env vars. **(1.12)** also exports `siteUrl` (`NEXT_PUBLIC_SITE_URL`, optional, localhost fallback, trailing slash stripped) — the base for every canonical/hreflang/OG/sitemap/robots URL. **(2.05)** also exports `previewNoindex` (server-side `PREVIEW_NOINDEX` flag, truthy = `1/true/yes/on`) — gates the site-wide noindex. |
 | `src/sanity/structure.ts` | Studio desk structure; `book` + `author` singletons (pinned documentId). |
 | `src/sanity/sanity.types.ts` | **Generated** TypeGen output — schema types + **14** query result types (incl. `REVIEWS_LIST_QUERY_RESULT` / `REVIEW_BY_SLUG_QUERY_RESULT` / `TOPICS_QUERY_RESULT`, 1.09; `POSTS_LIST_QUERY_RESULT` / `POST_BY_SLUG_QUERY_RESULT` / `POST_SLUGS_QUERY_RESULT`, 1.10) + `@sanity/client` fetch augmentation. |
 | `src/sanity/schemaTypes/index.ts` | Schema registry (array of all types). |
