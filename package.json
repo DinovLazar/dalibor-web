@@ -7,7 +7,9 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "typegen": "sanity schema extract && sanity typegen generate"
+    "typegen": "sanity schema extract && sanity typegen generate",
+    "embed:reviews": "node --conditions=react-server --import tsx --env-file=.env.local scripts/embed-reviews.mts",
+    "test:semantic": "node --conditions=react-server --import tsx --env-file=.env.local scripts/test-semantic-ranking.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -41,6 +43,7 @@
     "eslint-config-next": "16.2.7",
     "shadcn": "^4.10.0",
     "tailwindcss": "^4",
+    "tsx": "^4.22.4",
     "typescript": "^5"
   }
 }

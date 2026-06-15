@@ -9,12 +9,12 @@
 - Group rows by area (config, app/pages, i18n, components, lib, messages, sanity, styles, project-state, docs). Keep descriptions to one line.
 - This file is the fast way for any Claude to understand the repo without reading all the code.
 
-> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 1.12 (Part 1 complete)._
+> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 2.03 (semantic Reviews search LIVE locally)._
 
 ### Root config
 | File | Description |
 |---|---|
-| `package.json` | Manifest — deps (next, react, next-intl, sanity+toolchain, @base-ui/react, lucide-react, framer-motion, class-variance-authority, clsx, tailwind-merge, tw-animate-css, @portabletext/react, **ai, voyage-ai-provider, @supabase/supabase-js, server-only (1.09)**; `shadcn` in devDeps) + scripts (`dev`/`build` use `--webpack`; `typegen` = schema extract + generate). |
+| `package.json` | Manifest — deps (next, react, next-intl, sanity+toolchain, @base-ui/react, lucide-react, framer-motion, class-variance-authority, clsx, tailwind-merge, tw-animate-css, @portabletext/react, **ai, voyage-ai-provider, @supabase/supabase-js, server-only (1.09)**; `shadcn` + **`tsx` (2.03, for the `.mts` scripts)** in devDeps) + scripts (`dev`/`build` use `--webpack`; `typegen` = schema extract + generate; **(2.03) `embed:reviews` backfill + `test:semantic` ranking test, both run via `node --conditions=react-server --import tsx --env-file=.env.local`**). |
 | `components.json` | **New (1.06).** shadcn/ui config — `base-nova` (Base UI) style, css → `globals.css`, aliases (`@/components`, `@/lib/utils`, `@/components/ui`). |
 | `package-lock.json` | npm lockfile (exact installed tree). |
 | `next.config.ts` | Next.js config, wrapped with `createNextIntlPlugin('./src/i18n/request.ts')`; **(1.07)** `images.remotePatterns` allows `cdn.sanity.io/images/ndqmaath/**` for `next/image`. |
@@ -23,8 +23,8 @@
 | `eslint.config.mjs` | ESLint 9 flat config; **ignores generated `src/sanity/sanity.types.ts` + `sanity/seed/**`**. |
 | `postcss.config.mjs` | PostCSS loading `@tailwindcss/postcss` (Tailwind v4). |
 | `.gitignore` | Ignores `node_modules`, `.next`, `.env*` (**with `!.env.example` exception**), the local dossier, etc. |
-| `.env.local` | Local env — real Sanity project id/dataset/apiVersion + **(2.02)** the live `NEXT_PUBLIC_FORMSPREE_ENDPOINT`. **Gitignored, never committed.** |
-| `.env.example` | **Committed** env template (no real secrets) — Sanity vars + **(1.09) review-search vars** (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`) + **(1.11→2.02)** `NEXT_PUBLIC_FORMSPREE_ENDPOINT` (placeholder value + comment; real endpoint in `.env.local`, set on Vercel at deploy) + **(2.05)** `NEXT_PUBLIC_SITE_URL` (now flagged REQUIRED on Vercel) + new `PREVIEW_NOINDEX` (server-side noindex gate). |
+| `.env.local` | Local env — real Sanity project id/dataset/apiVersion + **(2.02)** the live `NEXT_PUBLIC_FORMSPREE_ENDPOINT` + **(2.03)** the live search keys (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`). **Gitignored, never committed.** |
+| `.env.example` | **Committed** env template (no real secrets) — Sanity vars + **(1.09→2.03) review-search vars** (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`, now documented **REQUIRED** for semantic search + auto-reindex; absent ⇒ keyword fallback) + **(1.11→2.02)** `NEXT_PUBLIC_FORMSPREE_ENDPOINT` (placeholder value + comment; real endpoint in `.env.local`, set on Vercel at deploy) + **(2.05)** `NEXT_PUBLIC_SITE_URL` (now flagged REQUIRED on Vercel) + new `PREVIEW_NOINDEX` (server-side noindex gate). |
 | `sanity.config.ts` | **Embedded Studio config** — basePath `/studio`, schema, `structureTool`+structure (singletons), `visionTool`, singleton action/template restrictions. |
 | `sanity.cli.ts` | **Sanity CLI config** — `api` (projectId/dataset) + `typegen` (paths). |
 | `schema.json` | **Generated** — extracted schema for TypeGen. |
@@ -49,7 +49,7 @@
 | `src/app/[locale]/blog/page.tsx` | **Real Style A Blog list (1.10)** — `POSTS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter (no dead chips), `PostCard` stack, empty state. **No search box.** **(1.12)** `generateMetadata`. Dynamic (`ƒ`). |
 | `src/app/[locale]/blog/[slug]/page.tsx` | **Real Style A single post (1.10)** — `POST_BY_SLUG_QUERY` (`cache()`d, shared w/ metadata); back link/breadcrumb, `<h1>`+double rule, Portable Text body w/ drop cap, topic chips; no book aside; `generateStaticParams`, `notFound()`. **(1.12)** full `generateMetadata` (og:type article) + `BlogPosting`+`BreadcrumbList` JSON-LD + `lang` on title/body. |
 | `src/app/api/reviews/search/route.ts` | **(1.09)** `POST` search route — the only search surface the browser sees; calls `searchReviews` (semantic→keyword fallback), returns `{mode, results}`, never leaks keys/errors. |
-| `src/app/api/reviews/reindex/route.ts` | **(1.09) DORMANT** `POST` re-index route — env-gated + `x-webhook-secret`; embeds one review + upserts its vector row. Not called until the 2.03 Sanity webhook. |
+| `src/app/api/reviews/reindex/route.ts` | **(1.09→2.03 LIVE)** `POST` re-index route — `x-webhook-secret`-authenticated (wrong/missing → 401; unconfigured → 503); builds the combined-language text via the shared `review-embedding-text` builder, embeds it, upserts the review's vector row by slug. Proven locally; live Sanity webhook registered by Cowork at the prod URL. |
 | `src/app/[locale]/about/page.tsx` | **Real Style A About (1.08)** — `ABOUT_QUERY`; name `<h1>` + roles/tagline, two-column portrait \| bio via Portable Text, quiet Contact link. **(1.12)** `generateMetadata` + `Person` JSON-LD + `lang` on the bio fallback. |
 | `src/app/[locale]/book/page.tsx` | **Real Style A Book (1.08)** — `BOOK_QUERY` (React-`cache()`d, shared w/ metadata); title `<h1>` + double rule, `Cover` + credit + publisher·year + purchase buttons, description via Portable Text. **No genre/format** (guard). **(1.12)** `generateMetadata` (title from doc) + `Book` JSON-LD (no genre/format) + `lang` on the description fallback. |
 | `src/app/studio/layout.tsx` | **Second root layout** — `<html>`/`<body>` for the non-localized Studio branch. |
@@ -101,7 +101,13 @@
 ### CMS / search migrations — `supabase/`
 | File | Description |
 |---|---|
-| `supabase/migrations/0001_review_embeddings.sql` | **(1.09) Written, NOT run** (runs in 2.03) — `review_embeddings` table (`vector(1024)`), HNSW `vector_cosine_ops` index, RLS enabled, `match_reviews` RPC (cosine `<=>`). |
+| `supabase/migrations/0001_review_embeddings.sql` | **(1.09 written, 2.03 APPLIED)** — `review_embeddings` table (`vector(1024)`), HNSW `vector_cosine_ops` index, RLS enabled, `match_reviews` RPC (cosine `<=>`). Run in the `dalibor-web` Supabase project (ref `wjqgkauzjrgnamacldgx`). |
+
+### Scripts — `scripts/` (Node, run via `tsx`)
+| File | Description |
+|---|---|
+| `scripts/embed-reviews.mts` | **(2.03)** Backfill / full resync — reads every review, builds embedding text via the shared builder, embeds (Voyage `document`), upserts one vector row per review by slug; idempotent (content-hash skip) + orphan-prune; asserts `rows == reviews`. `npm run embed:reviews`. Doubles as the one-shot re-embed after the 2.01 import. |
+| `scripts/test-semantic-ranking.mts` | **(2.03)** Content-independent ranking proof — seeds multilingual fixtures (`zfixture-` namespace), asserts meaning-queries retrieve the right snippet incl. a cross-lingual + a no-verbatim-keyword case, tears fixtures down in `finally`. `npm run test:semantic`. |
 
 ### Components — `src/components/`
 | File | Description |
@@ -157,8 +163,9 @@
 | `src/lib/search/types.ts` | **(1.09)** The Reviews search contract — `ReviewSummary` / `SearchRequest` / `SearchResponse` / `SearchMode`. |
 | `src/lib/search/reviews-search.ts` | **(1.09)** Orchestrator (server-only) — one `REVIEWS_SEARCH_QUERY` fetch feeds both paths; semantic→keyword fallback, honest `mode`; exports `semanticConfigured()`. |
 | `src/lib/search/keyword.ts` | **(1.09)** Always-on keyword fallback — `normalizeForSearch` (diacritic/case fold), `blocksToPlainText`, `keywordSearch` (AND-match). |
-| `src/lib/search/embeddings.ts` | **(1.09)** Voyage wrapper (server-only) — the SOLE Voyage access point: `embedQuery`/`embedDocuments`, `EMBEDDING_MODEL` (=`voyage-3.5`), `EMBEDDING_DIMENSIONS` (=1024). |
+| `src/lib/search/embeddings.ts` | **(1.09, +2.03)** Voyage wrapper (server-only) — the SOLE Voyage access point: `embedQuery` / `embedDocuments` / **`embedQueries` (2.03 batched query embed)**; `EMBEDDING_MODEL` (=`voyage-3.5`), `EMBEDDING_DIMENSIONS` (=1024) — confirmed live (1024-dim; `query` vs `document` `inputType`). |
 | `src/lib/search/supabase.ts` | **(1.09)** Server-only service-role Supabase client (`getSupabaseAdmin`); bypasses RLS, never imported client-side. |
+| `src/lib/search/review-embedding-text.ts` | **(2.03)** Shared, server-safe (no `server-only`) builder of a review's combined-language embedding text (reuses the 1.09 `blocksToPlainText` flattener + `localizedValue`) + its SHA-256 content hash. Used by BOTH the reindex route and the backfill script so they embed identically. |
 | `src/messages/{en,mk,sr}.json` | UI strings — `nav` / `common` / per-page titles / `footer` / `home` / `book` / **`reviews`** (1.09) / **`blog`** (1.10) / **`contact`** + **`privacy`** (1.11: full namespaces — contact intro/`form.*`/`links.*`, privacy intro + six `sections.*`; mk/sr copy is a plain-language placeholder pending Dalibor) namespaces (mk Cyrillic; en/sr Latin). **(1.11)** removed the now-unused `common.comingSoon`. **(1.12)** added the `metadata` namespace (`siteName` + per-page `title`/`description`, incl. `default` + `notFound`) — the source for every page's SEO copy; expanded `notFound` with `body`/`cta`; dropped `contact`/`privacy` `metaDescription` (superseded). **Metadata copy is working text → finalized in 2.01.** |
 | `src/messages/.gitkeep`, `src/styles/.gitkeep` | Folder placeholders. |
 
@@ -170,11 +177,11 @@
 ### Project-state — `src/_project-state/`
 | File | Description |
 |---|---|
-| `current-state.md` | Live snapshot (end of 1.12 — Part 1 complete). |
+| `current-state.md` | Live snapshot (end of 2.03 — semantic Reviews search live locally). |
 | `file-map.md` | This file. |
-| `00_stack-and-config.md` | Append-only stack/config log (1.02 → 1.12). |
+| `00_stack-and-config.md` | Append-only stack/config log (1.02 → 2.03). |
 | `Part-X-Phase-YY-Completion.md` | Blank completion-report template. |
-| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-12-Completion.md` | Per-phase completion reports. |
+| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-12-Completion.md`, **`Part-2-Phase-02/03/05-Completion.md`** | Per-phase completion reports. |
 
 ### Design handovers + mockups — `docs/`
 | File | Description |

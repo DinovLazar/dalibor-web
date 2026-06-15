@@ -285,3 +285,45 @@
 ¹ SEO 92 on both = a single failing audit, `canonical` ("Document does not have a valid `rel=canonical`"), caused entirely by the localhost canonical → expected to return to ~100 once `NEXT_PUBLIC_SITE_URL` is set + redeployed (no code fix needed).
 
 **Mobile-Performance unknown — RESOLVED, and the 1.12 hypothesis disproved.** 1.12 deferred the mobile number on the expectation that real CDN/HTTP-2/brotli would lift it. It did **not**: mobile is confirmed **79 on real infra**, because Lighthouse's mobile config **simulates Slow-4G + 4× CPU on top of** the real network — a faster server barely moves the *simulated* score (hence desktop's lighter throttle scores 100 while mobile stays 79). The gap is a single, content-independent lab artifact: **LCP render-delay 3.3s on the header wordmark** (`font-display`/Playfair, always Latin "Dalibor Plečić") waiting on the webfont swap. Render-blocking = none, CLS = 0, TBT = 260ms, A11y/BP = 100; the only JS opportunities are trivial (~150ms each). The design-preserving font levers were already exhausted in 1.12 (variable font, `preload:false`, `display:optional` — none moved it). **Decision (unchanged from 1.12, now evidence-backed):** keep the locked typography-forward Style A; do **not** chase the lab number with design- or a11y-disturbing changes. Re-validate after real content lands (2.01/2.03 — a hero portrait may displace the wordmark as LCP) and, definitively, against **field data (CrUX)** post-launch (2.06), which reflects real users rather than the lab simulation.
+
+---
+
+## 2026-06-15 — Phase 2.03 (Reviews semantic search turned ON)
+
+**Added dependency**
+
+| Package | Installed | In `package.json` | Where |
+|---|---|---|---|
+| tsx | ^4.22.4 | `^4.22.4` | **devDependencies** |
+
+- `tsx` runs the new TypeScript Node scripts so they can reuse the app's real `@/lib/search/*` modules (the Voyage wrapper, the Supabase client, the shared content builder) instead of duplicating that logic. Scripts run as `node --conditions=react-server --import tsx --env-file=.env.local …`: `--conditions=react-server` lets a plain Node process import the `server-only`-guarded wrapper modules; `--env-file` loads the keys. No app/runtime dependency added — `tsx` is dev-only tooling.
+
+**Embedding model + dimension — FINAL: `voyage-3.5` @ 1024 dims.**
+- Confirmed live: `voyage-3.5` embeds at **1024** dimensions for both `inputType: "document"` (storage) and `inputType: "query"` (search) — matching the migration's `vector(1024)` column + the `match_reviews(query_embedding vector(1024))` RPC + HNSW `vector_cosine_ops` index. The wrapper already distinguishes query vs document `inputType`; verified end-to-end.
+- **`voyage-4` considered, not adopted.** The newer family also supports 1024 dims (a clean swap that would leave the table/index untouched), but `voyage-3.5` is proven, operator-selected (`VOYAGE_MODEL=voyage-3.5`), multilingual-suitable, and already validated cross-lingually here — so it stays. A future `voyage-4` swap remains a one-line `VOYAGE_MODEL` change *iff* the output dimension is pinned to 1024 (re-embed via the backfill afterward).
+
+**Code changes (search layer)**
+- New `src/lib/search/review-embedding-text.ts` (no `server-only`) — `buildReviewEmbeddingText(review)` (combined mk+en+sr title/book/body, flattened with the 1.09 `blocksToPlainText`) + `reviewEmbeddingHash(content)` (SHA-256). The **single source of truth** for the embedded text, so the reindex route and the backfill embed identically (and the content hash stays a reliable "unchanged?" check).
+- `src/app/api/reviews/reindex/route.ts` refactored to use that builder (replacing its inline content-building). Now **LIVE**: `x-webhook-secret`-authenticated (wrong/missing → 401; unconfigured env → 503), embeds + upserts one row by slug.
+- `src/lib/search/embeddings.ts` gained `embedQueries(texts)` — a batched query-embed (Voyage `inputType: "query"`) used by tooling (the ranking test) to stay within Voyage's request-rate limit; the live search still uses singular `embedQuery`.
+
+**Vector store — migration APPLIED.**
+- Run in the **`dalibor-web`** Supabase project (ref **`wjqgkauzjrgnamacldgx`**, a clean DB whose ref matches `SUPABASE_URL`). **No Supabase MCP** was available in this environment and the service-role key can't execute DDL via PostgREST, so `supabase/migrations/0001_review_embeddings.sql` was applied by the operator in the **Supabase SQL editor**; the table, the `match_reviews` RPC, and the 1024-dim vector column were then verified from here via a service-role round-trip (the backfill upsert/count) + the fixture ranking test (which exercises the RPC). The HNSW index is created by the same migration script.
+
+**New npm scripts**
+- `embed:reviews` → `scripts/embed-reviews.mts` (backfill / full resync; idempotent content-hash skip + orphan-prune; doubles as the one-shot re-embed after the 2.01 import).
+- `test:semantic` → `scripts/test-semantic-ranking.mts` (content-independent multilingual ranking proof; fixtures in a `zfixture-` namespace, torn down).
+
+**Voyage free-tier rate limit — operational finding (for Cowork / launch).**
+- Without a payment method on the Voyage account, limits are **3 RPM / 10K TPM** (the API says so in its 429 body); the 200M free `voyage-3.5` tokens still apply. Implications: (a) the real **~78-review 2.01 backfill** will exceed 10K TPM in one pass and needs a Voyage **payment method added** (stays free under 200M tokens) or heavy throttling; (b) live search can intermittently 429 under burst — which the orchestrator turns into a graceful **keyword fallback** (proven), not an error. **Recommendation: add a Voyage payment method before the 2.01 backfill + launch.**
+
+**Verification evidence (local).**
+- Backfill: 4 reviews → 4 rows (`rows == reviews`); re-run idempotent (embedded=0, skipped=4).
+- Live route `POST /api/reviews/search`: `mode:"semantic"`, result shape matches `types.ts` `ReviewSummary`; latency ~1.2s warm / ~2.2s cold (dev server, free-tier Voyage embed dominates).
+- Ranking test: 4/4 pass incl. a **cross-lingual** (EN query → MK snippet, sim 0.572 vs 0.30) and a **no-verbatim-keyword** case (0.577).
+- Fallback: keys-unset → `keyword`; keys-present-but-Voyage-invalid (runtime error) → `keyword` (caught) — the search box never dies.
+- Reindex: missing/wrong secret → 401; correct secret → 200 + row `updated_at` refreshed.
+
+**Env.** The four search vars (`VOYAGE_API_KEY` + `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` + `SANITY_WEBHOOK_SECRET`) are now **REQUIRED** for semantic search + auto-reindex — present in gitignored `.env.local` locally; **to be set on the Vercel project at/after deploy** (until then production runs the keyword fallback — by design, not a bug). `.env.example` updated to say so (placeholders only). **No real secret in any tracked file.**
+
+**No other config changes.** `next.config.ts`, the next-intl plugin wrapper, the proxy matcher, and the `--webpack` `dev`/`build` pin are unchanged. `npm audit` unchanged in character (transitive; the new `tsx` is dev-only).

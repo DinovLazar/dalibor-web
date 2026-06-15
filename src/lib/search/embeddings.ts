@@ -44,6 +44,21 @@ export async function embedQuery(text: string): Promise<number[]> {
   return embedding;
 }
 
+/**
+ * Embed several queries in one request (Voyage `inputType: "query"`). The live
+ * search embeds one query at a time via {@link embedQuery}; this batched form is
+ * for tooling that scores many queries at once (e.g. the ranking test) and keeps
+ * those within Voyage's request-rate limits.
+ */
+export async function embedQueries(texts: string[]): Promise<number[][]> {
+  const {embeddings} = await embedMany({
+    model: getModel(),
+    values: texts,
+    providerOptions: {voyage: {inputType: "query"}},
+  });
+  return embeddings;
+}
+
 /** Embed one or more documents for indexing (Voyage `inputType: "document"`). */
 export async function embedDocuments(texts: string[]): Promise<number[][]> {
   const {embeddings} = await embedMany({

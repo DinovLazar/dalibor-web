@@ -1,12 +1,12 @@
-import {createHash} from "node:crypto";
-
 import type {NextRequest} from "next/server";
 
-import {blocksToPlainText} from "@/lib/search/keyword";
+import {
+  buildReviewEmbeddingText,
+  reviewEmbeddingHash,
+} from "@/lib/search/review-embedding-text";
 import {semanticConfigured} from "@/lib/search/reviews-search";
 import {client} from "@/sanity/lib/client";
 import {REVIEW_BY_SLUG_QUERY} from "@/sanity/lib/queries";
-import {localizedValue} from "@/sanity/lib/localize";
 
 /**
  * `POST /api/reviews/reindex` — DORMANT in Part 1. Nothing calls this yet; the
@@ -49,18 +49,10 @@ export async function POST(request: NextRequest): Promise<Response> {
   }
 
   // One vector row per review (decision #5): the multilingual model matches
-  // cross-lingually from this single combined-language source text.
-  const content = (["mk", "en", "sr"] as const)
-    .flatMap((l) => [
-      localizedValue(review.reviewTitle, l),
-      localizedValue(review.bookTitle, l),
-      review.bookAuthor,
-      blocksToPlainText(localizedValue(review.body, l)),
-    ])
-    .filter(Boolean)
-    .join("\n");
-
-  const contentHash = createHash("sha256").update(content).digest("hex");
+  // cross-lingually from this single combined-language source text. Built via
+  // the shared builder so this route and the backfill script embed identically.
+  const content = buildReviewEmbeddingText(review);
+  const contentHash = reviewEmbeddingHash(content);
 
   const {embedDocuments, EMBEDDING_MODEL} = await import(
     "@/lib/search/embeddings"
