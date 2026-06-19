@@ -8,6 +8,9 @@ import {dataset, projectId} from "./src/sanity/env";
  */
 export default defineCliConfig({
   api: {projectId, dataset},
+  // Hosted Studio target (Phase 2.04): deployed to https://daliborplecic.sanity.studio.
+  // Pinning the appId keeps `sanity deploy` non-interactive on future deploys.
+  deployment: {appId: "mesr4xa2evz7kwohj4488y94"},
   // TypeGen: scan src for `defineQuery`, read the extracted schema.json, and
   // emit typed query results to src/sanity/sanity.types.ts. (This replaces the
   // deprecated standalone sanity-typegen.json.)

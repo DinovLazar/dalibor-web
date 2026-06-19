@@ -26,7 +26,7 @@
 | `.env.local` | Local env — real Sanity project id/dataset/apiVersion + **(2.02)** the live `NEXT_PUBLIC_FORMSPREE_ENDPOINT` + **(2.03)** the live search keys (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`). **Gitignored, never committed.** |
 | `.env.example` | **Committed** env template (no real secrets) — Sanity vars + **(1.09→2.03) review-search vars** (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`, now documented **REQUIRED** for semantic search + auto-reindex; absent ⇒ keyword fallback) + **(1.11→2.02)** `NEXT_PUBLIC_FORMSPREE_ENDPOINT` (placeholder value + comment; real endpoint in `.env.local`, set on Vercel at deploy) + **(2.05)** `NEXT_PUBLIC_SITE_URL` (now flagged REQUIRED on Vercel) + new `PREVIEW_NOINDEX` (server-side noindex gate). |
 | `sanity.config.ts` | **Embedded Studio config** — basePath `/studio`, schema, `structureTool`+structure (singletons), `visionTool`, singleton action/template restrictions. |
-| `sanity.cli.ts` | **Sanity CLI config** — `api` (projectId/dataset) + `typegen` (paths). |
+| `sanity.cli.ts` | **Sanity CLI config** — `api` (projectId/dataset) + `typegen` (paths) + **(2.04) `deployment.appId`** (pins the hosted Studio app `daliborplecic.sanity.studio` so deploys are non-interactive). |
 | `schema.json` | **Generated** — extracted schema for TypeGen. |
 | `.claude/launch.json` | Preview-tool launch config (`prod` → `npm start`, autoPort). |
 | `README.md` | Project intro + how to run. |
@@ -177,17 +177,18 @@
 ### Project-state — `src/_project-state/`
 | File | Description |
 |---|---|
-| `current-state.md` | Live snapshot (end of 2.03 — semantic Reviews search live locally). |
+| `current-state.md` | Live snapshot (end of 2.04 — Sanity Studio deployed + live). |
 | `file-map.md` | This file. |
 | `00_stack-and-config.md` | Append-only stack/config log (1.02 → 2.03). |
 | `Part-X-Phase-YY-Completion.md` | Blank completion-report template. |
-| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-12-Completion.md`, **`Part-2-Phase-02/03/05-Completion.md`** | Per-phase completion reports. |
+| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-12-Completion.md`, **`Part-2-Phase-02/03/04/05-Completion.md`** | Per-phase completion reports. |
 
 ### Design handovers + mockups — `docs/`
 | File | Description |
 |---|---|
 | `docs/design-handovers/Part-1-Phase-03-Handover.md` | Style A "Hardcover" spec — source of truth for visuals. |
 | `docs/design-handovers/mockups/*.html` | Static mockups (home, reviews-list, single-review, components) + README. |
+| `docs/dalibor-publishing-guide.md` | **(2.04)** Non-technical publishing how-to for the live Studio (login → 3-language model → create post/review → cover+book metadata → draft vs publish). EN draft; MK version placeholder at top. |
 
 ### Planning docs (repo root)
 | File | Description |
