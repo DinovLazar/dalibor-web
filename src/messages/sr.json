@@ -10,7 +10,8 @@
     "openMenu": "Otvori meni",
     "closeMenu": "Zatvori meni",
     "menu": "Meni",
-    "availableIn": "Dostupno na: {langs}"
+    "availableIn": "Dostupno na: {langs}",
+    "builtBy": "Izradio"
   },
   "metadata": {
     "siteName": "Dalibor Plečić",

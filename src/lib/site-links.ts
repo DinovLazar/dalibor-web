@@ -29,6 +29,8 @@ export const siteLinks = {
   versopolis: "https://www.versopolis.com/author/54/dalibor-plecic",
   linkedin: "https://www.linkedin.com/in/plecicdalibor/",
   partizanska: "https://partizanskaknjiga.rs/translator/dalibor-plecic/",
+  /** Site builder — the "Built by Vertex Consulting" credit in the header. */
+  vertex: "https://www.vertexconsulting.mk",
 } as const;
 
 export type SiteLinks = typeof siteLinks;

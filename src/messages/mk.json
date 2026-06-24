@@ -10,7 +10,8 @@
     "openMenu": "Отвори мени",
     "closeMenu": "Затвори мени",
     "menu": "Мени",
-    "availableIn": "Достапно на: {langs}"
+    "availableIn": "Достапно на: {langs}",
+    "builtBy": "Изработено од"
   },
   "metadata": {
     "siteName": "Далибор Плечиќ",

@@ -18,7 +18,8 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "menu": "Menu",
-    "availableIn": "Available in: {langs}"
+    "availableIn": "Available in: {langs}",
+    "builtBy": "Built by"
   },
   "metadata": {
     "siteName": "Dalibor Plečić",

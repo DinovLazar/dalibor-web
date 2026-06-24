@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { isNavItemActive, primaryNav } from "@/lib/nav";
+import { siteLinks } from "@/lib/site-links";
 import { cn } from "@/lib/utils";
 
 /**
@@ -147,6 +148,18 @@ export function MobileMenu({ className }: { className?: string }) {
           <div className="flex justify-center pt-4">
             <LanguageSwitcher onNavigate={close} />
           </div>
+
+          <p className="mt-4 flex items-center justify-center gap-1 text-[0.8125rem] text-text-muted">
+            {t("common.builtBy")}
+            <a
+              href={siteLinks.vertex}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-sm font-medium text-primary-strong underline-offset-2 transition-colors hover:text-primary-hover hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            >
+              Vertex Consulting
+            </a>
+          </p>
         </m.div>
         </LazyMotion>
       </SheetContent>
