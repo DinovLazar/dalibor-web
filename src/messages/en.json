@@ -33,7 +33,7 @@
     },
     "about": {
       "title": "About",
-      "description": "About Dalibor Plečić — writer, literary critic, translator and journalist: the books he reads, the work he translates, and the writing he publishes here."
+      "description": "About Dalibor Plečić — writer, literary critic and translator: the books he reads, the work he translates, and the writing he publishes here."
     },
     "book": {
       "title": "The Book",
@@ -73,7 +73,24 @@
     "readBlog": "Read the blog"
   },
   "about": {
-    "title": "About"
+    "title": "About",
+    "education": "Education",
+    "translations": {
+      "heading": "Translations",
+      "intro": "Selected literary translations."
+    },
+    "langNames": {
+      "mk": "Macedonian",
+      "sr": "Serbian",
+      "bg": "Bulgarian",
+      "hr": "Croatian",
+      "en": "English",
+      "fr": "French"
+    },
+    "kinds": {
+      "play": "play",
+      "anthology": "anthology"
+    }
   },
   "reviews": {
     "title": "Reviews",
@@ -137,7 +154,6 @@
     "links": {
       "heading": "Find Dalibor elsewhere",
       "email": "Email",
-      "emailDesc": "Write directly",
       "instagram": "Instagram",
       "instagramDesc": "@daliborac",
       "facebook": "Facebook",
@@ -145,7 +161,8 @@
       "booksa": "Booksa",
       "booksaDesc": "His reviews and criticism",
       "interviews": "Interviews",
-      "interviewsDesc": "Selected conversations and media"
+      "interviewsDesc": "Selected conversations and media",
+      "interviewItem": "Interview {n}"
     }
   },
   "privacy": {
@@ -188,14 +205,12 @@
     "socialHeading": "Social",
     "writingHeading": "Writing",
     "interviewsHeading": "Interviews",
-    "email": "Email",
-    "emailPending": "Coming soon",
     "instagram": "Instagram",
     "facebook": "Facebook",
     "booksa": "Booksa",
     "versopolis": "Versopolis",
     "partizanska": "Partizanska knjiga",
-    "interview": "YouTube / TV",
+    "interview": "Interview {n}",
     "privacy": "Privacy",
     "copyright": "© {year} Dalibor Plečić. All rights reserved."
   }

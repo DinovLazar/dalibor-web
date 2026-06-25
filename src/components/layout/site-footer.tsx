@@ -62,11 +62,12 @@ export async function SiteFooter() {
       <Container className="pb-12 pt-16">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
           <FooterGroup heading={t("contactHeading")}>
-            {/* Email slot is rendered but inert until the address lands in 2.02. */}
-            <li className="inline-flex w-fit items-center gap-2 py-[5px] text-[0.9375rem] text-on-footer/[88%]">
-              <MailIcon className="size-5 shrink-0" strokeWidth={1.75} aria-hidden="true" />
-              <span>{t("email")}</span>
-              <span className="text-on-footer/80">· {t("emailPending")}</span>
+            {/* Live mailto — un-inerted in 2.01b (shown publicly per intake §7). */}
+            <li>
+              <a href={`mailto:${siteLinks.email}`} className={FOOTER_LINK}>
+                <MailIcon className="size-5 shrink-0" strokeWidth={1.75} aria-hidden="true" />
+                <span>{siteLinks.email}</span>
+              </a>
             </li>
           </FooterGroup>
 
@@ -92,9 +93,11 @@ export async function SiteFooter() {
           </FooterGroup>
 
           <FooterGroup heading={t("interviewsHeading")}>
-            <FooterExternal href={siteLinks.interview} icon={YoutubeIcon}>
-              {t("interview")}
-            </FooterExternal>
+            {siteLinks.interviews.map((href, i) => (
+              <FooterExternal key={href} href={href} icon={YoutubeIcon}>
+                {t("interview", { n: i + 1 })}
+              </FooterExternal>
+            ))}
           </FooterGroup>
         </div>
 

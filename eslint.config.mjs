@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Hosted Sanity Studio build output (gitignored artifact from `sanity deploy`,
+    // 2.04) — large minified bundles, never app source. Linting it OOMs ESLint.
+    "dist/**",
     // Sanity TypeGen output (generated) + seed tooling/data (not app code):
     "src/sanity/sanity.types.ts",
     "sanity/seed/**",

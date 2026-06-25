@@ -100,6 +100,18 @@ export type Author = {
   photo?: LocalizedImage;
   shortBio?: LocalizedText;
   bio?: LocalizedBlockContent;
+  education?: LocalizedString;
+  translations?: Array<{
+    title?: string;
+    originalAuthor?: string;
+    fromLang?: "mk" | "sr" | "bg" | "hr" | "en" | "fr";
+    toLang?: "mk" | "sr" | "bg" | "hr" | "en" | "fr";
+    publisher?: string;
+    year?: number;
+    kind?: "book" | "play" | "anthology";
+    _type: "translation";
+    _key: string;
+  }>;
   socialLinks?: Array<{
     platform?: string;
     url?: string;
@@ -469,7 +481,7 @@ export type BOOK_QUERY_RESULT = {
 
 // Source: src/sanity/lib/queries.ts
 // Variable: ABOUT_QUERY
-// Query: *[_type == "author"][0]{    _id,    name,    roles,    tagline,    bio,    photo  }
+// Query: *[_type == "author"][0]{    _id,    name,    roles,    tagline,    bio,    photo,    education,    translations[]{      title,      originalAuthor,      fromLang,      toLang,      publisher,      year,      kind    }  }
 export type ABOUT_QUERY_RESULT = {
   _id: string;
   name: LocalizedString | null;
@@ -477,6 +489,16 @@ export type ABOUT_QUERY_RESULT = {
   tagline: LocalizedString | null;
   bio: LocalizedBlockContent | null;
   photo: LocalizedImage | null;
+  education: LocalizedString | null;
+  translations: Array<{
+    title: string | null;
+    originalAuthor: string | null;
+    fromLang: "bg" | "en" | "fr" | "hr" | "mk" | "sr" | null;
+    toLang: "bg" | "en" | "fr" | "hr" | "mk" | "sr" | null;
+    publisher: string | null;
+    year: number | null;
+    kind: "anthology" | "book" | "play" | null;
+  }> | null;
 } | null;
 
 // Source: src/sanity/lib/queries.ts
@@ -544,7 +566,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    _updatedAt,\n    "slug": slug.current,\n    title,\n    excerpt,\n    body,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, "slug": slug.current, title }\n  }\n': POST_BY_SLUG_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }\n': POST_SLUGS_QUERY_RESULT;
     '\n  *[_type == "book"][0]{\n    _id,\n    title,\n    coverImage,\n    description,\n    purchaseLinks,\n    publisher,\n    publicationYear,\n    "authorName": *[_type == "author"][0].name\n  }\n': BOOK_QUERY_RESULT;
-    '\n  *[_type == "author"][0]{\n    _id,\n    name,\n    roles,\n    tagline,\n    bio,\n    photo\n  }\n': ABOUT_QUERY_RESULT;
+    '\n  *[_type == "author"][0]{\n    _id,\n    name,\n    roles,\n    tagline,\n    bio,\n    photo,\n    education,\n    translations[]{\n      title,\n      originalAuthor,\n      fromLang,\n      toLang,\n      publisher,\n      year,\n      kind\n    }\n  }\n': ABOUT_QUERY_RESULT;
     '\n  *[_type == "review" && defined(slug.current)]\n    | order(coalesce(publishedAt, _createdAt) desc)[0...3]{\n    _id,\n    "slug": slug.current,\n    reviewTitle,\n    bookTitle,\n    bookAuthor,\n    excerpt,\n    coverImage,\n    publishedAt,\n    "topics": topics[]->{ _id, title }\n  }\n': HOME_REVIEWS_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]\n    | order(coalesce(publishedAt, _createdAt) desc)[0...3]{\n    _id,\n    "slug": slug.current,\n    title,\n    excerpt,\n    publishedAt\n  }\n': HOME_POSTS_QUERY_RESULT;
     '\n  *[_type == "book"][0]{\n    _id,\n    title,\n    tagline,\n    coverImage,\n    publisher,\n    publicationYear\n  }\n': HOME_FEATURED_BOOK_QUERY_RESULT;

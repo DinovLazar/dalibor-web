@@ -25,7 +25,7 @@
     },
     "about": {
       "title": "O autoru",
-      "description": "O Daliboru Plečiću — pisac, književni kritičar, prevodilac i novinar: knjige koje čita, dela koja prevodi i tekstovi koje ovde objavljuje."
+      "description": "O Daliboru Plečiću — pisac, književni kritičar i prevodilac: knjige koje čita, dela koja prevodi i tekstovi koje ovde objavljuje."
     },
     "book": {
       "title": "Knjiga",
@@ -64,7 +64,26 @@
     "blogHeading": "Sa bloga",
     "readBlog": "Na blog"
   },
-  "about": { "title": "O autoru" },
+  "about": {
+    "title": "O autoru",
+    "education": "Obrazovanje",
+    "translations": {
+      "heading": "Prevodi",
+      "intro": "Izabrani književni prevodi."
+    },
+    "langNames": {
+      "mk": "makedonski",
+      "sr": "srpski",
+      "bg": "bugarski",
+      "hr": "hrvatski",
+      "en": "engleski",
+      "fr": "francuski"
+    },
+    "kinds": {
+      "play": "drama",
+      "anthology": "antologija"
+    }
+  },
   "reviews": {
     "title": "Kritike",
     "eyebrow": "Arhiva",
@@ -127,7 +146,6 @@
     "links": {
       "heading": "Pronađite Dalibora i na:",
       "email": "Imejl",
-      "emailDesc": "Pišite direktno",
       "instagram": "Instagram",
       "instagramDesc": "@daliborac",
       "facebook": "Facebook",
@@ -135,7 +153,8 @@
       "booksa": "Booksa",
       "booksaDesc": "Njegove kritike i eseji",
       "interviews": "Intervjui",
-      "interviewsDesc": "Izabrani razgovori i medijski nastupi"
+      "interviewsDesc": "Izabrani razgovori i medijski nastupi",
+      "interviewItem": "Intervju {n}"
     }
   },
   "privacy": {
@@ -178,14 +197,12 @@
     "socialHeading": "Društvene mreže",
     "writingHeading": "Pisanje",
     "interviewsHeading": "Intervjui",
-    "email": "E-pošta",
-    "emailPending": "Uskoro",
     "instagram": "Instagram",
     "facebook": "Facebook",
     "booksa": "Booksa",
     "versopolis": "Versopolis",
     "partizanska": "Partizanska knjiga",
-    "interview": "YouTube / TV",
+    "interview": "Intervju {n}",
     "privacy": "Privatnost",
     "copyright": "© {year} Dalibor Plečić. Sva prava zadržana."
   }

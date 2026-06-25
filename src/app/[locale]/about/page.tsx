@@ -10,6 +10,7 @@ import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { PortableText } from "@/components/portable-text";
+import { Translations } from "@/components/about/translations";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buttonVariants } from "@/components/ui/button";
 import { routing } from "@/i18n/routing";
@@ -66,6 +67,7 @@ export default async function AboutPage({
   const roles = localizedValue(author?.roles, locale);
   const tagline = localizedValue(author?.tagline, locale);
   const bio = localizedValue(author?.bio, locale);
+  const education = localizedValue(author?.education, locale);
   const photo = author?.photo?.asset ? author.photo : null;
   const monogram = monogramOf(name);
 
@@ -119,12 +121,29 @@ export default async function AboutPage({
           {/* Bio — Portable Text already constrains to the reading measure and
               returns null when empty, so a missing bio degrades gracefully. The
               `lang` is set only when the bio falls back to another language
-              (SC 3.1.2). */}
-          <PortableText value={bio} lang={contentLang(author?.bio, locale)} />
+              (SC 3.1.2). A quiet education line sits beneath it. */}
+          <div>
+            <PortableText value={bio} lang={contentLang(author?.bio, locale)} />
+            {education ? (
+              <p className="mt-6 text-meta text-text-muted">
+                <span className="font-medium text-text">
+                  {t("about.education")}:
+                </span>{" "}
+                {education}
+              </p>
+            ) : null}
+          </div>
         </div>
 
-        {/* 3 · Quiet link to Contact (§7.2). */}
-        <div className="mt-10 reveal reveal-3">
+        {/* 3 · Translations block (§2.01b) — quiet Style A list of his published
+            translations; renders nothing when the array is empty. */}
+        <Translations
+          translations={author?.translations}
+          className="mt-14 reveal reveal-3"
+        />
+
+        {/* 4 · Quiet link to Contact (§7.2). */}
+        <div className="mt-10 reveal reveal-4">
           <Link
             href="/contact"
             className={buttonVariants({ variant: "ghost" })}

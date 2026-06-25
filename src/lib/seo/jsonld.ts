@@ -50,7 +50,9 @@ export function personJsonLd(): Record<string, unknown> {
     "@type": "Person",
     name: "Dalibor Plečić",
     alternateName: ["Далибор Плечиќ", "Далибор Плечић"],
-    jobTitle: ["Writer", "Literary critic", "Literary translator", "Journalist"],
+    // Confirmed roles (intake §1 + the tagline ruling). "Journalist" was an
+    // unconfirmed dossier attribution and is intentionally dropped.
+    jobTitle: ["Writer", "Literary critic", "Literary translator"],
     url: PERSON_URL,
     sameAs,
     knowsLanguage: ["Macedonian", "Serbian", "Croatian", "Bulgarian", "English"],

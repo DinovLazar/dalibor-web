@@ -1,30 +1,30 @@
 /**
- * site-links — Dalibor's external links + contact, read by the footer now and the
- * Contact page later (1.11).
+ * site-links — Dalibor's external links + contact, read by the footer and the
+ * Contact page.
  *
- * PROVISIONAL — confirm/finalize in Phase 2.01; email in 2.02. Do NOT treat these
- * as published-accurate. URLs are the candidate links from the research dossier;
- * some handles are unconfirmed (flagged inline). Keep this file data-only (no
- * React/icons) so both the footer and the Contact page can import it freely.
+ * CONFIRMED in Phase 2.01b from Dalibor's intake answers (§7 email, §8 links):
+ * the email is real and shown publicly; X/Twitter (@PlecicD) was dropped at his
+ * request and is intentionally absent; Instagram @daliborac, Booksa, Versopolis,
+ * Partizanska, LinkedIn and Facebook are confirmed his; the three YouTube
+ * interview links are his additions. Keep this file data-only (no React/icons)
+ * so both the footer and the Contact page can import it freely.
  */
 export const siteLinks = {
-  /** Empty/inert until 2.02 — render the slot, but never invent an address. */
-  email: "",
-  /** Handle unconfirmed — verify in 2.01. */
+  /** Shown publicly (Contact + footer, mailto) — confirmed in intake §7. */
+  email: "plecicdalibor@gmail.com",
   instagram: "https://www.instagram.com/daliborac/",
   facebook: "https://www.facebook.com/plecicd/",
   booksa: "https://booksa.hr/suradnici/dalibor-plecic",
   /**
-   * Primary interview slot — the Bulgarian YouTube interview ("В читАлнЯта").
-   * Read by the footer and the Contact page's "Interviews" link.
+   * Interview / media appearances — the three YouTube links Dalibor supplied in
+   * intake §8. Rendered as a small list (Contact "Interviews" + footer) so all
+   * three appear. (Replaces the single provisional `interview` slot.)
    */
-  interview: "https://www.youtube.com/watch?v=Jgt3ZrJevkM",
-  /**
-   * Second interview candidate — Kanal VIS "Vis a Vis". URL is in the research
-   * dossier but not yet lifted here; PROVISIONAL — confirm/fill in 2.01. Empty
-   * for now so nothing renders a fabricated link.
-   */
-  interviewVis: "",
+  interviews: [
+    "https://www.youtube.com/watch?v=p7luU3at4cI&t=5s",
+    "https://www.youtube.com/watch?v=ZVLyyy8Pc7k&t=2114s",
+    "https://www.youtube.com/watch?v=Jgt3ZrJevkM&t=77s",
+  ],
   /** Optional extra writing hubs — rendered only where the footer has room. */
   versopolis: "https://www.versopolis.com/author/54/dalibor-plecic",
   linkedin: "https://www.linkedin.com/in/plecicdalibor/",

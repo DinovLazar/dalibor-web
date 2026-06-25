@@ -2,6 +2,21 @@ import {defineArrayMember, defineField, defineType} from "sanity";
 
 import {requireMk} from "./localized";
 
+/**
+ * Language options for `translations[]`. Stored as stable ISO-ish codes; the
+ * About "Translations" block renders the display name localized (mk/en/sr) via
+ * the `about.langNames` message strings — so the language pair reads in the
+ * visitor's language without duplicating names in the content.
+ */
+const TRANSLATION_LANGS = [
+  {title: "Macedonian", value: "mk"},
+  {title: "Serbian", value: "sr"},
+  {title: "Bulgarian", value: "bg"},
+  {title: "Croatian", value: "hr"},
+  {title: "English", value: "en"},
+  {title: "French", value: "fr"},
+];
+
 /** Dalibor's profile / bio — a singleton (one document, enforced in structure.ts). */
 export const author = defineType({
   name: "author",
@@ -46,6 +61,88 @@ export const author = defineType({
     }),
     defineField({name: "bio", title: "Full biography", type: "localizedBlockContent"}),
     defineField({
+      name: "education",
+      title: "Education",
+      type: "localizedString",
+      description:
+        "A short qualification line shown quietly on the About page (e.g. degree + field).",
+    }),
+    defineField({
+      name: "translations",
+      title: "Published translations",
+      type: "array",
+      description:
+        "Dalibor's published literary translations — rendered in the About page " +
+        "\"Translations\" block. Titles are proper nouns: write them exactly as " +
+        "published (not localized).",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "translation",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Title (as published)",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "originalAuthor",
+              title: "Original author",
+              type: "string",
+              description: "Leave blank for an anthology / multi-author selection.",
+            }),
+            defineField({
+              name: "fromLang",
+              title: "Translated from",
+              type: "string",
+              options: {list: TRANSLATION_LANGS},
+            }),
+            defineField({
+              name: "toLang",
+              title: "Translated into",
+              type: "string",
+              options: {list: TRANSLATION_LANGS},
+            }),
+            defineField({
+              name: "publisher",
+              title: "Publisher (optional)",
+              type: "string",
+            }),
+            defineField({
+              name: "year",
+              title: "Year (optional)",
+              type: "number",
+              validation: (Rule) => Rule.integer().min(0).max(2100),
+            }),
+            defineField({
+              name: "kind",
+              title: "Kind",
+              type: "string",
+              options: {
+                list: [
+                  {title: "Book", value: "book"},
+                  {title: "Play", value: "play"},
+                  {title: "Anthology", value: "anthology"},
+                ],
+                layout: "radio",
+              },
+              initialValue: "book",
+            }),
+          ],
+          preview: {
+            select: {title: "title", author: "originalAuthor", from: "fromLang", to: "toLang"},
+            prepare: ({title, author, from, to}) => ({
+              title: title || "(untitled translation)",
+              subtitle: [author, from && to ? `${from} → ${to}` : null]
+                .filter(Boolean)
+                .join(" · "),
+            }),
+          },
+        }),
+      ],
+    }),
+    defineField({
       name: "socialLinks",
       title: "Social & profile links",
       type: "array",
@@ -72,7 +169,9 @@ export const author = defineType({
       name: "email",
       title: "Email",
       type: "string",
-      description: "Left blank — supplied in phase 2.02.",
+      description:
+        "Shown publicly on the Contact page + footer. The site reads the address " +
+        "from src/lib/site-links.ts; this field mirrors it for CMS completeness.",
     }),
   ],
   preview: {

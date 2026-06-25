@@ -539,6 +539,159 @@
         },
         "optional": true
       },
+      "education": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "localizedString"
+        },
+        "optional": true
+      },
+      "translations": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "array",
+          "of": {
+            "type": "object",
+            "attributes": {
+              "title": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "originalAuthor": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "fromLang": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "mk"
+                    },
+                    {
+                      "type": "string",
+                      "value": "sr"
+                    },
+                    {
+                      "type": "string",
+                      "value": "bg"
+                    },
+                    {
+                      "type": "string",
+                      "value": "hr"
+                    },
+                    {
+                      "type": "string",
+                      "value": "en"
+                    },
+                    {
+                      "type": "string",
+                      "value": "fr"
+                    }
+                  ]
+                },
+                "optional": true
+              },
+              "toLang": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "mk"
+                    },
+                    {
+                      "type": "string",
+                      "value": "sr"
+                    },
+                    {
+                      "type": "string",
+                      "value": "bg"
+                    },
+                    {
+                      "type": "string",
+                      "value": "hr"
+                    },
+                    {
+                      "type": "string",
+                      "value": "en"
+                    },
+                    {
+                      "type": "string",
+                      "value": "fr"
+                    }
+                  ]
+                },
+                "optional": true
+              },
+              "publisher": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
+              "year": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "number"
+                },
+                "optional": true
+              },
+              "kind": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "book"
+                    },
+                    {
+                      "type": "string",
+                      "value": "play"
+                    },
+                    {
+                      "type": "string",
+                      "value": "anthology"
+                    }
+                  ]
+                },
+                "optional": true
+              },
+              "_type": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string",
+                  "value": "translation"
+                }
+              }
+            },
+            "rest": {
+              "type": "object",
+              "attributes": {
+                "_key": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "optional": true
+      },
       "socialLinks": {
         "type": "objectAttribute",
         "value": {

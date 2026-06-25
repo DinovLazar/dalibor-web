@@ -25,7 +25,7 @@
     },
     "about": {
       "title": "За авторот",
-      "description": "За Далибор Плечиќ — писател, книжевен критичар, преведувач и новинар: книгите што ги чита, делата што ги преведува и текстовите што ги објавува тука."
+      "description": "За Далибор Плечиќ — писател, книжевен критичар и преведувач: книгите што ги чита, делата што ги преведува и текстовите што ги објавува тука."
     },
     "book": {
       "title": "Книгата",
@@ -64,7 +64,26 @@
     "blogHeading": "Од блогот",
     "readBlog": "Кон блогот"
   },
-  "about": { "title": "За Далибор" },
+  "about": {
+    "title": "За Далибор",
+    "education": "Образование",
+    "translations": {
+      "heading": "Преводи",
+      "intro": "Избрани книжевни преводи."
+    },
+    "langNames": {
+      "mk": "македонски",
+      "sr": "српски",
+      "bg": "бугарски",
+      "hr": "хрватски",
+      "en": "англиски",
+      "fr": "француски"
+    },
+    "kinds": {
+      "play": "драма",
+      "anthology": "антологија"
+    }
+  },
   "reviews": {
     "title": "Критики",
     "eyebrow": "Архива",
@@ -127,7 +146,6 @@
     "links": {
       "heading": "Најдете го Далибор и на:",
       "email": "Е-пошта",
-      "emailDesc": "Пишете директно",
       "instagram": "Instagram",
       "instagramDesc": "@daliborac",
       "facebook": "Facebook",
@@ -135,7 +153,8 @@
       "booksa": "Booksa",
       "booksaDesc": "Неговите критики и есеи",
       "interviews": "Интервјуа",
-      "interviewsDesc": "Избрани разговори и медиумски настапи"
+      "interviewsDesc": "Избрани разговори и медиумски настапи",
+      "interviewItem": "Интервју {n}"
     }
   },
   "privacy": {
@@ -178,14 +197,12 @@
     "socialHeading": "Социјални мрежи",
     "writingHeading": "Пишување",
     "interviewsHeading": "Интервјуа",
-    "email": "Е-пошта",
-    "emailPending": "Наскоро",
     "instagram": "Instagram",
     "facebook": "Facebook",
     "booksa": "Booksa",
     "versopolis": "Versopolis",
     "partizanska": "Partizanska knjiga",
-    "interview": "YouTube / TV",
+    "interview": "Интервју {n}",
     "privacy": "Приватност",
     "copyright": "© {year} Далибор Плечиќ. Сите права задржани."
   }

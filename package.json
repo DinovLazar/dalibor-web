@@ -9,7 +9,8 @@
     "lint": "eslint",
     "typegen": "sanity schema extract && sanity typegen generate",
     "embed:reviews": "node --conditions=react-server --import tsx --env-file=.env.local scripts/embed-reviews.mts",
-    "test:semantic": "node --conditions=react-server --import tsx --env-file=.env.local scripts/test-semantic-ranking.mts"
+    "test:semantic": "node --conditions=react-server --import tsx --env-file=.env.local scripts/test-semantic-ranking.mts",
+    "import:content": "node --conditions=react-server --import tsx --env-file=.env.local scripts/import-content.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

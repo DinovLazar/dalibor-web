@@ -9,7 +9,7 @@
 - Group rows by area (config, app/pages, i18n, components, lib, messages, sanity, styles, project-state, docs). Keep descriptions to one line.
 - This file is the fast way for any Claude to understand the repo without reading all the code.
 
-> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 2.03 (semantic Reviews search LIVE locally)._
+> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 2.01b (real Author + Book singletons + translations imported; reviews/posts/topics deferred to 2.01c)._
 
 ### Root config
 | File | Description |
@@ -20,7 +20,9 @@
 | `next.config.ts` | Next.js config, wrapped with `createNextIntlPlugin('./src/i18n/request.ts')`; **(1.07)** `images.remotePatterns` allows `cdn.sanity.io/images/ndqmaath/**` for `next/image`. |
 | `tsconfig.json` | TS config; `@/*` → `./src/*`; includes root `*.ts` (so `sanity.config.ts`/`sanity.cli.ts` are checked). |
 | `next-env.d.ts` | Next.js ambient types (generated; gitignored). |
-| `eslint.config.mjs` | ESLint 9 flat config; **ignores generated `src/sanity/sanity.types.ts` + `sanity/seed/**`**. |
+| `eslint.config.mjs` | ESLint 9 flat config; **ignores generated `src/sanity/sanity.types.ts` + `sanity/seed/**` + (2.01b) `dist/**`** (the 2.04 hosted-Studio build artifact — linting its minified bundles OOM'd ESLint). |
+| `package.json` (2.01b) | + `import:content` script → `scripts/import-content.mts` (same `node --conditions=react-server --import tsx --env-file=.env.local` pattern). |
+| `content-packet/` | **New (2.01b).** `intake/Dalibor-Intake-Answers-MK.md` (verbatim MK bio §1 + book description §2 source, relocated from `~/Downloads`) + `README.md` (packet status). The reviews/posts workbook + topics docx + assets manifest are **still absent** (needed for 2.01c). |
 | `postcss.config.mjs` | PostCSS loading `@tailwindcss/postcss` (Tailwind v4). |
 | `.gitignore` | Ignores `node_modules`, `.next`, `.env*` (**with `!.env.example` exception**), the local dossier, etc. |
 | `.env.local` | Local env — real Sanity project id/dataset/apiVersion + **(2.02)** the live `NEXT_PUBLIC_FORMSPREE_ENDPOINT` + **(2.03)** the live search keys (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`). **Gitignored, never committed.** |
@@ -50,7 +52,7 @@
 | `src/app/[locale]/blog/[slug]/page.tsx` | **Real Style A single post (1.10)** — `POST_BY_SLUG_QUERY` (`cache()`d, shared w/ metadata); back link/breadcrumb, `<h1>`+double rule, Portable Text body w/ drop cap, topic chips; no book aside; `generateStaticParams`, `notFound()`. **(1.12)** full `generateMetadata` (og:type article) + `BlogPosting`+`BreadcrumbList` JSON-LD + `lang` on title/body. |
 | `src/app/api/reviews/search/route.ts` | **(1.09)** `POST` search route — the only search surface the browser sees; calls `searchReviews` (semantic→keyword fallback), returns `{mode, results}`, never leaks keys/errors. |
 | `src/app/api/reviews/reindex/route.ts` | **(1.09→2.03 LIVE)** `POST` re-index route — `x-webhook-secret`-authenticated (wrong/missing → 401; unconfigured → 503); builds the combined-language text via the shared `review-embedding-text` builder, embeds it, upserts the review's vector row by slug. Proven locally; live Sanity webhook registered by Cowork at the prod URL. |
-| `src/app/[locale]/about/page.tsx` | **Real Style A About (1.08)** — `ABOUT_QUERY`; name `<h1>` + roles/tagline, two-column portrait \| bio via Portable Text, quiet Contact link. **(1.12)** `generateMetadata` + `Person` JSON-LD + `lang` on the bio fallback. |
+| `src/app/[locale]/about/page.tsx` | **Real Style A About (1.08)** — `ABOUT_QUERY`; name `<h1>` + roles/tagline, two-column portrait \| bio via Portable Text, quiet Contact link. **(1.12)** `generateMetadata` + `Person` JSON-LD + `lang` on the bio fallback. **(2.01b)** + a quiet education line under the bio + the `<Translations>` block. |
 | `src/app/[locale]/book/page.tsx` | **Real Style A Book (1.08)** — `BOOK_QUERY` (React-`cache()`d, shared w/ metadata); title `<h1>` + double rule, `Cover` + credit + publisher·year + purchase buttons, description via Portable Text. **No genre/format** (guard). **(1.12)** `generateMetadata` (title from doc) + `Book` JSON-LD (no genre/format) + `lang` on the description fallback. |
 | `src/app/studio/layout.tsx` | **Second root layout** — `<html>`/`<body>` for the non-localized Studio branch. |
 | `src/app/studio/[[...tool]]/page.tsx` | `/studio` route (server) — metadata/viewport (`robots:noindex`) + `force-static`. |
@@ -82,13 +84,13 @@
 | `src/sanity/schemaTypes/localized.ts` | `localizedString`/`Text`/`BlockContent` ({mk,en,sr}) + reusable `localizedImage` (hotspot + required alt) + `requireMk`. |
 | `src/sanity/schemaTypes/blockContent.ts` | Shared Portable Text (normal/h2-h4/quote, bullet/number, strong/em/link). No drop-cap block. |
 | `src/sanity/schemaTypes/post.ts` | `post` document. |
-| `src/sanity/schemaTypes/review.ts` | `review` document (reviewed-book fields, source, required cover). |
+| `src/sanity/schemaTypes/review.ts` | `review` document (reviewed-book fields). **(2.01b)** `reviewTitle`/`bookTitle` no longer mk-required (fall back mk→en→sr; slug stays required); `coverImage` now optional; `source {sourceName,sourceUrl}` re-documented as the **firstPublished** attribution (outlet + original URL). |
 | `src/sanity/schemaTypes/book.ts` | `book` singleton (Dalibor's own book); **(1.08)** `purchaseLinks[].url` now `.required()`. `genre` field kept but intentionally unseeded/unrendered. |
-| `src/sanity/schemaTypes/author.ts` | `author` singleton (profile/bio); **(1.07)** + `tagline` (mk-required) + `heroIntro` for the Home hero. |
+| `src/sanity/schemaTypes/author.ts` | `author` singleton (profile/bio); **(1.07)** + `tagline` (mk-required) + `heroIntro` for the Home hero. **(2.01b)** + `translations[]` (title/originalAuthor/fromLang/toLang/publisher?/year?/kind; lang codes mk/sr/bg/hr/en/fr) + `education` (localizedString); `email` now shown publicly. |
 | `src/sanity/schemaTypes/topic.ts` | `topic` taxonomy. |
 | `src/sanity/lib/client.ts` | Public read client (published perspective, `useCdn`, no token). |
 | `src/sanity/lib/image.ts` | `@sanity/image-url` builder (`urlForImage`). |
-| `src/sanity/lib/queries.ts` | **Fourteen** typed `defineQuery` queries (reviews/blog list+single+slugs, topics, about, book, 4 Home `HOME_*`). **(1.12)** `REVIEW_BY_SLUG_QUERY` + `POST_BY_SLUG_QUERY` also select `_updatedAt` (JSON-LD `dateModified`). |
+| `src/sanity/lib/queries.ts` | **Fourteen** typed `defineQuery` queries (reviews/blog list+single+slugs, topics, about, book, 4 Home `HOME_*`). **(1.12)** `REVIEW_BY_SLUG_QUERY` + `POST_BY_SLUG_QUERY` also select `_updatedAt` (JSON-LD `dateModified`). **(2.01b)** `ABOUT_QUERY` also selects `education` + `translations[]`. |
 | `src/sanity/lib/localize.ts` | `localizedValue(field, locale)` (mk→en→sr) + `availableLanguages(field)` + **(1.09)** `availableInLabel(...)` + `resolveTopics(...)` + **(1.12)** `resolvedLanguage(field, locale)` (which lang resolved) + `contentLang(field, locale)` / `contentLangFromList(langs, locale)` (the `lang` attr value for fallback content — SC 3.1.2). |
 
 ### CMS seed — `sanity/`
@@ -108,6 +110,7 @@
 |---|---|
 | `scripts/embed-reviews.mts` | **(2.03)** Backfill / full resync — reads every review, builds embedding text via the shared builder, embeds (Voyage `document`), upserts one vector row per review by slug; idempotent (content-hash skip) + orphan-prune; asserts `rows == reviews`. `npm run embed:reviews`. Doubles as the one-shot re-embed after the 2.01 import. |
 | `scripts/test-semantic-ranking.mts` | **(2.03)** Content-independent ranking proof — seeds multilingual fixtures (`zfixture-` namespace), asserts meaning-queries retrieve the right snippet incl. a cross-lingual + a no-verbatim-keyword case, tears fixtures down in `finally`. `npm run test:semantic`. |
+| `scripts/import-content.mts` | **(2.01b)** Idempotent content importer — separate write client (`SANITY_WRITE_TOKEN`, read client stays token-less); reads verbatim MK bio §1 + book description §2 from `content-packet/intake/…`; `createOrReplace` the real **Author + Book singletons + 8 translations** (fixed `_id`s + stable `_key`s → re-runnable); Zaporožac scrub aborts pre-write; **workbook-aware** (logs the 2.01c deferral when the xlsx is absent, leaving placeholders intact); `--dry-run`. `npm run import:content`. |
 
 ### Components — `src/components/`
 | File | Description |
@@ -119,11 +122,12 @@
 | `src/components/ui/label.tsx` | **(1.11)** Style-A `<label>` (§6.12) — hand-rolled native element (no Radix dep); Lora 500/15px; required `*` + "(optional)" passed in by the form. |
 | `src/components/ui/textarea.tsx` | **(1.11)** Style-A `<textarea>` (§6.12) — hand-rolled native element; min-h 140px, vertical resize; same focus/error treatment as `input`. |
 | `src/components/contact/contact-form.tsx` | **(1.11, live 2.02)** `'use client'` — the accessible Contact form (Name*/Email*/Subject/Message* + honeypot `_gotcha`); client validation + focus-first-error + `aria-invalid`/`aria-describedby`; idle/submitting/success/error/preview states via a polite `aria-live` region + focused success panel; **env-gated** submit (`NEXT_PUBLIC_FORMSPREE_ENDPOINT`) — **real AJAX send live since 2.02** (preview notice retained only as a missing-env safety net); AJAX JSON payload = name · `email` (reply-to) · subject · message · **`locale`** (mk/en/sr via `useLocale`) · `_subject` · `_gotcha`; progressively enhanced (`method=POST`+`action`). |
-| `src/components/contact/contact-links.tsx` | **(1.11)** Server — Dalibor's links beside the form, from `lib/site-links` (no hardcoded URLs) with localized `links.*Desc` descriptions; email slot rendered but inert until 2.02; externals `target=_blank rel="noopener noreferrer"`. |
+| `src/components/contact/contact-links.tsx` | **(1.11; 2.01b)** Server — Dalibor's links beside the form, from `lib/site-links` (no hardcoded URLs). **(2.01b)** email is now a **live `mailto:`** (showing the address); Instagram/Facebook/Booksa rows; the **3 interview links render as a small list** (Interview 1/2/3); externals `target=_blank rel="noopener noreferrer"`. |
+| `src/components/about/translations.tsx` | **New (2.01b).** Server — the About "Translations" block; renders `author.translations[]` (title over a muted meta line: original author · localized language pair `from → to` · play/anthology tag · publisher · year; absent parts dropped). `<section aria-labelledby>` + `<ul>`; returns `null` when empty. |
 | `src/components/layout/site-header.tsx` | **Style A sticky header** (Server Component) — wordmark→home, desktop nav, switcher, mobile menu. |
 | `src/components/layout/primary-nav.tsx` | Desktop primary nav (`'use client'`) — `aria-current` + caramel active underline; reads `lib/nav`. |
 | `src/components/layout/mobile-menu.tsx` | Accessible mobile menu (`'use client'`) — Base UI Dialog panel, explicit focus-in/return, Framer entrance (reduced-motion gated). |
-| `src/components/layout/site-footer.tsx` | **Style A footer** (Server Component) — 4 link groups from `lib/site-links` + copyright + Privacy link. **(1.12)** "Coming soon" note bumped to AA contrast; Privacy link given a ≥24px hit area (SC 2.5.8). |
+| `src/components/layout/site-footer.tsx` | **Style A footer** (Server Component) — 4 link groups from `lib/site-links` + copyright + Privacy link. **(1.12)** Privacy link given a ≥24px hit area (SC 2.5.8). **(2.01b)** email is a **live `mailto:`** (address shown), the inert "Coming soon" slot removed; Interviews group maps the **3 interview links** (Interview 1/2/3). |
 | `src/components/layout/container.tsx` | Shell-width wrapper + §4.6 responsive gutters. |
 | `src/components/layout/section.tsx` | §4.1 vertical-rhythm section wrapper. |
 | `src/components/layout/page-header.tsx` | Eyebrow + title + description page/section head. |
@@ -154,9 +158,9 @@
 |---|---|
 | `src/lib/utils.ts` | `cn` (clsx + tailwind-merge) — from shadcn init. |
 | `src/lib/nav.ts` | Primary-nav source of truth (`primaryNav` + `isNavItemActive`). |
-| `src/lib/site-links.ts` | **Provisional** external links + email (data-only; finalized 2.01/2.02). Read by the footer, `ContactLinks`, **and the Person JSON-LD `sameAs` (1.12)**. **(1.11)** added empty `interviewVis` slot (Kanal VIS "Vis a Vis" — confirm/fill in 2.01). |
+| `src/lib/site-links.ts` | **Finalized (2.01b)** external links + email (data-only). Read by the footer, `ContactLinks`, **and the Person JSON-LD `sameAs` (1.12)**. Real public **email**; `interview`/`interviewVis` replaced by **`interviews[]`** (3 YouTube links); X/Twitter intentionally absent; IG @daliborac + Booksa/Versopolis/Partizanska/LinkedIn/Facebook kept. |
 | `src/lib/seo/metadata.ts` | **(1.12)** `buildPageMetadata({locale,page,path,title?,description?,absoluteTitle?,ogType?})` → Next `Metadata` with title (template-aware), description, self canonical, mk/en/sr + x-default hreflang, OG + Twitter; references the OG image route on non-root pages (Home uses the file convention). |
-| `src/lib/seo/jsonld.ts` | **(1.12)** Pure schema.org builders — `personJsonLd` (no birth/nationality/location; `sameAs` from site-links), `articleJsonLd` (Article/BlogPosting), `bookJsonLd` (no genre/format), `breadcrumbJsonLd`. |
+| `src/lib/seo/jsonld.ts` | **(1.12; 2.01b)** Pure schema.org builders — `personJsonLd` (no birth/nationality/location; `sameAs` from site-links; **(2.01b)** `jobTitle` minus the unconfirmed "Journalist"), `articleJsonLd` (Article/BlogPosting), `bookJsonLd` (no genre/format — format kept in `book.genre` data only), `breadcrumbJsonLd`. |
 | `src/lib/seo/og-fonts/*.ttf` | **(1.12)** Bundled static subset TTFs (Playfair latin/latin-ext 700; Lora latin/latin-ext/cyrillic 400) read by the OG image — OFL-licensed; static (Satori can't parse variable fonts). |
 | `src/lib/datetime.ts` | **(1.07)** `formatMonthYear` / `formatFullDate` for cards (Intl; sr→`sr-Latn`). |
 | `src/lib/strings.ts` | **(1.07)** `monogramOf` — first letter for the no-cover placeholder (strips the `[PLACEHOLDER]` marker). |
@@ -166,7 +170,7 @@
 | `src/lib/search/embeddings.ts` | **(1.09, +2.03)** Voyage wrapper (server-only) — the SOLE Voyage access point: `embedQuery` / `embedDocuments` / **`embedQueries` (2.03 batched query embed)**; `EMBEDDING_MODEL` (=`voyage-3.5`), `EMBEDDING_DIMENSIONS` (=1024) — confirmed live (1024-dim; `query` vs `document` `inputType`). |
 | `src/lib/search/supabase.ts` | **(1.09)** Server-only service-role Supabase client (`getSupabaseAdmin`); bypasses RLS, never imported client-side. |
 | `src/lib/search/review-embedding-text.ts` | **(2.03)** Shared, server-safe (no `server-only`) builder of a review's combined-language embedding text (reuses the 1.09 `blocksToPlainText` flattener + `localizedValue`) + its SHA-256 content hash. Used by BOTH the reindex route and the backfill script so they embed identically. |
-| `src/messages/{en,mk,sr}.json` | UI strings — `nav` / `common` / per-page titles / `footer` / `home` / `book` / **`reviews`** (1.09) / **`blog`** (1.10) / **`contact`** + **`privacy`** (1.11: full namespaces — contact intro/`form.*`/`links.*`, privacy intro + six `sections.*`; mk/sr copy is a plain-language placeholder pending Dalibor) namespaces (mk Cyrillic; en/sr Latin). **(1.11)** removed the now-unused `common.comingSoon`. **(1.12)** added the `metadata` namespace (`siteName` + per-page `title`/`description`, incl. `default` + `notFound`) — the source for every page's SEO copy; expanded `notFound` with `body`/`cta`; dropped `contact`/`privacy` `metaDescription` (superseded). **Metadata copy is working text → finalized in 2.01.** |
+| `src/messages/{en,mk,sr}.json` | UI strings — `nav` / `common` / per-page titles / `footer` / `home` / `book` / **`reviews`** (1.09) / **`blog`** (1.10) / **`contact`** + **`privacy`** (1.11: full namespaces — contact intro/`form.*`/`links.*`, privacy intro + six `sections.*`; mk/sr copy is a plain-language placeholder pending Dalibor) namespaces (mk Cyrillic; en/sr Latin). **(1.11)** removed the now-unused `common.comingSoon`. **(1.12)** added the `metadata` namespace (`siteName` + per-page `title`/`description`, incl. `default` + `notFound`) — the source for every page's SEO copy; expanded `notFound` with `body`/`cta`; dropped `contact`/`privacy` `metaDescription` (superseded). **(2.01b)** metadata copy finalized (dropped the unconfirmed "journalist" from the About description); added the `about.*` block (`translations.*`, `langNames.*`, `kinds.*`, `education`) + `contact.links.interviewItem` + parameterized `footer.interview {n}`; removed obsolete `footer.email`/`footer.emailPending`/`contact.links.emailDesc`. Metadata still gets Dalibor's launch-QA sign-off. |
 | `src/messages/.gitkeep`, `src/styles/.gitkeep` | Folder placeholders. |
 
 ### Static assets — `public/`

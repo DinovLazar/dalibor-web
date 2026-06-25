@@ -327,3 +327,26 @@
 **Env.** The four search vars (`VOYAGE_API_KEY` + `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` + `SANITY_WEBHOOK_SECRET`) are now **REQUIRED** for semantic search + auto-reindex — present in gitignored `.env.local` locally; **to be set on the Vercel project at/after deploy** (until then production runs the keyword fallback — by design, not a bug). `.env.example` updated to say so (placeholders only). **No real secret in any tracked file.**
 
 **No other config changes.** `next.config.ts`, the next-intl plugin wrapper, the proxy matcher, and the `--webpack` `dev`/`build` pin are unchanged. `npm audit` unchanged in character (transitive; the new `tsx` is dev-only).
+
+## 2026-06-26 — Phase 2.01b (intake merge + content import — PARTIAL pass)
+
+**No new dependency added.** The xlsx parser the phase anticipated is **NOT** added in 2.01b — the reviews/posts workbook was absent, so the workbook import is deferred to **2.01c** (which will add a pinned xlsx parser, e.g. SheetJS `xlsx`, and log it here then). The new `import:content` script reuses the existing `.mts` toolchain (`tsx`, dev-only) — no runtime dependency.
+
+**New npm script.**
+- `import:content` → `scripts/import-content.mts` (idempotent Author/Book singleton + translations import; `--dry-run` supported), run via `node --conditions=react-server --import tsx --env-file=.env.local …` — the same pattern as `embed:reviews`/`test:semantic`.
+
+**Schema-validation POLICY change (deliberate).**
+- `review.reviewTitle` and `review.bookTitle` are **no longer Macedonian-required** (the `requireMk` custom validation was removed from both). Rationale: most reviews exist only in hr/sr/en; the site falls back mk→en→sr and shows the "available in: …" note. The **slug remains the required, language-neutral identifier**. Author `name`/`tagline` and Book `title` keep `requireMk` (those documents are authored in Macedonian).
+- `review.coverImage` is now **optional** (the previous custom "cover required" rule is gone) — most reviews have no cover; the graceful Style A placeholder renders. Alt text is still required once an image is set (unchanged, in `localizedImage`).
+
+**Schema additions / reuse.**
+- `author.translations[]` (object array: `title`, `originalAuthor`, `fromLang`, `toLang`, `publisher?`, `year?`, `kind: book|play|anthology`) + `author.education` (localizedString). Language values are stored as **codes** (mk/sr/bg/hr/en/fr) and localized to display names at render (`about.langNames.*`) — a separation-of-concerns choice.
+- **Reuse over duplication:** the requested `review.firstPublished {outlet,url}` attribution is served by the **existing** `review.source {sourceName, sourceUrl}` (re-titled/-documented), not a new field.
+
+**ESLint config — `dist/**` ignored.**
+- Added `dist/**` to the flat-config `globalIgnores`. The 2.04 hosted-Studio build (`sanity deploy`) writes large minified bundles to the gitignored `dist/`; ESLint was linting them and **OOM-crashed** (`Ineffective mark-compacts near heap limit`). `dist/` is a build artifact (like the already-ignored `.next`/`out`/`build`). Pre-existing gap exposed by 2.04, fixed here.
+
+**Repo content.**
+- `content-packet/` now exists in the repo with **`intake/Dalibor-Intake-Answers-MK.md`** (relocated from `~/Downloads`, SHA-verified — the verbatim MK bio/book-description source the import reads) + a `README.md` documenting the still-pending workbook/docx/assets for 2.01c. The reviews/posts workbook, singletons docx, and assets manifest remain **absent**.
+
+**Token.** The Sanity **write** token lives in gitignored `.env.local` as **`SANITY_WRITE_TOKEN`** (the phase expected `SANITY_API_WRITE_TOKEN`; `.env.example` defines no write-token name — the public read client stays token-less). The import script reads `SANITY_WRITE_TOKEN`. No secret in any tracked file; never printed.

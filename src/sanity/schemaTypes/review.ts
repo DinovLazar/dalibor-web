@@ -1,6 +1,5 @@
 import {defineArrayMember, defineField, defineType} from "sanity";
 
-import {requireMk} from "./localized";
 import {localizedSlug} from "./slug";
 
 /** A review of someone else's book (verdict-driven prose — no star rating). */
@@ -13,27 +12,26 @@ export const review = defineType({
       name: "reviewTitle",
       title: "Review title",
       type: "localizedString",
-      description: "The headline of Dalibor's review.",
-      validation: (Rule) => Rule.custom(requireMk),
+      description:
+        "The headline of Dalibor's review. Macedonian is OPTIONAL — most reviews " +
+        "exist only in hr/sr/en, and the site falls back mk→en→sr (the slug is the " +
+        "required, language-neutral identifier).",
     }),
     localizedSlug("reviewTitle"),
     defineField({
       name: "coverImage",
       title: "Cover image (of the reviewed book)",
       type: "localizedImage",
-      validation: (Rule) =>
-        Rule.custom((image) =>
-          (image as { asset?: { _ref?: string } } | undefined)?.asset?._ref
-            ? true
-            : "A cover image of the reviewed book is required.",
-        ),
+      description:
+        "Optional — most reviews have no cover; the graceful Style A placeholder " +
+        "renders when unset. Alt text is still required once an image is added.",
     }),
     // --- Reviewed-book details ---
     defineField({
       name: "bookTitle",
       title: "Reviewed book — title",
       type: "localizedString",
-      validation: (Rule) => Rule.custom(requireMk),
+      description: "Macedonian optional — falls back mk→en→sr like the review title.",
     }),
     defineField({name: "bookAuthor", title: "Reviewed book — author", type: "string"}),
     defineField({name: "publisher", title: "Reviewed book — publisher", type: "string"}),
@@ -70,15 +68,23 @@ export const review = defineType({
     }),
     defineField({
       name: "source",
-      title: "Original source (optional)",
+      title: "First published on (attribution)",
       type: "object",
-      description: "Where this review first appeared (e.g. Booksa, Beton).",
+      description:
+        "The \"first published on …\" credit + link to the original. `sourceName` is " +
+        "the outlet (e.g. Booksa, Beton, The Literary Review); `sourceUrl` links the " +
+        "original. This is the firstPublished attribution — there is no separate field.",
       options: {collapsible: true, collapsed: true},
       fields: [
-        defineField({name: "sourceName", title: "Source name", type: "string"}),
+        defineField({
+          name: "sourceName",
+          title: "Outlet (publication name)",
+          type: "string",
+          description: "e.g. Booksa, Beton, The Literary Review.",
+        }),
         defineField({
           name: "sourceUrl",
-          title: "Source URL",
+          title: "Original URL",
           type: "url",
           validation: (Rule) => Rule.uri({scheme: ["http", "https"]}),
         }),

@@ -147,8 +147,9 @@ export const BOOK_QUERY = defineQuery(`
   }
 `);
 
-/** The About page (Phase 1.08): the author singleton — name, roles, tagline (the
- * page header) + the long-form bio (Portable Text) + portrait (`photo`). */
+/** The About page (Phase 1.08, +2.01b): the author singleton — name, roles,
+ * tagline (the page header) + the long-form bio (Portable Text) + portrait
+ * (`photo`) + a quiet education line + the published-translations list. */
 export const ABOUT_QUERY = defineQuery(`
   *[_type == "author"][0]{
     _id,
@@ -156,7 +157,17 @@ export const ABOUT_QUERY = defineQuery(`
     roles,
     tagline,
     bio,
-    photo
+    photo,
+    education,
+    translations[]{
+      title,
+      originalAuthor,
+      fromLang,
+      toLang,
+      publisher,
+      year,
+      kind
+    }
   }
 `);
 
