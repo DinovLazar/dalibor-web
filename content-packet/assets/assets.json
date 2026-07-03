@@ -1,0 +1,46 @@
+{
+  "author_photo": {
+    "file": "author/portrait.jpg",
+    "target": { "docId": "author", "field": "photo" },
+    "source": "https://www.versopolis.com/author/54/dalibor-plecic (image file: https://www.versopolis.com/uploads/media/article/0001/02/thumb_1491_article_big.jpeg). The same photo is also his headshot on Booksa: https://booksa.hr/suradnici/dalibor-plecic (https://booksa.hr/system/author/image/9/large_Dalibor.Plecic.jpg, 576x447). The 720x720 Versopolis copy was used as it is the sharpest/largest.",
+    "dimensions": "720x720",
+    "rights": "Dalibor's own public author portrait, used by him on his Versopolis and Booksa author profiles (a self-portrait at Tower Bridge, London). No separate photographer credit is stated on either page. Treat as author's own image.",
+    "alt": {
+      "mk": "Портрет на Далибор Плечиќ",
+      "en": "Portrait of Dalibor Plečić",
+      "sr": "Portret Dalibora Plečića"
+    },
+    "use": true,
+    "note": "Interim author portrait. It is his canonical public author photo across two platforms, so identity is confirmed, but it is a stylised outdoor self-portrait (face angled, partly in shadow) rather than a studio headshot, and only 720x720. Fine to place now; ideally replace when Dalibor sends a higher-resolution / more conventional portrait."
+  },
+
+  "favicon_source": {
+    "file": "author/avatar-square.jpg",
+    "target": null,
+    "source": "Cropped from author/portrait.jpg (original: Versopolis 720x720 author photo, https://www.versopolis.com/author/54/dalibor-plecic).",
+    "dimensions": "512x512",
+    "rights": "Same as the portrait — Dalibor's own public author photo. Cropped, not otherwise altered.",
+    "note": "Square face crop (head-and-shoulders) made from the portrait for the browser-tab icon; Code resizes this into the favicon. Not a CMS field. Because the face sits in the left half of the source photo, the crop is left-anchored, so a little sky remains on the right — negligible at favicon size, but Code may fine-tune the centering if desired."
+  },
+
+  "book_cover": {
+    "file": null,
+    "target": { "docId": "book", "field": "coverImage" },
+    "source": "Only representation found: the launch/promotion poster on Nova Makedonija, https://novamakedonija.com.mk/zivot/kultura/izleze-zbirkata-raskazi-buniki-od-dalibor-plechikj/ (image https://novamakedonija.com.mk/wp-content/uploads/2022/04/278063475_4908989669220579_377294624201615593_n.jpg, 695x363).",
+    "dimensions": null,
+    "rights": "n/a — no cover file saved.",
+    "alt": {
+      "mk": "Корица на книгата „Буники“ од Далибор Плечиќ",
+      "en": "Cover of the book “Bunike” by Dalibor Plečić",
+      "sr": "Korica knjige „Bunike“ Dalibora Plečića"
+    },
+    "use": "hold",
+    "note": "HELD — no genuine flat cover found. The only image available is an event PROMO poster (a 3D angled book mock-up embedded in a composite with the event details and Dalibor's portrait), not a clean front cover, and no retail listing (literatura.mk, kupikniga.mk, knigoteka.mk) carries this small-press 2022 PNV Publications title. The cover art is readable there (blue with a draping henbane/'buniki' flower and the title 'Далибор Плечиќ — БУНИКИ') if Code/Dalibor want to see it. Dalibor said he would send the real cover — use that. alt text is pre-filled for when the real cover is added."
+  },
+
+  "reviewed_books": [],
+
+  "blog_images": [],
+
+  "banner": []
+}

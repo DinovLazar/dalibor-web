@@ -9,7 +9,7 @@
 - Group rows by area (config, app/pages, i18n, components, lib, messages, sanity, styles, project-state, docs). Keep descriptions to one line.
 - This file is the fast way for any Claude to understand the repo without reading all the code.
 
-> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 2.01b (real Author + Book singletons + translations imported; reviews/posts/topics deferred to 2.01c)._
+> _Excludes the generated/ignored trees `node_modules/` and `.next/`. Status: end of Phase 2.01e (Dalibor's portrait uploaded to `author.photo`; App-Router icon.png/apple-icon.png replace the default favicon; scaffold SVGs removed)._
 
 ### Root config
 | File | Description |
@@ -21,8 +21,8 @@
 | `tsconfig.json` | TS config; `@/*` → `./src/*`; includes root `*.ts` (so `sanity.config.ts`/`sanity.cli.ts` are checked). |
 | `next-env.d.ts` | Next.js ambient types (generated; gitignored). |
 | `eslint.config.mjs` | ESLint 9 flat config; **ignores generated `src/sanity/sanity.types.ts` + `sanity/seed/**` + (2.01b) `dist/**`** (the 2.04 hosted-Studio build artifact — linting its minified bundles OOM'd ESLint). |
-| `package.json` (2.01b) | + `import:content` script → `scripts/import-content.mts` (same `node --conditions=react-server --import tsx --env-file=.env.local` pattern). |
-| `content-packet/` | `intake/Dalibor-Intake-Answers-MK.md` (verbatim MK bio §1 + book description §2 source) + `README.md`. **(2.01c)** + `topics.json` (13), `reviews.json` (20), `posts.json` (1) — the launch packet (copyright-safe: no body/excerpt). Read by `import-content.mts` via `readFileSync`+`JSON.parse` (no xlsx parser). `topics.json` is the canonical intended taxonomy + drives the importer's map-sync guard; the actual topic upsert **reconciles** onto Dalibor's live `t-*` taxonomy (see README). Reviewed-book covers + portrait still pending from Dalibor. |
+| `package.json` (2.01b) | + `import:content` script → `scripts/import-content.mts` (same `node --conditions=react-server --import tsx --env-file=.env.local` pattern). **(2.01e)** + `import:assets` → `scripts/import-assets.mts` (same runner) + `make:favicon` → `scripts/make-favicon.mts` (`node --import tsx`); **`sharp@0.34.5` pinned in devDeps** (favicon generation only — not shipped). |
+| `content-packet/` | `intake/Dalibor-Intake-Answers-MK.md` (verbatim MK bio §1 + book description §2 source) + `README.md`. **(2.01c)** + `topics.json` (13), `reviews.json` (20), `posts.json` (1) — the launch packet (copyright-safe: no body/excerpt). Read by `import-content.mts` via `readFileSync`+`JSON.parse` (no xlsx parser). `topics.json` is the canonical intended taxonomy + drives the importer's map-sync guard; the actual topic upsert **reconciles** onto Dalibor's live `t-*` taxonomy (see README). **(2.01e — now tracked)** + `assets/` — Cowork's image packet: `assets.json` manifest + `README.md` + `author/portrait.jpg` (720² interim author portrait) + `author/avatar-square.jpg` (512² favicon source crop). Read by `import-assets.mts`. Book cover HELD (no file); reviewed-book/blog/banner arrays empty. |
 | `postcss.config.mjs` | PostCSS loading `@tailwindcss/postcss` (Tailwind v4). |
 | `.gitignore` | Ignores `node_modules`, `.next`, `.env*` (**with `!.env.example` exception**), the local dossier, etc. |
 | `.env.local` | Local env — real Sanity project id/dataset/apiVersion + **(2.02)** the live `NEXT_PUBLIC_FORMSPREE_ENDPOINT` + **(2.03)** the live search keys (`VOYAGE_API_KEY`/`VOYAGE_MODEL`/`SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY`/`SANITY_WEBHOOK_SECRET`). **Gitignored, never committed.** |
@@ -58,7 +58,8 @@
 | `src/app/studio/[[...tool]]/page.tsx` | `/studio` route (server) — metadata/viewport (`robots:noindex`) + `force-static`. |
 | `src/app/studio/[[...tool]]/Studio.tsx` | `'use client'` wrapper rendering `<NextStudio config>` (imports `sanity.config`). |
 | `src/app/globals.css` | Global stylesheet — Tailwind v4 + `tw-animate-css` imports + Style A `@theme` tokens **+ shadcn semantic alias tokens (1.06)** + the `.reveal` page-load animation (1.07) **+ (1.12) `scroll-margin-top` on focusable targets/headings (SC 2.4.11 — clear of the sticky header)**. |
-| `src/app/favicon.ico` | Default favicon. |
+| `src/app/icon.png` | **(2.01e)** Browser-tab / general app icon — 512×512 PNG generated from `content-packet/assets/author/avatar-square.jpg`. Next auto-emits `<link rel="icon" href="/icon.png" sizes="512x512">`. Replaces the deleted default `favicon.ico`. |
+| `src/app/apple-icon.png` | **(2.01e)** Apple-touch-icon — 180×180 PNG from the same avatar. Next auto-emits `<link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180">`. |
 
 ### i18n — `src/i18n/`
 | File | Description |
@@ -112,6 +113,8 @@
 | `scripts/embed-reviews.mts` | **(2.03)** Backfill / full resync — reads every review, builds embedding text via the shared builder, embeds (Voyage `document`), upserts one vector row per review by slug; idempotent (content-hash skip) + orphan-prune; asserts `rows == reviews`. `npm run embed:reviews`. Doubles as the one-shot re-embed after the 2.01 import. |
 | `scripts/test-semantic-ranking.mts` | **(2.03)** Content-independent ranking proof — seeds multilingual fixtures (`zfixture-` namespace), asserts meaning-queries retrieve the right snippet incl. a cross-lingual + a no-verbatim-keyword case, tears fixtures down in `finally`. `npm run test:semantic`. |
 | `scripts/import-content.mts` | Idempotent content importer — separate write client (`SANITY_WRITE_TOKEN`, read client stays token-less); Zaporožac scrub aborts pre-write; `--dry-run`. **(2.01b)** `createOrReplace` the real **Author + Book singletons + 8 translations** from `content-packet/intake/…` (untouched in 2.01c). **(2.01c)** reads `topics/reviews/posts.json`; **reconciles** review/post topic refs onto Dalibor's live `t-*` taxonomy (map `TOPIC_ID_BY_PACKET_SLUG` + guards) and creates only `t-essay`/`t-society-politics`; upserts reviews+posts **idempotently** (skip-if-unchanged via a system-field-stripped `canonical()`/`sameDoc()` compare → no `_rev` churn on re-run); deletes any leftover `[PLACEHOLDER]` docs (reviews→posts→topics, drafts incl.); prints an integrity report. `npm run import:content`. |
+| `scripts/import-assets.mts` | **(2.01e)** Idempotent image importer — reads `content-packet/assets/assets.json`, uploads each `use:true` image (`writeClient.assets.upload`, content-hash id → naturally idempotent) and sets the target `localizedImage` field via **patch** (never `createOrReplace`, so sibling fields survive). **Preserve-if-set:** skips any field that already has an `asset._ref` (a Studio upload is never clobbered) unless `--force`. Same write client / `SANITY_WRITE_TOKEN` / Zaporožac scrub as `import-content.mts`; `--dry-run`; prints a `uploaded/set/skipped/held` tally. Ignores `favicon_source` (handled by `make:favicon`). Fails loudly on a missing file / missing `alt.mk` / unknown docId. `npm run import:assets`. |
+| `scripts/make-favicon.mts` | **(2.01e)** Generates `src/app/icon.png` (512²) + `src/app/apple-icon.png` (180²) from `content-packet/assets/author/avatar-square.jpg` via `sharp` (resize + PNG re-encode; the avatar is already a square crop). `npm run make:favicon`. |
 
 ### Components — `src/components/`
 | File | Description |
@@ -177,16 +180,16 @@
 ### Static assets — `public/`
 | File | Description |
 |---|---|
-| `public/*.svg` | Default create-next-app SVGs (placeholders). |
+| _(none)_ | **(2.01e)** The unused create-next-app scaffold SVGs (`vercel/next/file/globe/window.svg`) were deleted (confirmed unreferenced); `public/` is now empty. App icons live under `src/app/` (see `icon.png`/`apple-icon.png`), not `public/`. |
 
 ### Project-state — `src/_project-state/`
 | File | Description |
 |---|---|
-| `current-state.md` | Live snapshot (end of 2.04 — Sanity Studio deployed + live). |
+| `current-state.md` | Live snapshot (end of 2.01e — Dalibor's portrait live on About/Home; site favicon set). |
 | `file-map.md` | This file. |
-| `00_stack-and-config.md` | Append-only stack/config log (1.02 → 2.03). |
+| `00_stack-and-config.md` | Append-only stack/config log (1.02 → 2.01e). |
 | `Part-X-Phase-YY-Completion.md` | Blank completion-report template. |
-| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-12-Completion.md`, **`Part-2-Phase-02/03/04/05-Completion.md`** | Per-phase completion reports. |
+| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-12-Completion.md`, **`Part-2-Phase-01b/01c/01d/01e/02/03/04/05-Completion.md`** | Per-phase completion reports. |
 
 ### Design handovers + mockups — `docs/`
 | File | Description |
