@@ -1,0 +1,381 @@
+[
+  {
+    "slug": "glasnik-i-razdvajanje-nestabilnost-zbilje",
+    "reviewTitle": {
+      "sr": "Glasnik i Razdvajanje: Nestabilnost zbilje"
+    },
+    "bookTitle": {
+      "sr": "Glasnik i Razdvajanje"
+    },
+    "topics": [
+      "science-fiction",
+      "contemporary-fiction"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/glasnik-i-razdvajanje-nestabilnost-zbilje"
+    },
+    "publishedAt": "2026-05-12",
+    "bookAuthor": "Dario Šarec"
+  },
+  {
+    "slug": "esej-o-noci-tama-kao-povratak-sebi",
+    "reviewTitle": {
+      "sr": "Esej o noći: Tama kao povratak sebi"
+    },
+    "bookTitle": {
+      "sr": "Esej o noći"
+    },
+    "topics": [
+      "poetry",
+      "essay"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/esej-o-noci-tama-kao-povratak-sebi"
+    },
+    "publishedAt": "2026-02-17",
+    "bookAuthor": "Marko Pogačar"
+  },
+  {
+    "slug": "svijet-koji-sam-izabrala-zivot-u-suterenu",
+    "reviewTitle": {
+      "sr": "Svijet koji sam izabrala: Život u suterenu"
+    },
+    "bookTitle": {
+      "sr": "Svijet koji sam izabrala"
+    },
+    "topics": [
+      "women-and-gender",
+      "macedonian-literature",
+      "contemporary-fiction"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/svijet-koji-sam-izabrala-zivot-u-suterenu"
+    },
+    "publishedAt": "2025-11-25",
+    "bookAuthor": "Kalina Maleska"
+  },
+  {
+    "slug": "putovanja-slijepih-mapa-fascinantnog-zaboravljenog-i-marginalnog",
+    "reviewTitle": {
+      "sr": "Putovanja slijepih: Mapa fascinantnog, zaboravljenog i marginalnog"
+    },
+    "bookTitle": {
+      "sr": "Putovanja slijepih"
+    },
+    "topics": [
+      "short-stories"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/putovanja-slijepih-mapa-fascinantnog-zaboravljenog-i-marginalnog"
+    },
+    "publishedAt": "2025-10-28",
+    "bookAuthor": "Rade Jarak"
+  },
+  {
+    "slug": "tako-neka-bude-izmedu-povijesti-i-suvremenosti",
+    "reviewTitle": {
+      "sr": "Tako neka bude: Između povijesti i suvremenosti"
+    },
+    "bookTitle": {
+      "sr": "Tako neka bude"
+    },
+    "topics": [
+      "memory-and-history",
+      "post-yugoslav-literature",
+      "contemporary-fiction"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/tako-neka-bude-izmedu-povijesti-i-suvremenosti"
+    },
+    "publishedAt": "2025-09-16",
+    "bookAuthor": "Robert Međurečan"
+  },
+  {
+    "slug": "chinook-i-dokument-i-elegija",
+    "reviewTitle": {
+      "sr": "Chinook: I dokument i elegija"
+    },
+    "bookTitle": {
+      "sr": "Chinook"
+    },
+    "topics": [
+      "identity-and-belonging",
+      "contemporary-fiction"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/chinook-i-dokument-i-elegija"
+    },
+    "publishedAt": "2025-08-12"
+  },
+  {
+    "slug": "najbolje-je-vec-proslo-tjeskoba-iznevjerene-generacije",
+    "reviewTitle": {
+      "sr": "Najbolje je već prošlo: Tjeskoba iznevjerene generacije"
+    },
+    "bookTitle": {
+      "sr": "Najbolje je već prošlo"
+    },
+    "topics": [
+      "short-stories",
+      "society-and-politics"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/najbolje-je-vec-proslo-tjeskoba-iznevjerene-generacije"
+    },
+    "publishedAt": "2025-04-08",
+    "bookAuthor": "Danilo Stojić"
+  },
+  {
+    "slug": "kao-da-nema-sutra-intrigantna-premisa-mlaka-izvedba",
+    "reviewTitle": {
+      "sr": "Kao da nema sutra: Intrigantna premisa, mlaka izvedba"
+    },
+    "bookTitle": {
+      "sr": "Kao da nema sutra"
+    },
+    "topics": [
+      "science-fiction",
+      "contemporary-fiction"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/kao-da-nema-sutra-intrigantna-premisa-mlaka-izvedba"
+    },
+    "publishedAt": "2025-02-25",
+    "bookAuthor": "Borna Vujčić"
+  },
+  {
+    "slug": "cimetna-pisma-dijamantna-stvorenja-ljubavna-prica-u-postapokalipticnom-vremenu",
+    "reviewTitle": {
+      "sr": "Cimetna pisma, dijamantna stvorenja: Ljubavna priča u postapokaliptičnom vremenu"
+    },
+    "bookTitle": {
+      "sr": "Cimetna pisma, dijamantna stvorenja"
+    },
+    "topics": [
+      "science-fiction",
+      "poetry",
+      "post-yugoslav-literature"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/cimetna-pisma-dijamantna-stvorenja-ljubavna-prica-u-postapokalipticnom-vremenu"
+    },
+    "publishedAt": "2025-01-21",
+    "bookAuthor": "Faruk Šehić"
+  },
+  {
+    "slug": "bejturan-i-ruza-granice-ljubavi-gubitka-i-identiteta",
+    "reviewTitle": {
+      "sr": "Bejturan i ruža: Granice ljubavi, gubitka i identiteta"
+    },
+    "bookTitle": {
+      "sr": "Bejturan i ruža"
+    },
+    "topics": [
+      "identity-and-belonging",
+      "memory-and-history",
+      "post-yugoslav-literature"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/bejturan-i-ruza-granice-ljubavi-gubitka-i-identiteta"
+    },
+    "publishedAt": "2024-11-26",
+    "bookAuthor": "Aleksandar Hemon"
+  },
+  {
+    "slug": "u-haosu-radosti-poetski-inat",
+    "reviewTitle": {
+      "sr": "U haosu radost: Poetski inat"
+    },
+    "bookTitle": {
+      "sr": "U haosu radost"
+    },
+    "topics": [
+      "poetry"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/u-haosu-radosti-poetski-inat"
+    },
+    "publishedAt": "2024-10-01",
+    "bookAuthor": "Kalija Dimitrova"
+  },
+  {
+    "slug": "put-od-crvene-cigle-antipatrijarhalni-diskurz",
+    "reviewTitle": {
+      "sr": "Put od crvene cigle: Antipatrijarhalni diskurz"
+    },
+    "bookTitle": {
+      "sr": "Put od crvene cigle"
+    },
+    "topics": [
+      "women-and-gender",
+      "short-stories"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/put-od-crvene-cigle-antipatrijarhalni-diskurz"
+    },
+    "publishedAt": "2024-09-24",
+    "bookAuthor": "Marijana Čanak"
+  },
+  {
+    "slug": "albert-poeticna-teznja-slobodi",
+    "reviewTitle": {
+      "sr": "Albert: Poetična težnja slobodi"
+    },
+    "bookTitle": {
+      "sr": "Albert"
+    },
+    "topics": [
+      "contemporary-fiction"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/albert-poeticna-teznja-slobodi"
+    },
+    "publishedAt": "2024-07-02",
+    "bookAuthor": "Ivica Prtenjača"
+  },
+  {
+    "slug": "oce-ako-jesi-komplicirana-tema-komplicirana-forma",
+    "reviewTitle": {
+      "sr": "Oče, ako jesi: Komplicirana tema, komplicirana forma"
+    },
+    "bookTitle": {
+      "sr": "Oče, ako jesi"
+    },
+    "topics": [
+      "contemporary-fiction",
+      "short-stories"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/oce-ako-jesi-komplicirana-tema-komplicirana-forma"
+    },
+    "publishedAt": "2024-05-14",
+    "bookAuthor": "Julijana Adamović"
+  },
+  {
+    "slug": "knjiga-za-maju-samo-ljubav-ima-smisla",
+    "reviewTitle": {
+      "sr": "Knjiga za Maju: Samo ljubav ima smisla"
+    },
+    "bookTitle": {
+      "sr": "Knjiga za Maju"
+    },
+    "topics": [
+      "contemporary-fiction",
+      "poetry",
+      "post-yugoslav-literature"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/knjiga-za-maju-samo-ljubav-ima-smisla"
+    },
+    "publishedAt": "2024-03-26",
+    "bookAuthor": "Marko Tomaš"
+  },
+  {
+    "slug": "nocni-autobus-izvan-jugoormana",
+    "reviewTitle": {
+      "sr": "Noćni autobus: Izvan Jugoormana"
+    },
+    "bookTitle": {
+      "sr": "Noćni autobus"
+    },
+    "topics": [
+      "short-stories",
+      "society-and-politics"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/nocni-autobus-izvan-jugoormana"
+    },
+    "publishedAt": "2023-12-12",
+    "bookAuthor": "Stefan Alijević"
+  },
+  {
+    "slug": "do-boljeg-jucer-mnogo-mogucih-tumacenja",
+    "reviewTitle": {
+      "sr": "Do boljeg jučer: Mnogo mogućih tumačenja"
+    },
+    "bookTitle": {
+      "sr": "Do boljeg jučer"
+    },
+    "topics": [
+      "science-fiction",
+      "contemporary-fiction"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/do-boljeg-jucer-mnogo-mogucih-tumacenja"
+    },
+    "publishedAt": "2023-09-05",
+    "bookAuthor": "Emina Žuna"
+  },
+  {
+    "slug": "ocenas-sa-sjecanja-na-sjecanje",
+    "reviewTitle": {
+      "sr": "Očenaš: Sa sjećanja na sjećanje"
+    },
+    "bookTitle": {
+      "sr": "Očenaš"
+    },
+    "topics": [
+      "memory-and-history",
+      "contemporary-fiction"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/ocenas-sa-sjecanja-na-sjecanje"
+    },
+    "publishedAt": "2023-05-31",
+    "bookAuthor": "Iva Ušćumlić"
+  },
+  {
+    "slug": "svijet-je-gladno-mjesto-izmedu-svjesnog-i-nesvjesnog",
+    "reviewTitle": {
+      "sr": "Svijet je gladno mjesto: Između svjesnog i nesvjesnog"
+    },
+    "bookTitle": {
+      "sr": "Svijet je gladno mjesto"
+    },
+    "topics": [
+      "short-stories"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/svijet-je-gladno-mjesto-izmedu-svjesnog-i-nesvjesnog"
+    },
+    "publishedAt": "2023-04-18",
+    "bookAuthor": "Jelena Zlatar Gamberožić"
+  },
+  {
+    "slug": "pisma-iz-vinogradske-roman-o-zivotu-i-smrti",
+    "reviewTitle": {
+      "sr": "Pisma iz Vinogradske: Roman o životu i smrti"
+    },
+    "bookTitle": {
+      "sr": "Pisma iz Vinogradske"
+    },
+    "topics": [
+      "contemporary-fiction"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/kritike/pisma-iz-vinogradske-roman-o-zivotu-i-smrti"
+    },
+    "publishedAt": "2023-02-14",
+    "bookAuthor": "Boris Škifić"
+  }
+]

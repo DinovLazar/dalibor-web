@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "very-difficult-to-translate-my-friend",
+    "title": {
+      "mk": "Very difficult to translate, my friend.",
+      "en": "Very Difficult to Translate, My Friend",
+      "sr": "Very difficult to translate, my friend."
+    },
+    "topics": [
+      "translation",
+      "literary-criticism",
+      "essay"
+    ],
+    "source": {
+      "sourceName": "Booksa",
+      "sourceUrl": "https://booksa.hr/u-fokusu/very-difficult-to-translate-my-friend"
+    },
+    "publishedAt": "2026-01-19"
+  }
+]

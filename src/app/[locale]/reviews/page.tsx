@@ -60,12 +60,21 @@ export default async function ReviewsPage({
     client.fetch(TOPICS_QUERY),
   ]);
 
+  // Build a set of topic slugs actually referenced by the fetched reviews so the
+  // filter chips reflect only live topics (no dead chips for unused topics) —
+  // mirrors the Blog list. Matters now the taxonomy is broader than the content.
+  const usedTopicSlugs = new Set(
+    reviews.flatMap((r) =>
+      (r.topics ?? []).map((tp) => tp.slug).filter(Boolean),
+    ),
+  );
+
   const topicChips = topics
     .map((tp) => ({
       slug: tp.slug ?? "",
       label: localizedValue(tp.title, locale) ?? "",
     }))
-    .filter((x) => x.slug && x.label);
+    .filter((x) => x.slug && x.label && usedTopicSlugs.has(x.slug));
 
   // Topic filter is purely server-side (works without JS): scope the list by slug.
   const filtered = activeTopic

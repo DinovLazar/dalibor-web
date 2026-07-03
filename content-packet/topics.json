@@ -1,0 +1,106 @@
+[
+  {
+    "slug": "post-yugoslav-literature",
+    "title": {
+      "mk": "Постјугословенска книжевност",
+      "en": "Post-Yugoslav literature",
+      "sr": "Postjugoslovenska književnost"
+    }
+  },
+  {
+    "slug": "contemporary-fiction",
+    "title": {
+      "mk": "Современа проза",
+      "en": "Contemporary fiction",
+      "sr": "Savremena proza"
+    }
+  },
+  {
+    "slug": "short-stories",
+    "title": {
+      "mk": "Расказ",
+      "en": "Short stories",
+      "sr": "Kratka priča"
+    }
+  },
+  {
+    "slug": "poetry",
+    "title": {
+      "mk": "Поезија",
+      "en": "Poetry",
+      "sr": "Poezija"
+    }
+  },
+  {
+    "slug": "science-fiction",
+    "title": {
+      "mk": "Научна фантастика",
+      "en": "Science fiction",
+      "sr": "Naučna fantastika"
+    }
+  },
+  {
+    "slug": "identity-and-belonging",
+    "title": {
+      "mk": "Идентитет и припадност",
+      "en": "Identity and belonging",
+      "sr": "Identitet i pripadnost"
+    }
+  },
+  {
+    "slug": "memory-and-history",
+    "title": {
+      "mk": "Меморија и историја",
+      "en": "Memory and history",
+      "sr": "Sećanje i istorija"
+    }
+  },
+  {
+    "slug": "society-and-politics",
+    "title": {
+      "mk": "Општество и политика",
+      "en": "Society and politics",
+      "sr": "Društvo i politika"
+    }
+  },
+  {
+    "slug": "women-and-gender",
+    "title": {
+      "mk": "Жена и род",
+      "en": "Women and gender",
+      "sr": "Žene i rod"
+    }
+  },
+  {
+    "slug": "translation",
+    "title": {
+      "mk": "Превод",
+      "en": "Translation",
+      "sr": "Prevod"
+    }
+  },
+  {
+    "slug": "literary-criticism",
+    "title": {
+      "mk": "Книжевна критика",
+      "en": "Literary criticism",
+      "sr": "Književna kritika"
+    }
+  },
+  {
+    "slug": "essay",
+    "title": {
+      "mk": "Есеј",
+      "en": "Essay",
+      "sr": "Esej"
+    }
+  },
+  {
+    "slug": "macedonian-literature",
+    "title": {
+      "mk": "Македонска книжевност",
+      "en": "Macedonian literature",
+      "sr": "Makedonska književnost"
+    }
+  }
+]

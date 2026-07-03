@@ -2,6 +2,7 @@ import {defineArrayMember, defineField, defineType} from "sanity";
 
 import {requireMk} from "./localized";
 import {localizedSlug} from "./slug";
+import {sourceField} from "./source";
 
 /** Blog post. */
 export const post = defineType({
@@ -36,6 +37,7 @@ export const post = defineType({
       type: "array",
       of: [defineArrayMember({type: "reference", to: [{type: "topic"}]})],
     }),
+    sourceField(),
     defineField({
       name: "publishedAt",
       title: "Published at",

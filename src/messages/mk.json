@@ -110,7 +110,8 @@
     "allTopics": "Сите",
     "empty": "Сè уште нема објави за прикажување.",
     "backToBlog": "Назад кон блогот",
-    "breadcrumbLabel": "Навигациска патека"
+    "breadcrumbLabel": "Навигациска патека",
+    "source": "Извор"
   },
   "book": {
     "title": "Книгата",

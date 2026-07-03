@@ -110,7 +110,8 @@
     "allTopics": "Sve",
     "empty": "Još uvek nema objava za prikaz.",
     "backToBlog": "Nazad na blog",
-    "breadcrumbLabel": "Navigaciona putanja"
+    "breadcrumbLabel": "Navigaciona putanja",
+    "source": "Izvor"
   },
   "book": {
     "title": "Knjiga",

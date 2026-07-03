@@ -119,6 +119,7 @@ export const POST_BY_SLUG_QUERY = defineQuery(`
     body,
     coverImage,
     publishedAt,
+    source,
     "topics": topics[]->{ _id, "slug": slug.current, title }
   }
 `);

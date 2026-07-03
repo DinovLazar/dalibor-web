@@ -350,3 +350,20 @@
 - `content-packet/` now exists in the repo with **`intake/Dalibor-Intake-Answers-MK.md`** (relocated from `~/Downloads`, SHA-verified — the verbatim MK bio/book-description source the import reads) + a `README.md` documenting the still-pending workbook/docx/assets for 2.01c. The reviews/posts workbook, singletons docx, and assets manifest remain **absent**.
 
 **Token.** The Sanity **write** token lives in gitignored `.env.local` as **`SANITY_WRITE_TOKEN`** (the phase expected `SANITY_API_WRITE_TOKEN`; `.env.example` defines no write-token name — the public read client stays token-less). The import script reads `SANITY_WRITE_TOKEN`. No secret in any tracked file; never printed.
+
+## 2026-07-03 — Phase 2.01c (reviews/posts/topics import)
+
+**No new dependency added.** The xlsx parser 2.01b anticipated is **still not added** — the reviews/posts/topics content arrived as three plain JSON files (`content-packet/{topics,reviews,posts}.json`), read with Node's built-in `readFileSync` + `JSON.parse`. No spreadsheet parser, no runtime dependency; the import reuses the existing `.mts`/`tsx` toolchain.
+
+**Schema addition — `post.source`.**
+- Added an optional `source` object (`sourceName` string + `sourceUrl` url, `https`-validated) to the **`post`** document, mirroring `review.source` — the "first published on …" attribution. Renders as a quiet Style-A "Source → outlet" link on the single-post page.
+- **Factored, not duplicated:** the inline `source` object was extracted to a shared **`sourceField()`** factory (`src/sanity/schemaTypes/source.ts`), consumed by **both** `review.ts` and `post.ts` (same idiom as `localizedSlug()`). `review`'s generated schema is **byte-identical** after the refactor — the `schema.json` diff is purely the additive `post.source`. Typegen regenerated.
+- New neutral i18n string `blog.source` ("Source" / "Извор" / "Izvor") in all three message files, matching the existing `reviews.source` wording.
+
+**Topic taxonomy — reconciliation (data, not stack).**
+- The live `production` dataset already carried **Dalibor's own 14-topic taxonomy** (ids `t-<slug>`), hand-built in the hosted Studio after the 2.01b snapshot. Rather than import a parallel `topic-<slug>` set, the importer **maps** the packet's topic slugs onto his `t-*` ids and creates only two missing concepts (`t-essay`, `t-society-politics`). Operator decision (Lazar, 2026-07-03): `women-and-gender` → existing `t-womens-writing`. Dataset ends at **16 topics** (his 14 + the 2 new), not the packet's 13. Recorded so future phases don't expect a 13-topic count.
+
+**Reviews list — used-topic chip filter.**
+- The Reviews list page now filters its topic chips to only topics referenced by reviews (mirrors the existing Blog list behavior), preventing dead chips now the taxonomy is broader than the content. Behavioural change only; no config.
+
+**No deploy / no Vercel env / no dependency / no `npm audit` change.**

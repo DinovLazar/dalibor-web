@@ -118,7 +118,8 @@
     "allTopics": "All",
     "empty": "No posts to show yet.",
     "backToBlog": "Back to Blog",
-    "breadcrumbLabel": "Breadcrumb"
+    "breadcrumbLabel": "Breadcrumb",
+    "source": "Source"
   },
   "book": {
     "title": "The Book",

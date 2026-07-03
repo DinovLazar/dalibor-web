@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
@@ -95,6 +95,8 @@ export default async function BlogPostPage({
   const date = formatFullDate(post.publishedAt, locale);
   const body = localizedValue(post.body, locale);
   const topics = resolveTopics(post.topics, locale);
+  const sourceName = post.source?.sourceName;
+  const sourceUrl = post.source?.sourceUrl;
 
   // Structured data: BlogPosting (the post) + BreadcrumbList (Home › Blog › title).
   const canonical = `${siteUrl}/${locale}/blog/${slug}`;
@@ -196,6 +198,29 @@ export default async function BlogPostPage({
                 </li>
               ))}
             </ul>
+          ) : null}
+
+          {/* Quiet "first published on …" attribution (§ same treatment as the
+              single-review reviewed-book aside): eyebrow + outlet link. */}
+          {sourceUrl || sourceName ? (
+            <div className="mt-8">
+              <p className="eyebrow text-eyebrow uppercase text-text-muted">
+                {t("blog.source")}
+              </p>
+              {sourceUrl ? (
+                <a
+                  href={sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-flex items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                >
+                  {sourceName || sourceUrl}
+                  <ExternalLink className="size-4" strokeWidth={1.75} aria-hidden />
+                </a>
+              ) : (
+                <p className="mt-1 text-meta text-text-muted">{sourceName}</p>
+              )}
+            </div>
           ) : null}
 
           <hr className="mt-6 border-t border-border" />
