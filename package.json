@@ -10,7 +10,9 @@
     "typegen": "sanity schema extract && sanity typegen generate",
     "embed:reviews": "node --conditions=react-server --import tsx --env-file=.env.local scripts/embed-reviews.mts",
     "test:semantic": "node --conditions=react-server --import tsx --env-file=.env.local scripts/test-semantic-ranking.mts",
-    "import:content": "node --conditions=react-server --import tsx --env-file=.env.local scripts/import-content.mts"
+    "import:content": "node --conditions=react-server --import tsx --env-file=.env.local scripts/import-content.mts",
+    "import:assets": "node --conditions=react-server --import tsx --env-file=.env.local scripts/import-assets.mts",
+    "make:favicon": "node --import tsx scripts/make-favicon.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -42,6 +44,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
+    "sharp": "0.34.5",
     "shadcn": "^4.10.0",
     "tailwindcss": "^4",
     "tsx": "^4.22.4",

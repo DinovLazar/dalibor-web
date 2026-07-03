@@ -367,3 +367,17 @@
 - The Reviews list page now filters its topic chips to only topics referenced by reviews (mirrors the existing Blog list behavior), preventing dead chips now the taxonomy is broader than the content. Behavioural change only; no config.
 
 **No deploy / no Vercel env / no dependency / no `npm audit` change.**
+
+## 2026-07-03 — Phase 2.01e (upload photos to Sanity + set site favicon)
+
+**New devDependency — `sharp@0.34.5` (pinned, exact).** Added to `devDependencies` for the favicon-generation script only (`scripts/make-favicon.mts`). It was already present transitively (Next.js/Sanity toolchain), but a committed script must not rely on a transitive dep — so it is now a declared, pinned devDep. **Not shipped in the app bundle** (build/runtime unchanged; `next/image` uses its own optimizer, not this).
+
+**Two new npm scripts.**
+- `import:assets` → `scripts/import-assets.mts` — the idempotent image importer, run via the same `node --conditions=react-server --import tsx --env-file=.env.local …` runner as `import:content`/`embed:reviews`. Supports `--dry-run` and `--force`.
+- `make:favicon` → `scripts/make-favicon.mts` — run via `node --import tsx scripts/make-favicon.mts` (no `.env.local` / no `react-server` condition needed; it touches no Sanity/runtime code, only `sharp` + the local avatar file).
+
+**App-Router icon files (no code/config change).** `src/app/icon.png` (512²) + `src/app/apple-icon.png` (180²) are static image files under the file-convention path; Next auto-emits the `<link rel="icon">` / `<link rel="apple-touch-icon">` tags (verified in the built HTML). The default `src/app/favicon.ico` was **deleted** so `icon.png` is authoritative (a lingering `favicon.ico` can win in some browsers). **No `icons` entry was added to any `metadata` object** — the file convention is sufficient. A legacy 48×48 `favicon.ico` was **not** emitted: `sharp` can't write `.ico` and that would need another dependency; the PNG icons cover modern browsers (recorded as a deliberate skip).
+
+**Branding cleanup.** The five unused create-next-app scaffold SVGs (`vercel/next/file/globe/window.svg`) were deleted after grepping the repo confirmed zero references; `public/` is now empty.
+
+**No new runtime dependency, no deploy, no Vercel env change, no schema change** (`localizedImage`/`author.photo` already existed → `typegen` produced no diff). `npm audit` unchanged.
