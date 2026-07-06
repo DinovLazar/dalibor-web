@@ -1,7 +1,10 @@
 {
   "author_photo": {
     "file": "author/portrait.jpg",
-    "target": { "docId": "author", "field": "photo" },
+    "target": {
+      "docId": "author",
+      "field": "photo"
+    },
     "source": "https://www.versopolis.com/author/54/dalibor-plecic (image file: https://www.versopolis.com/uploads/media/article/0001/02/thumb_1491_article_big.jpeg). The same photo is also his headshot on Booksa: https://booksa.hr/suradnici/dalibor-plecic (https://booksa.hr/system/author/image/9/large_Dalibor.Plecic.jpg, 576x447). The 720x720 Versopolis copy was used as it is the sharpest/largest.",
     "dimensions": "720x720",
     "rights": "Dalibor's own public author portrait, used by him on his Versopolis and Booksa author profiles (a self-portrait at Tower Bridge, London). No separate photographer credit is stated on either page. Treat as author's own image.",
@@ -13,7 +16,6 @@
     "use": true,
     "note": "Interim author portrait. It is his canonical public author photo across two platforms, so identity is confirmed, but it is a stylised outdoor self-portrait (face angled, partly in shadow) rather than a studio headshot, and only 720x720. Fine to place now; ideally replace when Dalibor sends a higher-resolution / more conventional portrait."
   },
-
   "favicon_source": {
     "file": "author/avatar-square.jpg",
     "target": null,
@@ -22,10 +24,12 @@
     "rights": "Same as the portrait — Dalibor's own public author photo. Cropped, not otherwise altered.",
     "note": "Square face crop (head-and-shoulders) made from the portrait for the browser-tab icon; Code resizes this into the favicon. Not a CMS field. Because the face sits in the left half of the source photo, the crop is left-anchored, so a little sky remains on the right — negligible at favicon size, but Code may fine-tune the centering if desired."
   },
-
   "book_cover": {
     "file": null,
-    "target": { "docId": "book", "field": "coverImage" },
+    "target": {
+      "docId": "book",
+      "field": "coverImage"
+    },
     "source": "Only representation found: the launch/promotion poster on Nova Makedonija, https://novamakedonija.com.mk/zivot/kultura/izleze-zbirkata-raskazi-buniki-od-dalibor-plechikj/ (image https://novamakedonija.com.mk/wp-content/uploads/2022/04/278063475_4908989669220579_377294624201615593_n.jpg, 695x363).",
     "dimensions": null,
     "rights": "n/a — no cover file saved.",
@@ -37,10 +41,348 @@
     "use": "hold",
     "note": "HELD — no genuine flat cover found. The only image available is an event PROMO poster (a 3D angled book mock-up embedded in a composite with the event details and Dalibor's portrait), not a clean front cover, and no retail listing (literatura.mk, kupikniga.mk, knigoteka.mk) carries this small-press 2022 PNV Publications title. The cover art is readable there (blue with a draping henbane/'buniki' flower and the title 'Далибор Плечиќ — БУНИКИ') if Code/Dalibor want to see it. Dalibor said he would send the real cover — use that. alt text is pre-filled for when the real cover is added."
   },
-
-  "reviewed_books": [],
-
+  "reviewed_books": [
+    {
+      "file": "reviewed-books/glasnik-i-razdvajanje-nestabilnost-zbilje.jpg",
+      "target": {
+        "docId": "review-glasnik-i-razdvajanje-nestabilnost-zbilje",
+        "field": "coverImage"
+      },
+      "source": "Hangar 7 (Solaris) webshop (image file: https://hangar7.store/wp-content/uploads/2024/11/Solaris26_Glasnik.jpg)",
+      "dimensions": "870x1305",
+      "rights": "Official published cover of the reviewed book, via Solaris (Hangar 7 webshop). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Glasnik“ од Дарио Шарец",
+        "en": "Cover of the book “Glasnik” by Dario Šarec",
+        "sr": "Korica knjige „Glasnik“ — Dario Šarec"
+      },
+      "use": true,
+      "note": "Cover is for „Glasnik“, the first-named of the two reviewed titles (Glasnik i Razdvajanje). 870×1305."
+    },
+    {
+      "file": "reviewed-books/esej-o-noci-tama-kao-povratak-sebi.jpg",
+      "target": {
+        "docId": "review-esej-o-noci-tama-kao-povratak-sebi",
+        "field": "coverImage"
+      },
+      "source": "V.B.Z. via Knjižara Znanje (image file: https://znanje.hr/product-images/a01e2462-2bf5-42d6-ad33-44e8331f4c1c.jpg)",
+      "dimensions": "360x601",
+      "rights": "Official published cover of the reviewed book, via V.B.Z. (Knjižara Znanje). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Esej o noći“ од Марко Погачар",
+        "en": "Cover of the book “Esej o noći” by Marko Pogačar",
+        "sr": "Korica knjige „Esej o noći“ — Marko Pogačar"
+      },
+      "use": true,
+      "note": "V.B.Z. edition via Znanje; 360×601, above the 350px floor (the kupiknjigu fallback was not needed)."
+    },
+    {
+      "file": "reviewed-books/svijet-koji-sam-izabrala-zivot-u-suterenu.jpg",
+      "target": {
+        "docId": "review-svijet-koji-sam-izabrala-zivot-u-suterenu",
+        "field": "coverImage"
+      },
+      "source": "ILI-ILI publisher site, https://iliili.com.mk (image file: https://iliili.com.mk/wp-content/uploads/2025/03/Svetot-shto-go-izbrav-jpg.jpg)",
+      "dimensions": "735x1200",
+      "rights": "Official published cover of the reviewed book, via ILI-ILI (Skopje). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Светот што го избрав“ од Калина Малеска",
+        "en": "Cover of the book “Светот што го избрав” by Kalina Maleska",
+        "sr": "Korica knjige „Светот што го избрав“ — Kalina Maleska"
+      },
+      "use": true,
+      "note": "Macedonian original „Светот што го избрав“ (the edition reviewed); the review displays the Croatian title while the cover shows the Macedonian title — correct. Retrieved with the host IP pinned (curl could not resolve iliili.com.mk from this machine). 735×1200."
+    },
+    {
+      "file": "reviewed-books/putovanja-slijepih-mapa-fascinantnog-zaboravljenog-i-marginalnog.jpg",
+      "target": {
+        "docId": "review-putovanja-slijepih-mapa-fascinantnog-zaboravljenog-i-marginalnog",
+        "field": "coverImage"
+      },
+      "source": "Disput 2025 via Knjižara Znanje (publisher site is client-rendered) (image file: https://znanje.hr/product-images/ee5a2eeb-3019-4f24-aa8e-c4e151338aef.jpg)",
+      "dimensions": "360x571",
+      "rights": "Official published cover of the reviewed book, via Disput (Knjižara Znanje). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Putovanja slijepih“ од Раде Јарак",
+        "en": "Cover of the book “Putovanja slijepih” by Rade Jarak",
+        "sr": "Korica knjige „Putovanja slijepih“ — Rade Jarak"
+      },
+      "use": true,
+      "note": "Disput 2025 via Znanje; 360×571."
+    },
+    {
+      "file": "reviewed-books/tako-neka-bude-izmedu-povijesti-i-suvremenosti.jpg",
+      "target": {
+        "docId": "review-tako-neka-bude-izmedu-povijesti-i-suvremenosti",
+        "field": "coverImage"
+      },
+      "source": "Sandorf publisher file (image file: https://www.sandorf.hr/media/202510200944360.robert%20medurecan_tako%20neka%20bude_BF%2072.jpg)",
+      "dimensions": "1654x2480",
+      "rights": "Official published cover of the reviewed book, via Sandorf. Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Tako neka bude“ од Роберт Меѓуречан",
+        "en": "Cover of the book “Tako neka bude” by Robert Međurečan",
+        "sr": "Korica knjige „Tako neka bude“ — Robert Međurečan"
+      },
+      "use": true,
+      "note": "Sandorf publisher file (URL-encoded spaces in the filename); high-res 1654×2480."
+    },
+    {
+      "file": "reviewed-books/chinook-i-dokument-i-elegija.jpg",
+      "target": {
+        "docId": "review-chinook-i-dokument-i-elegija",
+        "field": "coverImage"
+      },
+      "source": "V.B.Z. 2025 edition via Knjižara Znanje, https://znanje.hr/product/chinook/518019 (image file: https://znanje.hr/product-images/cc785eeb-7b70-47ea-a36c-9e3bcf675eb6.jpg)",
+      "dimensions": "360x526",
+      "rights": "Official published cover of the reviewed book, via V.B.Z. (Knjižara Znanje). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Chinook“",
+        "en": "Cover of the book “Chinook”",
+        "sr": "Korica knjige „Chinook“"
+      },
+      "use": true,
+      "note": "Alt text omits the author (not in our data). Sourced from Znanje at 360×526 because the phase-table hocuknjigu.hr getmedia master is only 296px (under the 350 floor); same VBZ 2025 edition (ISBN 9789535208204, Bekim Sejranović)."
+    },
+    {
+      "file": "reviewed-books/najbolje-je-vec-proslo-tjeskoba-iznevjerene-generacije.jpg",
+      "target": {
+        "docId": "review-najbolje-je-vec-proslo-tjeskoba-iznevjerene-generacije",
+        "field": "coverImage"
+      },
+      "source": "Partizanska knjiga publisher (image file: https://partizanskaknjiga.rs/wp-content/uploads/2024/11/najbolje-je-vec-proslo-danilo-stojic-naslovna.jpg)",
+      "dimensions": "1616x2480",
+      "rights": "Official published cover of the reviewed book, via Partizanska knjiga. Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Najbolje je već prošlo“ од Данило Стојиќ",
+        "en": "Cover of the book “Najbolje je već prošlo” by Danilo Stojić",
+        "sr": "Korica knjige „Najbolje je već prošlo“ — Danilo Stojić"
+      },
+      "use": true,
+      "note": "Partizanska knjiga original; 1616×2480."
+    },
+    {
+      "file": "reviewed-books/kao-da-nema-sutra-intrigantna-premisa-mlaka-izvedba.jpg",
+      "target": {
+        "docId": "review-kao-da-nema-sutra-intrigantna-premisa-mlaka-izvedba",
+        "field": "coverImage"
+      },
+      "source": "V.B.Z. official site, https://www.vbz.hr/book/kao-da-nema-sutra/ (image file: https://www.vbz.hr/wp-content/uploads/2024/07/kao-da-nema-sutra.jpg)",
+      "dimensions": "674x1000",
+      "rights": "Official published cover of the reviewed book, via V.B.Z.. Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Kao da nema sutra“ од Борна Вујчиќ",
+        "en": "Cover of the book “Kao da nema sutra” by Borna Vujčić",
+        "sr": "Korica knjige „Kao da nema sutra“ — Borna Vujčić"
+      },
+      "use": true,
+      "note": "Sourced from vbz.hr at 674×1000 because the phase-table hocuknjigu.hr getmedia master is only 296px (under the 350 floor); same VBZ 2024 edition (ISBN 9789535207245)."
+    },
+    {
+      "file": "reviewed-books/cimetna-pisma-dijamantna-stvorenja-ljubavna-prica-u-postapokalipticnom-vremenu.jpg",
+      "target": {
+        "docId": "review-cimetna-pisma-dijamantna-stvorenja-ljubavna-prica-u-postapokalipticnom-vremenu",
+        "field": "coverImage"
+      },
+      "source": "Fraktura 2024 via Superknjižara, 300 dpi press image (image file: https://www.superknjizara.hr/Documents/Products/619604/cimetna_pisma_300dpi_1.jpg)",
+      "dimensions": "1668x2484",
+      "rights": "Official published cover of the reviewed book, via Fraktura (Superknjižara). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Cimetna pisma, dijamantna stvorenja“ од Фарук Шехиќ",
+        "en": "Cover of the book “Cimetna pisma, dijamantna stvorenja” by Faruk Šehić",
+        "sr": "Korica knjige „Cimetna pisma, dijamantna stvorenja“ — Faruk Šehić"
+      },
+      "use": true,
+      "note": "Fraktura 2024, 300 dpi press image; 1668×2484."
+    },
+    {
+      "file": "reviewed-books/bejturan-i-ruza-granice-ljubavi-gubitka-i-identiteta.jpg",
+      "target": {
+        "docId": "review-bejturan-i-ruza-granice-ljubavi-gubitka-i-identiteta",
+        "field": "coverImage"
+      },
+      "source": "Buybook / V.B.Z. joint edition via knjiga.ba (image file: https://www.knjiga.ba/media/catalog/product/slike/bejturan_i_ruza.jpg)",
+      "dimensions": "455x700",
+      "rights": "Official published cover of the reviewed book, via Buybook / V.B.Z. (knjiga.ba). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Bejturan i ruža“ од Александар Хемон",
+        "en": "Cover of the book “Bejturan i ruža” by Aleksandar Hemon",
+        "sr": "Korica knjige „Bejturan i ruža“ — Aleksandar Hemon"
+      },
+      "use": true,
+      "note": "Buybook/V.B.Z. joint edition; 455×700, above the floor (no Znanje/Ljevak fallback needed)."
+    },
+    {
+      "file": null,
+      "target": {
+        "docId": "review-u-haosu-radosti-poetski-inat",
+        "field": "coverImage"
+      },
+      "source": "n/a — self-published title; no genuine flat cover exists anywhere accessible online.",
+      "dimensions": null,
+      "rights": "n/a — no cover file saved.",
+      "alt": {
+        "mk": "Корица на книгата „Во хаосот радост“ од Калија Димитрова",
+        "en": "Cover of the book “Во хаосот радост” by Kalija Dimitrova",
+        "sr": "Korica knjige „Во хаосот радост“ — Kalija Dimitrova"
+      },
+      "use": "hold",
+      "note": "HELD — self-published („Во хаосот радост“ / „U haosu radost“, Kalija Dimitrova); no genuine flat cover exists anywhere accessible online (settled decision). Do NOT substitute the Meduza landscape banner or any event photo. alt text is pre-filled for when a real cover arrives."
+    },
+    {
+      "file": "reviewed-books/put-od-crvene-cigle-antipatrijarhalni-diskurz.jpg",
+      "target": {
+        "docId": "review-put-od-crvene-cigle-antipatrijarhalni-diskurz",
+        "field": "coverImage"
+      },
+      "source": "Marijana Čanak's official site (Buybook edition) (image file: https://ik.imagekit.io/tkrwfvazw/marijanacanak/slike/knjige/put-od-crvene-cigle-buybook.jpg)",
+      "dimensions": "1000x1577",
+      "rights": "Official published cover of the reviewed book, via Buybook (author’s official site). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Put od crvene cigle“ од Маријана Чанак",
+        "en": "Cover of the book “Put od crvene cigle” by Marijana Čanak",
+        "sr": "Korica knjige „Put od crvene cigle“ — Marijana Čanak"
+      },
+      "use": true,
+      "note": "Author’s official site (Buybook edition); 1000×1577. No ?tr= resize query was present to strip."
+    },
+    {
+      "file": "reviewed-books/albert-poeticna-teznja-slobodi.jpg",
+      "target": {
+        "docId": "review-albert-poeticna-teznja-slobodi",
+        "field": "coverImage"
+      },
+      "source": "V.B.Z. official site, https://www.vbz.hr/book/albert/ (image file: https://www.vbz.hr/wp-content/uploads/2023/11/albert-naslovnica.jpg)",
+      "dimensions": "599x1000",
+      "rights": "Official published cover of the reviewed book, via V.B.Z.. Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Albert“ од Ивица Пртењача",
+        "en": "Cover of the book “Albert” by Ivica Prtenjača",
+        "sr": "Korica knjige „Albert“ — Ivica Prtenjača"
+      },
+      "use": true,
+      "note": "Sourced from vbz.hr at 599×1000 because the phase-table ljevak.hr image is only 296px (under the 350 floor); same VBZ 2023 edition."
+    },
+    {
+      "file": "reviewed-books/oce-ako-jesi-komplicirana-tema-komplicirana-forma.jpg",
+      "target": {
+        "docId": "review-oce-ako-jesi-komplicirana-tema-komplicirana-forma",
+        "field": "coverImage"
+      },
+      "source": "Fraktura 2023 via Knjižara Znanje (image file: https://znanje.hr/product-images/6ba16010-b144-4101-81ab-ff500aaea2fd.jpg)",
+      "dimensions": "360x534",
+      "rights": "Official published cover of the reviewed book, via Fraktura (Knjižara Znanje). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Oče, ako jesi“ од Јулијана Адамовиќ",
+        "en": "Cover of the book “Oče, ako jesi” by Julijana Adamović",
+        "sr": "Korica knjige „Oče, ako jesi“ — Julijana Adamović"
+      },
+      "use": true,
+      "note": "Fraktura 2023 via Znanje; 360×534."
+    },
+    {
+      "file": "reviewed-books/knjiga-za-maju-samo-ljubav-ima-smisla.jpg",
+      "target": {
+        "docId": "review-knjiga-za-maju-samo-ljubav-ima-smisla",
+        "field": "coverImage"
+      },
+      "source": "V.B.Z. 2023 via Knjižara Znanje (image file: https://znanje.hr/product-images/2800f033-1213-450c-98af-ca69eb5f3f76.jpg)",
+      "dimensions": "360x598",
+      "rights": "Official published cover of the reviewed book, via V.B.Z. (Knjižara Znanje). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Knjiga za Maju“ од Марко Томаш",
+        "en": "Cover of the book “Knjiga za Maju” by Marko Tomaš",
+        "sr": "Korica knjige „Knjiga za Maju“ — Marko Tomaš"
+      },
+      "use": true,
+      "note": "V.B.Z. 2023 via Znanje; 360×598 (the Booksa fallback was not needed)."
+    },
+    {
+      "file": "reviewed-books/nocni-autobus-izvan-jugoormana.jpg",
+      "target": {
+        "docId": "review-nocni-autobus-izvan-jugoormana",
+        "field": "coverImage"
+      },
+      "source": "ILI-ILI (Skopje) publisher site, https://iliili.com.mk (image file: https://iliili.com.mk/wp-content/uploads/2022/07/00-Veceren-avtobus-korica.jpg)",
+      "dimensions": "750x1200",
+      "rights": "Official published cover of the reviewed book, via ILI-ILI (Skopje). Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Вечерен автобус“ од Стефан Алијевиќ",
+        "en": "Cover of the book “Вечерен автобус” by Stefan Alijević",
+        "sr": "Korica knjige „Вечерен автобус“ — Stefan Alijević"
+      },
+      "use": true,
+      "note": "Macedonian original „Вечерен автобус“ (the edition reviewed); the review displays the Croatian title while the cover shows the Macedonian title — correct. Retrieved with the host IP pinned (curl could not resolve iliili.com.mk from this machine). 750×1200."
+    },
+    {
+      "file": "reviewed-books/do-boljeg-jucer-mnogo-mogucih-tumacenja.jpg",
+      "target": {
+        "docId": "review-do-boljeg-jucer-mnogo-mogucih-tumacenja",
+        "field": "coverImage"
+      },
+      "source": "Buybook (Shopify) store (image file: https://buybook.ba/cdn/shop/files/548886858_d838944e-53a3-4d31-a49a-a521f8005107.jpg?width=1946)",
+      "dimensions": "1166x1654",
+      "rights": "Official published cover of the reviewed book, via Buybook. Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Do boljeg jučer“ од Емина Жуна",
+        "en": "Cover of the book “Do boljeg jučer” by Emina Žuna",
+        "sr": "Korica knjige „Do boljeg jučer“ — Emina Žuna"
+      },
+      "use": true,
+      "note": "Buybook Shopify; 1166×1654 — the largest of the set."
+    },
+    {
+      "file": "reviewed-books/ocenas-sa-sjecanja-na-sjecanje.jpg",
+      "target": {
+        "docId": "review-ocenas-sa-sjecanja-na-sjecanje",
+        "field": "coverImage"
+      },
+      "source": "Durieux publisher (image file: http://durieux.hr/wordpress/wp-content/uploads/2022/11/ocenas-web1.jpg — retrieved over plain HTTP; the host’s HTTPS certificate did not verify. One-time download of a public cover; nothing insecure ships.)",
+      "dimensions": "622x945",
+      "rights": "Official published cover of the reviewed book, via Durieux. Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Očenaš“ од Ива Ушчумлиќ",
+        "en": "Cover of the book “Očenaš” by Iva Ušćumlić",
+        "sr": "Korica knjige „Očenaš“ — Iva Ušćumlić"
+      },
+      "use": true,
+      "note": "Durieux publisher. Retrieved over plain HTTP because the host’s HTTPS certificate did not verify (phase-sanctioned); one-time download of a public cover, nothing insecure ships. 622×945."
+    },
+    {
+      "file": "reviewed-books/svijet-je-gladno-mjesto-izmedu-svjesnog-i-nesvjesnog.jpg",
+      "target": {
+        "docId": "review-svijet-je-gladno-mjesto-izmedu-svjesnog-i-nesvjesnog",
+        "field": "coverImage"
+      },
+      "source": "MVinfo (image file: https://www.mvinfo.hr/_mvshop/public/data/image/2/14546.jpg)",
+      "dimensions": "300x455",
+      "rights": "Official published cover of the reviewed book, via MVinfo. Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Svijet je gladno mjesto“ од Јелена Златар Гамберожиќ",
+        "en": "Cover of the book “Svijet je gladno mjesto” by Jelena Zlatar Gamberožić",
+        "sr": "Korica knjige „Svijet je gladno mjesto“ — Jelena Zlatar Gamberožić"
+      },
+      "use": true,
+      "note": "ACCEPTED EXCEPTION to the 350px floor (settled decision): a genuine flat cover at 300×455 — the publisher only offers a forbidden 3D mockup and no larger flat copy exists online. Never use the 3D PNG."
+    },
+    {
+      "file": "reviewed-books/pisma-iz-vinogradske-roman-o-zivotu-i-smrti.jpg",
+      "target": {
+        "docId": "review-pisma-iz-vinogradske-roman-o-zivotu-i-smrti",
+        "field": "coverImage"
+      },
+      "source": "Hena com publisher (image file: https://hena-com.hr/doc/slike/pisma_iz_vinogradske_96.jpg)",
+      "dimensions": "525x809",
+      "rights": "Official published cover of the reviewed book, via Hena com. Used to identify the work under review; replaceable on request.",
+      "alt": {
+        "mk": "Корица на книгата „Pisma iz Vinogradske“ од Борис Шкифиќ",
+        "en": "Cover of the book “Pisma iz Vinogradske” by Boris Škifić",
+        "sr": "Korica knjige „Pisma iz Vinogradske“ — Boris Škifić"
+      },
+      "use": true,
+      "note": "Hena com publisher; 525×809. Avoided the letterboxed _1200x630_crop derivative."
+    }
+  ],
   "blog_images": [],
-
   "banner": []
 }
