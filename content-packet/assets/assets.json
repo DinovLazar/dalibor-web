@@ -25,21 +25,21 @@
     "note": "Square face crop (head-and-shoulders) made from the portrait for the browser-tab icon; Code resizes this into the favicon. Not a CMS field. Because the face sits in the left half of the source photo, the crop is left-anchored, so a little sky remains on the right — negligible at favicon size, but Code may fine-tune the centering if desired."
   },
   "book_cover": {
-    "file": null,
+    "file": "book/cover.jpg",
     "target": {
       "docId": "book",
       "field": "coverImage"
     },
-    "source": "Only representation found: the launch/promotion poster on Nova Makedonija, https://novamakedonija.com.mk/zivot/kultura/izleze-zbirkata-raskazi-buniki-od-dalibor-plechikj/ (image https://novamakedonija.com.mk/wp-content/uploads/2022/04/278063475_4908989669220579_377294624201615593_n.jpg, 695x363).",
-    "dimensions": null,
-    "rights": "n/a — no cover file saved.",
+    "source": "Supplied directly by the operator (Lazar) as a file drop at repo root (`4 books/буники .jpg`), 2026-07-07. The original file was a 1200x1200 square with a large white margin around the cover art; trimmed (sharp, uniform-border trim) to the genuine flat cover at 632x965.",
+    "dimensions": "632x965",
+    "rights": "Dalibor's own book cover (Буники / Bunike, ПНВ Публикации, 2022), supplied by him via the operator. Treat as author-supplied.",
     "alt": {
       "mk": "Корица на книгата „Буники“ од Далибор Плечиќ",
       "en": "Cover of the book “Bunike” by Dalibor Plečić",
       "sr": "Korica knjige „Bunike“ Dalibora Plečića"
     },
-    "use": "hold",
-    "note": "HELD — no genuine flat cover found. The only image available is an event PROMO poster (a 3D angled book mock-up embedded in a composite with the event details and Dalibor's portrait), not a clean front cover, and no retail listing (literatura.mk, kupikniga.mk, knigoteka.mk) carries this small-press 2022 PNV Publications title. The cover art is readable there (blue with a draping henbane/'buniki' flower and the title 'Далибор Плечиќ — БУНИКИ') if Code/Dalibor want to see it. Dalibor said he would send the real cover — use that. alt text is pre-filled for when the real cover is added."
+    "use": true,
+    "note": "Real cover — replaces the 2.01e/2.01g held placeholder (no genuine flat cover was findable online at that time; only an event promo poster existed). This is the genuine flat front cover: a draping henbane/'buniki' flower on blue, title + author in the lower third. 632x965 (aspect 1.53, within the 1.2-2.0 portrait floor)."
   },
   "reviewed_books": [
     {
@@ -48,16 +48,16 @@
         "docId": "review-glasnik-i-razdvajanje-nestabilnost-zbilje",
         "field": "coverImage"
       },
-      "source": "Hangar 7 (Solaris) webshop (image file: https://hangar7.store/wp-content/uploads/2024/11/Solaris26_Glasnik.jpg)",
-      "dimensions": "870x1305",
-      "rights": "Official published cover of the reviewed book, via Solaris (Hangar 7 webshop). Used to identify the work under review; replaceable on request.",
+      "source": "Supplied directly by the operator (Lazar) as a file drop at repo root (`4 books/Гласник и раздвајанје.jpeg`), 2026-07-07 — supersedes the 2.01g web-sourced copy (Hangar 7 / Solaris webshop, https://hangar7.store/wp-content/uploads/2024/11/Solaris26_Glasnik.jpg, 870x1305). Same edition/artwork; the superseded file was deleted, not kept alongside.",
+      "dimensions": "360x540",
+      "rights": "Official published cover of the reviewed book (same edition as the superseded 2.01g source). Used to identify the work under review; replaceable on request.",
       "alt": {
         "mk": "Корица на книгата „Glasnik“ од Дарио Шарец",
         "en": "Cover of the book “Glasnik” by Dario Šarec",
         "sr": "Korica knjige „Glasnik“ — Dario Šarec"
       },
       "use": true,
-      "note": "Cover is for „Glasnik“, the first-named of the two reviewed titles (Glasnik i Razdvajanje). 870×1305."
+      "note": "Cover is for „Glasnik“, the first-named of the two reviewed titles (Glasnik i Razdvajanje). Operator-supplied copy is lower-resolution than the 2.01g web original (360×540 vs 870×1305) but still clears the 350px-width floor and the 1.2-2.0 aspect floor (1.5)."
     },
     {
       "file": "reviewed-books/esej-o-noci-tama-kao-povratak-sebi.jpg",
@@ -65,16 +65,16 @@
         "docId": "review-esej-o-noci-tama-kao-povratak-sebi",
         "field": "coverImage"
       },
-      "source": "V.B.Z. via Knjižara Znanje (image file: https://znanje.hr/product-images/a01e2462-2bf5-42d6-ad33-44e8331f4c1c.jpg)",
-      "dimensions": "360x601",
-      "rights": "Official published cover of the reviewed book, via V.B.Z. (Knjižara Znanje). Used to identify the work under review; replaceable on request.",
+      "source": "Supplied directly by the operator (Lazar) as a file drop at repo root (`4 books/Есеј од ночи.jpg`), 2026-07-07 — supersedes the 2.01g web-sourced copy (V.B.Z. via Knjižara Znanje, https://znanje.hr/product-images/a01e2462-2bf5-42d6-ad33-44e8331f4c1c.jpg, 360x601). Same edition/artwork; the superseded file was deleted, not kept alongside.",
+      "dimensions": "298x500",
+      "rights": "Official published cover of the reviewed book (same edition as the superseded 2.01g source). Used to identify the work under review; replaceable on request.",
       "alt": {
         "mk": "Корица на книгата „Esej o noći“ од Марко Погачар",
         "en": "Cover of the book “Esej o noći” by Marko Pogačar",
         "sr": "Korica knjige „Esej o noći“ — Marko Pogačar"
       },
       "use": true,
-      "note": "V.B.Z. edition via Znanje; 360×601, above the 350px floor (the kupiknjigu fallback was not needed)."
+      "note": "FLAG for operator: the operator-supplied copy (298×500) is now BELOW the 350px-width floor 2.01g established (the superseded web original was 360×601). Aspect (1.68) is still within the 1.2-2.0 floor. Used anyway per this phase's explicit instruction that operator-supplied files take priority — but the resolution is a step down; keep the higher-res 2.01g source easily recoverable (git history) if Lazar prefers to revert this one file."
     },
     {
       "file": "reviewed-books/svijet-koji-sam-izabrala-zivot-u-suterenu.jpg",
@@ -82,16 +82,16 @@
         "docId": "review-svijet-koji-sam-izabrala-zivot-u-suterenu",
         "field": "coverImage"
       },
-      "source": "ILI-ILI publisher site, https://iliili.com.mk (image file: https://iliili.com.mk/wp-content/uploads/2025/03/Svetot-shto-go-izbrav-jpg.jpg)",
-      "dimensions": "735x1200",
-      "rights": "Official published cover of the reviewed book, via ILI-ILI (Skopje). Used to identify the work under review; replaceable on request.",
+      "source": "Supplied directly by the operator (Lazar) as a file drop at repo root (`4 books/свијет који сам изабрала.webp`), 2026-07-07 — supersedes the 2.01g web-sourced copy (ILI-ILI publisher site, https://iliili.com.mk/wp-content/uploads/2025/03/Svetot-shto-go-izbrav-jpg.jpg, 735x1200). Same edition/artwork (second edition); converted from WebP to JPEG for convention consistency with the rest of the folder. The superseded file was deleted, not kept alongside.",
+      "dimensions": "384x525",
+      "rights": "Official published cover of the reviewed book (same edition as the superseded 2.01g source). Used to identify the work under review; replaceable on request.",
       "alt": {
         "mk": "Корица на книгата „Светот што го избрав“ од Калина Малеска",
         "en": "Cover of the book “Светот што го избрав” by Kalina Maleska",
         "sr": "Korica knjige „Светот што го избрав“ — Kalina Maleska"
       },
       "use": true,
-      "note": "Macedonian original „Светот што го избрав“ (the edition reviewed); the review displays the Croatian title while the cover shows the Macedonian title — correct. Retrieved with the host IP pinned (curl could not resolve iliili.com.mk from this machine). 735×1200."
+      "note": "Macedonian original „Светот што го избрав“ (the edition reviewed); the review displays the Croatian title while the cover shows the Macedonian title — correct. Operator-supplied copy is lower-resolution than the 2.01g web original (384×525 vs 735×1200) but still clears the 350px-width floor and the 1.2-2.0 aspect floor (1.37)."
     },
     {
       "file": "reviewed-books/putovanja-slijepih-mapa-fascinantnog-zaboravljenog-i-marginalnog.jpg",
