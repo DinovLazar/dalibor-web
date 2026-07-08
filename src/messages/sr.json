@@ -100,7 +100,10 @@
     "backToReviews": "Nazad na kritike",
     "breadcrumbLabel": "Navigaciona putanja",
     "reviewedBook": "Recenzirana knjiga",
-    "source": "Izvor"
+    "source": "Izvor",
+    "fullTextAtSource": "Ova kritika je prvobitno objavljena na {source}.",
+    "readFullReview": "Pročitajte celu kritiku na {source}",
+    "fullTextPending": "Ceo tekst ove kritike biće objavljen ovde."
   },
   "blog": {
     "title": "Blog",

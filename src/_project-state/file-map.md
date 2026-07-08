@@ -47,7 +47,7 @@
 | `src/app/[locale]/contact/page.tsx` | **Real Style A Contact (1.11)** — `PageHeader` (title+intro) + two-column (`ContactForm` left, `ContactLinks` right; form-first on mobile). **(1.12)** `generateMetadata` via `buildPageMetadata`. Static (`●`). |
 | `src/app/[locale]/privacy/page.tsx` | **Real Style A Privacy (1.11)** — `<h1>` + §6.16 double rule + lede + six `<h2>`/`<p>` sections in `max-w-prose`. **(1.12)** `generateMetadata` via `buildPageMetadata`. Static (`●`). |
 | `src/app/[locale]/reviews/page.tsx` | **Real Style A Reviews list (1.09)** — `REVIEWS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter, progressively-enhanced `ReviewSearch` over the SSR `ReviewsList`. **(1.12)** `generateMetadata`. Dynamic (`ƒ`). |
-| `src/app/[locale]/reviews/[slug]/page.tsx` | **Real Style A single review (1.09)** — `REVIEW_BY_SLUG_QUERY` (`cache()`d, shared w/ metadata); back link/breadcrumb, `<h1>`+double rule, Portable Text body w/ drop cap, sticky `ReviewBookAside`, topic chips; `generateStaticParams`, `notFound()`. **(1.12)** full `generateMetadata` (og:type article) + `Article`+`BreadcrumbList` JSON-LD + `lang` on title/body. |
+| `src/app/[locale]/reviews/[slug]/page.tsx` | **Real Style A single review (1.09)** — `REVIEW_BY_SLUG_QUERY` (`cache()`d, shared w/ metadata); back link/breadcrumb, `<h1>`+double rule, Portable Text body w/ drop cap, sticky `ReviewBookAside`, topic chips; `generateStaticParams`, `notFound()`. **(1.12)** full `generateMetadata` (og:type article) + `Article`+`BreadcrumbList` JSON-LD + `lang` on title/body. **(2.09)** when `body` is empty (every review until Dalibor pastes prose), the left column renders a quiet "read at source" panel from the review's `source` instead of blank space. |
 | `src/app/[locale]/blog/page.tsx` | **Real Style A Blog list (1.10)** — `POSTS_LIST_QUERY` + `TOPICS_QUERY`; Archive header, SSR `?topic=` chip filter (no dead chips), `PostCard` stack, empty state. **No search box.** **(1.12)** `generateMetadata`. Dynamic (`ƒ`). |
 | `src/app/[locale]/blog/[slug]/page.tsx` | **Real Style A single post (1.10)** — `POST_BY_SLUG_QUERY` (`cache()`d, shared w/ metadata); back link/breadcrumb, `<h1>`+double rule, Portable Text body w/ drop cap, topic chips; no book aside; `generateStaticParams`, `notFound()`. **(1.12)** full `generateMetadata` (og:type article) + `BlogPosting`+`BreadcrumbList` JSON-LD + `lang` on title/body. |
 | `src/app/api/reviews/search/route.ts` | **(1.09)** `POST` search route — the only search surface the browser sees; calls `searchReviews` (semantic→keyword fallback), returns `{mode, results}`, never leaks keys/errors. |
@@ -189,7 +189,7 @@
 | `file-map.md` | This file. |
 | `00_stack-and-config.md` | Append-only stack/config log (1.02 → 2.01e). |
 | `Part-X-Phase-YY-Completion.md` | Blank completion-report template. |
-| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-12-Completion.md`, **`Part-2-Phase-01b/01c/01d/01e/02/03/04/05-Completion.md`** | Per-phase completion reports. |
+| `Part-1-Phase-02-Completion.md` … `Part-1-Phase-12-Completion.md`, **`Part-2-Phase-01b/01c/01d/01e/01g/01h/01i/02/03/04/05/09-Completion.md`** | Per-phase completion reports. |
 
 ### Design handovers + mockups — `docs/`
 | File | Description |
