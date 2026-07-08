@@ -8,51 +8,82 @@
 
 **Branch:** `phase/2.01i-vo-haosot-cover` (based on updated `main`; pushed; `main` untouched)
 
-**Outcome:** **STOPPED at Task 3 — no operator-supplied cover file was found.** Per the phase brief's explicit instruction, no substitute (landscape/promo/Meduza-banner image) was sourced from the web. Entry `#11` (`review-u-haosu-radosti-poetski-inat`) in `assets.json` is **unchanged** — still `file: null`, `use: "hold"`. No code, asset, or manifest changes were made in this phase.
+**Outcome:** The last held reviewed-book cover is **resolved**. The operator supplied the genuine flat front cover directly in-conversation (not via the anticipated `covers-in/` file drop) after this phase's first pass had stopped and reported it missing. The image was validated as a genuine flat portrait front cover (dried-flower photography with the title „ВО ХАОСОТ РАДОСТ" and author „КАЛИА ДИМИТРОВА" lettered on it — not the Meduza landscape promo banner), extracted, normalized to JPEG, and manifested. All **20/20** reviewed-book covers are now `use: true` with **0 held**. The Sanity **write is still DEFERRED** — this machine has no `SANITY_WRITE_TOKEN`; per Task 10, the exact operator command is documented below.
 
 ---
 
-## Sync check (Task 1)
+## Sync check (unchanged from the first pass)
 
-- `git fetch origin` — clean.
-- `git status` before branching: on `phase/2.01h-book-cover-images`, up to date with `fork/phase/2.01h-book-cover-images`; one pre-existing untracked file (`content-packet/intake/Dalibor-Intake-Form-MK.html`, unrelated to this phase, left untouched).
-- **Base-branch decision:** `git branch -r --merged origin/main | grep 2.01h` showed `fork/phase/2.01h-book-cover-images` already merged — confirmed by `git log origin/main` (`91a7993 Merge pull request #2 from petarjakimov11012011-cell/phase/2.01h-book-cover-images`). So per the brief, this phase is based on **updated `main`**, not on `phase/2.01h-book-cover-images` directly: `git checkout main && git pull --ff-only origin main` (fast-forwarded 2 commits, pulling in 2.01h's manifested Буники + 3-cover changes), then `git checkout -b phase/2.01i-vo-haosot-cover`.
+- Based on updated `main` (2.01h already merged via PR #2, confirmed by `git branch -r --merged origin/main` and `git log origin/main`). Branch `phase/2.01i-vo-haosot-cover` cut from there.
 
-## What was checked (Task 3)
+## What happened (two passes in one phase)
 
-- Looked for `covers-in/u-haosu-radosti-poetski-inat.<ext>` at the repo root — **the `covers-in/` directory does not exist at all**.
-- Ran a repo-wide search (`find . -iname "*haosu*" -o -iname "*haosot*"`, excluding `node_modules`/`.git`) — **no matching file anywhere in the working tree**.
-- Confirmed the current manifest entry for `review-u-haosu-radosti-poetski-inat` is exactly as the 2.01g HELD state left it: `file: null`, `use: "hold"`, `dimensions: null`, `alt` (mk/en/sr) already pre-filled, `note` still reads "HELD — self-published … Do NOT substitute the Meduza landscape banner or any event photo."
+1. **First pass — stopped as designed.** `covers-in/` did not exist and a repo-wide filename search for the book turned up nothing. Per the brief's explicit trap-avoidance instruction, no substitute (Meduza banner/event photo) was sourced from the web. This was committed and pushed as an interim stop-report (see git history on this branch).
+2. **Second pass — the operator supplied the cover directly in the chat turn**, not as a `covers-in/` file drop. Since the brief's file-drop path assumes a filesystem location the operator can't always use mid-conversation, the image was instead **recovered from the session transcript**: the pasted image (base64-encoded, `image/webp`, one image block) was located in this session's `.jsonl` transcript and decoded to disk with a short Python script, landing at `covers-in/u-haosu-radosti-poetski-inat.webp` — functionally equivalent to the anticipated drop location, just sourced from the conversation instead of a pre-placed file.
 
-Per the brief's Task 3 instruction, this is a stop condition: **do not search the web for and substitute a promo/banner/event image.** No file to validate, trim, save, or manifest.
+## Validation against the Task 4 gate (the whole point of the phase)
+
+- **Magic bytes:** confirmed genuine WebP (`file` reported `RIFF ... Web/P image`), decoded cleanly with `sharp`.
+- **Orientation:** **1668×2000, portrait**, aspect ratio (h/w) **1.199** — within the established 1.2–2.0 floor (right at the edge, effectively 1.2; not a landscape banner).
+- **Content:** depicts dried/pressed-flower photography as full-bleed cover art, with the book's Cyrillic title „ВО ХАОСОТ РАДОСТ" and the author's name „КАЛИА ДИМИТРОВА" set in cream title-card boxes directly on the cover — this is cover artwork, not an event poster or social graphic (no venue/date/audience content, no promotional copy).
+- **Border check:** ran `sharp().trim()` against the source — it reported zero trim offset and unchanged dimensions, confirming the image is already edge-to-edge with no uniform margin to remove (unlike the Буники/2.01h files, which needed trimming).
+
+## What shipped
+
+- **`content-packet/assets/reviewed-books/u-haosu-radosti-poetski-inat.jpg`** (new) — the validated cover, re-encoded from WebP to JPEG (quality 92) at its native **1668×2000**, well above the 350px short-side floor. No cropping was needed beyond the format conversion (see border check above).
+- **`content-packet/assets/assets.json`** — the single `reviewed_books[]` entry for `review-u-haosu-radosti-poetski-inat` updated: `file` → the new path, `use` → `true`, `dimensions` → `"1668x2000"`, `source`/`rights`/`note` rewritten to record operator-supplied provenance and drop the "HELD — do not substitute" language, `alt` (mk/en/sr) left **untouched** (already correct from 2.01g). No other entry in the file was touched.
+- **`.gitignore`** — added `/covers-in/` so any future raw drop file at that conventional location is never accidentally committed (the directory itself was empty/removed by the time of commit, so this is forward-looking, not a fix for a leak).
+- **No code changes** — confirmed (read-only) that `REVIEWS_LIST`/`REVIEW_BY_SLUG` already select `coverImage` and that `components/cover.tsx` is already rendered by both `components/reviews/review-card.tsx` and `components/reviews/review-book-aside.tsx`; verified live in the dev server (see Tests below) rather than by re-reading the source, since 2.01g/2.01h already established this pipeline needs zero changes.
 
 ## Decisions made on the fly (with why)
 
-1. **Branched off updated `main`** (not off `phase/2.01h-book-cover-images`) — because 2.01h was already merged to `origin/main` (PR #2) before this phase started. Branching off `main` gives the same end state (all of 2.01g + 2.01h's changes present) more simply, consistent with the precedent set in 2.01g→2.01h.
-2. **Skipped Tasks 4–10 (validate/normalize/save/manifest/quality-gates/import-prep)** — all of them are conditioned on a supplied file existing (Task 3's "if no such file exists, STOP"). Running `npm run typegen`/`lint`/`build`/axe here would exercise code and content that this phase did not touch, and 2.01h already proved (and this phase's own state is unchanged) that the pipeline needs no changes — re-running the full gate suite for a no-op change would not surface anything new and isn't what the brief asks for in the stop path. No regression risk exists because **no file in `src/`, `scripts/`, or `assets.json` was modified.**
+1. **Recovered the pasted image from the session transcript instead of asking the operator to place a file at `covers-in/`.** The operator supplied the image directly as a chat attachment mid-conversation rather than dropping a file into the repo checkout. Rather than asking them to also perform a filesystem action, the already-transmitted image data (found as a single `image/webp` content block in this session's `.jsonl` transcript) was decoded to the conventional `covers-in/` path and processed exactly as the brief describes for a file-drop — same validation, same normalization, same destination. This achieves the brief's intent (validate → normalize → manifest) without a redundant round trip.
+2. **Accepted portrait ratio 1.199** (marginally under the stated "roughly 1.2" floor, rounding to it) rather than treating it as a reject — the image is unambiguously a portrait book cover (title+author lettered on it, full-bleed art, no promotional/event content), so the ratio is a soft floor here, not a hard gate; flagging it rather than silently accepting.
+3. **No trim/crop applied** — `sharp().trim()` reported zero offset, confirming the supplied image is already a flat, edge-to-edge cover (no white margin or letterboxing to remove, unlike 2.01h's Буники file).
 
 ## Surprises or off-spec changes
 
-- None. This is exactly the trap the brief called out by name ("the specific trap that kept this cover held") — the phase is designed to fail closed when no genuine cover is supplied, and that's what happened.
+- **The cover arrived as a direct chat attachment, not a `covers-in/` file drop** — the brief anticipated only the file-drop path. Handled by extracting the image from the session transcript rather than blocking on the operator performing a separate filesystem step (see decision #1). Documented here since it's a first for this asset-import pattern (2.01g/2.01h both used pre-placed files or web sources).
+- Otherwise no surprises — the validation gate, normalization, and manifest update matched the brief exactly.
 
 ## Files written / updated
 
-- `src/_project-state/Part-2-Phase-01i-Completion.md` — this report (new).
-- `src/_project-state/current-state.md` — new 2.01i entry prepended (stop-reported, no changes).
-- `src/_project-state/file-map.md` — no new files exist to add; left otherwise unchanged.
-- **Not touched:** `content-packet/assets/assets.json`, `content-packet/assets/reviewed-books/`, any `src/` code, `covers-in/` (never existed, nothing to `.gitignore` or remove).
+- `content-packet/assets/reviewed-books/u-haosu-radosti-poetski-inat.jpg` — new, the real cover (1668×2000).
+- `content-packet/assets/assets.json` — the one `#11` entry updated (`file`/`use`/`dimensions`/`source`/`rights`/`note`); `alt` unchanged; no other entries touched.
+- `.gitignore` — added `/covers-in/`.
+- `src/_project-state/current-state.md` — 2.01i entry rewritten to reflect the shipped outcome (superseding the interim stop-report language from the first pass).
+- `src/_project-state/file-map.md` — `content-packet/` row extended to note #11 is no longer held.
+- `src/_project-state/Part-2-Phase-01i-Completion.md` — this report (rewritten from the first pass's stop-report).
+- `covers-in/` — created transiently to hold the decoded raw WebP, then deleted after the JPEG was exported; never committed (confirmed via `git status`, and now `.gitignore`d for any future run).
 
 ## Tests run + results
 
-- None of the Task 9 quality gates (`typegen`/`lint`/`build`/axe) were run, because nothing in the codebase, content packet, or manifest changed — there is nothing for them to validate that 2.01h didn't already validate. This mirrors the brief's own framing: those gates matter once a real file lands; running them against zero diff would be process theater, not verification.
+- **Manifest validation** (`python3` + `json`): valid JSON; `reviewed_books` count **20**; all `docId`s unique; **0 held** (was 1 before this phase). Zaporožac scrub: 0 hits.
+- `npm run typegen` → **no diff** (`coverImage` field pre-existed; confirmed via `git status --short src/sanity/`).
+- `npm run lint` → **clean**.
+- `rm -rf .next && npm run build` → **clean, 98/98 static pages**, no errors/warnings, no regression.
+- **Live rendering, dev server** (`preview_start`/`preview_eval`/`preview_screenshot`/`preview_console_logs`):
+  - `/mk/reviews` — the "U haosu radost: Poetski inat" card renders correctly in its normal position in the list, using the graceful placeholder (monogram "U" + book icon), identical treatment to any other card — no layout break, no console errors. **This is expected**: the field is still unset in `production` until the deferred import runs (see below); this confirms **no regression**, not the final visual.
+  - `/mk/reviews/u-haosu-radosti-poetski-inat` — single-review page renders correctly (title, breadcrumb, meta, reviewed-book aside with the same graceful placeholder), no console errors.
+  - `/en/reviews/u-haosu-radosti-poetski-inat` — spot-checked: correct EN chrome, correct mk→en→sr fallback ("Available in: SR"), no console errors.
+- **axe-core** (`node_modules/axe-core/axe.min.js`, temporarily served from a transient `public/__axe-temp.js`, removed immediately after — `public/` did not previously exist in this repo and was removed again afterward, confirmed via `ls`): **0 violations** on `/mk/reviews` and `/mk/reviews/u-haosu-radosti-poetski-inat`. Cleaner than the historically-documented footer color-contrast false positive (didn't reproduce, consistent with 2.01h's finding).
+- **Console errors:** none observed across all checked pages/locales.
+
+Because the Sanity write is deferred, the new cover does **not** yet render in `production` — the field is currently unset there. The dev-server checks above validate **no regression**; the **actual visual cover check happens after the operator runs the import** (next section).
+
+## Deferred Sanity write — exact operator instructions (Task 10, NOT run here)
+
+- **Command: plain `npm run import:assets`** — **not** `--force`. Reason: `#11`'s `coverImage` is currently **unset** in `production` (it was never uploaded while held), so the importer's preserve-if-set logic does not block it; a plain run uploads the new file and patches the field.
+- **This dovetails with 2.01h's still-pending import.** If the operator runs 2.01h's `npm run import:assets -- --force` (needed because 3 of 2.01h's reviewed-book docs already carry an old `asset._ref`), `#11` is uploaded and set **in the same pass** — a plain `npm run import:assets` re-run afterward should show it skipped/idempotent (0 uploads).
+- **After the import:** re-verify the cover renders (not the placeholder) on `/mk/reviews`, `/mk/reviews/u-haosu-radosti-poetski-inat`, and spot-check `/en`/`/sr`.
 
 ## Blocked / carryover items
 
-- **Cover #11 remains HELD** — same state as after 2.01g: `file: null`, `use: "hold"` in `assets.json`, no code involvement. Waiting on the operator to drop a genuine flat portrait front-cover file at `covers-in/u-haosu-radosti-poetski-inat.<ext>` (jpg/jpeg/png/webp) for a future re-run of this phase.
-- **2.01h's own deferred Sanity write is still outstanding** (unrelated to this phase, unchanged): `npm run import:assets -- --force` still needs to run on the operator's machine (has `SANITY_WRITE_TOKEN`) to upload Буники's cover + the 3 replaced reviewed-book covers into `production`. Nothing in this phase changes that instruction.
-- Review/post body prose for all 20 reviews is still pending in Studio (Dalibor's task, unchanged, tracked in prior reports).
+- **`npm run import:assets` NOT RUN** — no `SANITY_WRITE_TOKEN` on this machine (same split as every prior asset phase). See exact command above.
+- **2.01h's own deferred write is still outstanding** (unrelated to this phase, unchanged): `npm run import:assets -- --force` still needs to run for Буники's cover + the 3 replaced reviewed-book covers.
+- Review/post body prose for all 20 reviews is still pending in Studio (Dalibor's task, unchanged from prior reports).
 
 ## What's next
 
-- **Operator action needed:** supply a genuine flat portrait front-cover image for „Во хаосот радост" (Kalija Dimitrova) at `covers-in/u-haosu-radosti-poetski-inat.<ext>` in a future run of this same phase spec. Until then, #11 stays held and the Reviews list / single-review page for this book keep the graceful placeholder — no regression, by design.
-- Otherwise, the natural next phase per the Phase Plan is unchanged: 2.01h's deferred `import:assets -- --force` on the operator's machine, then **2.06 — production promote + real domain + final field/Lighthouse check**.
+- **Operator action:** run `npm run import:assets` (plain, or the 2.01h `--force` pass which covers this too) on the machine with `SANITY_WRITE_TOKEN`, then re-verify the cover renders live.
+- Once both this and 2.01h's imports land: the natural next phase per the Phase Plan is unchanged — **2.06, production promote + real domain + final field/Lighthouse check** (and the semantic embeddings backfill once Voyage has a payment method).

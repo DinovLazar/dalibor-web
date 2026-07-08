@@ -50,3 +50,6 @@ next-env.d.ts
 # (Phase 1.01 deep-research output; held privately by Lazar. See src/_project-state/current-state.md)
 /compass_artifact_wf-3c935f84-d3ee-4d5c-80ea-16f7b1b72ff0_text_markdown.md
 
+# project: raw operator-supplied cover drops — processed into content-packet/assets/ then discarded
+/covers-in/
+
