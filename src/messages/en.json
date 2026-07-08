@@ -108,7 +108,10 @@
     "backToReviews": "Back to Reviews",
     "breadcrumbLabel": "Breadcrumb",
     "reviewedBook": "Reviewed book",
-    "source": "Source"
+    "source": "Source",
+    "fullTextAtSource": "This review was first published on {source}.",
+    "readFullReview": "Read the full review on {source}",
+    "fullTextPending": "The full text of this review will be published here."
   },
   "blog": {
     "title": "Blog",

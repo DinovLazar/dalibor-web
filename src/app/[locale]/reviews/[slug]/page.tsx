@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
@@ -95,6 +95,10 @@ export default async function ReviewPage({
   const date = formatFullDate(review.publishedAt, locale);
   const body = localizedValue(review.body, locale);
   const topics = resolveTopics(review.topics, locale);
+  // Read the review's source the same way the aside does, for the "read at
+  // source" fallback shown when a review has no body yet (§7.4 empty state).
+  const sourceName = review.source?.sourceName;
+  const sourceUrl = review.source?.sourceUrl;
 
   // Structured data: Article (the review) + BreadcrumbList (Home › Reviews › title).
   const canonical = `${siteUrl}/${locale}/reviews/${slug}`;
@@ -182,11 +186,44 @@ export default async function ReviewPage({
         {/* Body + aside — prose at the reading measure, 18rem aside at lg. */}
         <div className="mt-6 grid gap-12 lg:grid-cols-[minmax(0,42rem)_18rem] lg:items-start">
           <div className="reveal reveal-2 min-w-0">
-            <PortableText
-              value={body}
-              dropCap
-              lang={contentLang(review.body, locale)}
-            />
+            {body ? (
+              <PortableText
+                value={body}
+                dropCap
+                lang={contentLang(review.body, locale)}
+              />
+            ) : (
+              /* No body pasted yet (§7.4 empty state): a quiet "read at source"
+                 note in place of the reading column, never fabricated prose. */
+              <div className="max-w-prose rounded-card border border-border bg-surface p-6">
+                {sourceName ? (
+                  <>
+                    <p className="text-body text-text-muted">
+                      {t("reviews.fullTextAtSource", { source: sourceName })}
+                    </p>
+                    {sourceUrl ? (
+                      <a
+                        href={sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-1.5 text-body font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                      >
+                        {t("reviews.readFullReview", { source: sourceName })}
+                        <ExternalLink
+                          className="size-4"
+                          strokeWidth={1.75}
+                          aria-hidden
+                        />
+                      </a>
+                    ) : null}
+                  </>
+                ) : (
+                  <p className="text-body text-text-muted">
+                    {t("reviews.fullTextPending")}
+                  </p>
+                )}
+              </div>
+            )}
 
             {topics.length ? (
               <ul className="mt-8 flex flex-wrap gap-2">

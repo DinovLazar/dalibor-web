@@ -213,21 +213,21 @@
       "note": "Buybook/V.B.Z. joint edition; 455×700, above the floor (no Znanje/Ljevak fallback needed)."
     },
     {
-      "file": null,
+      "file": "reviewed-books/u-haosu-radosti-poetski-inat.jpg",
       "target": {
         "docId": "review-u-haosu-radosti-poetski-inat",
         "field": "coverImage"
       },
-      "source": "n/a — self-published title; no genuine flat cover exists anywhere accessible online.",
-      "dimensions": null,
-      "rights": "n/a — no cover file saved.",
+      "source": "Operator-supplied (2026-07-08) — the genuine self-published cover (dried-flower photography, title + author lettering), previously unfindable online; supplied directly by the operator.",
+      "dimensions": "1668x2000",
+      "rights": "„Во хаосот радост“, Kalija Dimitrova, self-issued 2023; cover design Kristina Atanasova — treated as author-/designer-supplied.",
       "alt": {
         "mk": "Корица на книгата „Во хаосот радост“ од Калија Димитрова",
         "en": "Cover of the book “Во хаосот радост” by Kalija Dimitrova",
         "sr": "Korica knjige „Во хаосот радост“ — Kalija Dimitrova"
       },
-      "use": "hold",
-      "note": "HELD — self-published („Во хаосот радост“ / „U haosu radost“, Kalija Dimitrova); no genuine flat cover exists anywhere accessible online (settled decision). Do NOT substitute the Meduza landscape banner or any event photo. alt text is pre-filled for when a real cover arrives."
+      "use": true,
+      "note": "Real cover — operator-supplied 2026-07-08, replacing the prior HELD placeholder (self-published title with no findable cover online)."
     },
     {
       "file": "reviewed-books/put-od-crvene-cigle-antipatrijarhalni-diskurz.jpg",

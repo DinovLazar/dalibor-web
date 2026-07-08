@@ -100,7 +100,10 @@
     "backToReviews": "Назад кон критиките",
     "breadcrumbLabel": "Навигациска патека",
     "reviewedBook": "Рецензирана книга",
-    "source": "Извор"
+    "source": "Извор",
+    "fullTextAtSource": "Оваа критика прво беше објавена на {source}.",
+    "readFullReview": "Прочитајте ја целата критика на {source}",
+    "fullTextPending": "Целосниот текст на оваа критика допрва ќе биде објавен овде."
   },
   "blog": {
     "title": "Блог",
