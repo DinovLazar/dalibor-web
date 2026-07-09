@@ -34,6 +34,12 @@
 
 ---
 
+## 2026-07-09 — Phase 2.12 (translate singleton prose)
+
+26. **Ship machine-drafted EN/SR translations of the Author + Book singleton prose now** (`author.roles` / `tagline` / `education` / `bio` and `book.description`), via the surgical `scripts/import-translations.mts` patch. — *Why:* Lazar's explicit instruction — until now these en/sr slots were left empty so the site fell back to Macedonian, which meant EN/SR visitors saw untranslated Macedonian on About / Book / Home. **Qualifies #4** ("he is a translator and can provide all three"): the machine text is an **interim first draft pending Dalibor's own review/approval in the Studio**, not a substitute for his wording. Scope is deliberately limited to the two singletons — **review/book *titles* (the `sr`-only content across Reviews/Blog) are NOT machine-translated here**; that remains Dalibor's to supply. Book `publisher` ("ПНВ Публикации") is a proper noun left in its original script (localizing it would need a schema change) — flagged, not changed.
+
+---
+
 ### Decision-log conventions
 - **Append only.** Never edit or delete a past entry.
 - A **reversed** decision gets a new dated entry that states the change and references the original number (e.g. "Reverses #14: dark mode is now in scope because …").
