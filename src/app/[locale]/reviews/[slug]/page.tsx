@@ -94,6 +94,7 @@ export default async function ReviewPage({
   );
   const date = formatFullDate(review.publishedAt, locale);
   const body = localizedValue(review.body, locale);
+  const summary = localizedValue(review.excerpt, locale);
   const topics = resolveTopics(review.topics, locale);
   // Read the review's source the same way the aside does, for the "read at
   // source" fallback shown when a review has no body yet (§7.4 empty state).
@@ -192,6 +193,50 @@ export default async function ReviewPage({
                 dropCap
                 lang={contentLang(review.body, locale)}
               />
+            ) : summary ? (
+              /* No full body, but Dalibor has written a short summary: render it
+                 as the reading content, with the "first published on …"
+                 attribution beneath. `excerpt` is plain text — split blank lines
+                 into paragraphs. */
+              <div className="max-w-prose">
+                {summary
+                  .split(/\r?\n\s*\r?\n/)
+                  .map((para) => para.trim())
+                  .filter(Boolean)
+                  .map((para, i) => (
+                    <p
+                      key={i}
+                      lang={contentLang(review.excerpt, locale)}
+                      className={`text-body text-text${i > 0 ? " mt-4" : ""}`}
+                    >
+                      {para}
+                    </p>
+                  ))}
+
+                {sourceName ? (
+                  <p className="mt-6 text-meta text-text-muted">
+                    {t("reviews.fullTextAtSource", { source: sourceName })}
+                    {sourceUrl ? (
+                      <>
+                        {" "}
+                        <a
+                          href={sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                        >
+                          {t("reviews.readFullReview", { source: sourceName })}
+                          <ExternalLink
+                            className="size-4"
+                            strokeWidth={1.75}
+                            aria-hidden
+                          />
+                        </a>
+                      </>
+                    ) : null}
+                  </p>
+                ) : null}
+              </div>
             ) : (
               /* No body pasted yet (§7.4 empty state): a quiet "read at source"
                  note in place of the reading column, never fabricated prose. */
