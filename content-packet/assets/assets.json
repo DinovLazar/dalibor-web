@@ -87,11 +87,11 @@
       "rights": "Official published cover of the reviewed book (same edition as the superseded 2.01g source). Used to identify the work under review; replaceable on request.",
       "alt": {
         "mk": "Корица на книгата „Светот што го избрав“ од Калина Малеска",
-        "en": "Cover of the book “Светот што го избрав” by Kalina Maleska",
-        "sr": "Korica knjige „Светот што го избрав“ — Kalina Maleska"
+        "en": "Cover of the book “Svetot što go izbrav” by Kalina Maleska",
+        "sr": "Korica knjige „Svetot što go izbrav“ — Kalina Maleska"
       },
       "use": true,
-      "note": "Macedonian original „Светот што го избрав“ (the edition reviewed); the review displays the Croatian title while the cover shows the Macedonian title — correct. Operator-supplied copy is lower-resolution than the 2.01g web original (384×525 vs 735×1200) but still clears the 350px-width floor and the 1.2-2.0 aspect floor (1.37)."
+      "note": "Macedonian original „Светот што го избрав“ (the edition reviewed); the review displays the Croatian title while the cover shows the Macedonian title — correct. Operator-supplied copy is lower-resolution than the 2.01g web original (384×525 vs 735×1200) but still clears the 350px-width floor and the 1.2-2.0 aspect floor (1.37). — 2.11: en/sr alt captions transliterated to Latin (Svetot što go izbrav) so the caption is single-script; mk slot unchanged; title not translated, per the caption convention."
     },
     {
       "file": "reviewed-books/putovanja-slijepih-mapa-fascinantnog-zaboravljenog-i-marginalnog.jpg",
@@ -223,11 +223,11 @@
       "rights": "„Во хаосот радост“, Kalija Dimitrova, self-issued 2023; cover design Kristina Atanasova — treated as author-/designer-supplied.",
       "alt": {
         "mk": "Корица на книгата „Во хаосот радост“ од Калија Димитрова",
-        "en": "Cover of the book “Во хаосот радост” by Kalija Dimitrova",
-        "sr": "Korica knjige „Во хаосот радост“ — Kalija Dimitrova"
+        "en": "Cover of the book “Vo haosot radost” by Kalija Dimitrova",
+        "sr": "Korica knjige „Vo haosot radost“ — Kalija Dimitrova"
       },
       "use": true,
-      "note": "Real cover — operator-supplied 2026-07-08, replacing the prior HELD placeholder (self-published title with no findable cover online)."
+      "note": "Real cover — operator-supplied 2026-07-08, replacing the prior HELD placeholder (self-published title with no findable cover online). — 2.11: en/sr alt captions transliterated to Latin (Vo haosot radost) so the caption is single-script; mk slot unchanged; title not translated, per the caption convention."
     },
     {
       "file": "reviewed-books/put-od-crvene-cigle-antipatrijarhalni-diskurz.jpg",
@@ -308,11 +308,11 @@
       "rights": "Official published cover of the reviewed book, via ILI-ILI (Skopje). Used to identify the work under review; replaceable on request.",
       "alt": {
         "mk": "Корица на книгата „Вечерен автобус“ од Стефан Алијевиќ",
-        "en": "Cover of the book “Вечерен автобус” by Stefan Alijević",
-        "sr": "Korica knjige „Вечерен автобус“ — Stefan Alijević"
+        "en": "Cover of the book “Večeren avtobus” by Stefan Alijević",
+        "sr": "Korica knjige „Večeren avtobus“ — Stefan Alijević"
       },
       "use": true,
-      "note": "Macedonian original „Вечерен автобус“ (the edition reviewed); the review displays the Croatian title while the cover shows the Macedonian title — correct. Retrieved with the host IP pinned (curl could not resolve iliili.com.mk from this machine). 750×1200."
+      "note": "Macedonian original „Вечерен автобус“ (the edition reviewed); the review displays the Croatian title while the cover shows the Macedonian title — correct. Retrieved with the host IP pinned (curl could not resolve iliili.com.mk from this machine). 750×1200. — 2.11: en/sr alt captions transliterated to Latin (Večeren avtobus) so the caption is single-script; mk slot unchanged; title not translated, per the caption convention."
     },
     {
       "file": "reviewed-books/do-boljeg-jucer-mnogo-mogucih-tumacenja.jpg",
