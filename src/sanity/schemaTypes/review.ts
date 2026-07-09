@@ -49,10 +49,14 @@ export const review = defineType({
     }),
     // --- The review itself ---
     defineField({
-      name: "excerpt",
-      title: "Excerpt",
+      name: "excerpt", // ← unchanged (stored id referenced by query, importer, list card, TypeGen)
+      title: "Summary",
       type: "localizedText",
-      description: "Short summary used on the list / cards.",
+      description:
+        "A short summary of the review, in your own words — about 2–4 sentences. " +
+        "Shown on the review's own page and on the Reviews list cards. Please don't " +
+        "paste text from the original outlet; just summarize it. Macedonian is " +
+        "optional — the site falls back mk→en→sr.",
     }),
     defineField({
       name: "body",
