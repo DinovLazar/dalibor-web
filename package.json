@@ -12,6 +12,7 @@
     "test:semantic": "node --conditions=react-server --import tsx --env-file=.env.local scripts/test-semantic-ranking.mts",
     "import:content": "node --conditions=react-server --import tsx --env-file=.env.local scripts/import-content.mts",
     "import:assets": "node --conditions=react-server --import tsx --env-file=.env.local scripts/import-assets.mts",
+    "import:translations": "node --conditions=react-server --import tsx --env-file=.env.local scripts/import-translations.mts",
     "make:favicon": "node --import tsx scripts/make-favicon.mts"
   },
   "dependencies": {
