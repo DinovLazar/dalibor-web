@@ -29,7 +29,7 @@ export async function SiteHeader() {
         {/* Builder credit (§6.3) — a muted lead-in with the studio name as the only
             link. Shown only at xl, where the shell has room beside the widest
             (Macedonian) nav; on smaller screens it lives in the mobile menu. */}
-        <p className="hidden text-[0.8125rem] leading-tight text-text-muted xl:inline-flex xl:items-center xl:gap-1">
+        <p className="hidden shrink-0 whitespace-nowrap text-[0.8125rem] leading-tight text-text-muted xl:inline-flex xl:items-center xl:gap-1">
           {t("builtBy")}
           <a
             href={siteLinks.vertex}
