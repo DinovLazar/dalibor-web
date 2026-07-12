@@ -35,6 +35,22 @@ type WebhookPayload = {
 };
 
 /**
+ * Read the document slug from the untrusted payload, accepting BOTH shapes it
+ * can arrive in: the flattened string a GROQ webhook produces (projection
+ * `"slug": slug.current`) OR the raw `{current}` object a plain document webhook
+ * ships when it sends the whole document. Either way we get the per-slug tag
+ * right; anything else → "" (revalidate only the aggregate surfaces).
+ */
+function readSlug(value: unknown): string {
+  if (typeof value === "string") return value;
+  if (value && typeof value === "object") {
+    const current = (value as {current?: unknown}).current;
+    if (typeof current === "string") return current;
+  }
+  return "";
+}
+
+/**
  * Immediate expiration. Sanity is an external system calling this Route Handler
  * and needs the data to expire NOW (not lazily on a later visit), so we pass the
  * `{expire: 0}` cache-life profile — the documented pattern for webhook-driven
@@ -61,7 +77,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   const type = typeof payload._type === "string" ? payload._type : "";
   const id = typeof payload._id === "string" ? payload._id : "";
-  const slug = typeof payload.slug === "string" ? payload.slug : "";
+  const slug = readSlug(payload.slug);
 
   // Defensive draft guard: the webhook filter (`!(_id in path("drafts.**"))`)
   // already excludes drafts, but never trust it — a `drafts.*` id must never

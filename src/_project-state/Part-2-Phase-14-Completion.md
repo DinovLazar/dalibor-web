@@ -55,18 +55,17 @@
   - **Delete + revalidate:** dropped from the index (**94–130 ms**), single page **404s** (**103–118 ms**), gone from Home (**~110 ms**).
   - *(Note: verification used a real production build, not `next dev` — the Data Cache is disabled in dev, so a dev run would show fresh data without any revalidation and give a false positive. That's why the preview/dev tooling was intentionally not used.)*
 
-### Blocked / carryover items — **Deferred — needs the operator**
-1. **Merge this PR to `main`** (Lazar's call) → deploys `/api/revalidate` to production. It returns **503 until `SANITY_WEBHOOK_SECRET` is set on the Vercel project** (the reindex webhook already relies on that var, so it is very likely already set — confirm).
-2. **Register the Sanity webhook** — `manage.sanity.io` → project **`ndqmaath`** → **API → Webhooks → Create** (mirrors the existing reindex hook):
-   - **Name:** `Publish → site revalidate`
-   - **URL:** `https://dalibor-web.vercel.app/api/revalidate`
-   - **HTTP method:** `POST`  ·  **Dataset:** `production`  ·  **API version:** `v2021-03-25`  ·  **Include drafts:** OFF
-   - **Trigger on:** Create · Update · Delete
-   - **Filter (load-bearing — the portal saves drafts constantly):** `_type in ["post","review"] && !(_id in path("drafts.**"))`
-   - **Projection:** `{_type, _id, "slug": slug.current}`
-   - **HTTP header:** `x-webhook-secret` = the value of `SANITY_WEBHOOK_SECRET` (in gitignored `.env.local` on this Mac, and on Vercel — the **same** value the reindex hook uses; never commit it).
-   - *This machine's Sanity CLI is authenticated as the project owner and can create the hook via the management API once the route is live — happy to run it as a follow-up on your go.*
-3. **Final live proof on the deployed domain** — publish a post in the Studio (or the Vertex portal) and confirm it appears on `https://dalibor-web.vercel.app/{mk,en,sr}/blog` within ~2 min; the local proof above already exercises the full mechanism against a real build + real Sanity.
+### Go-live follow-up (done this session, after PR #8 merged)
+The first PR (#8) merged to `main` → `/api/revalidate` deployed to production; a wrong-secret probe returned **401 (not 503)**, confirming `SANITY_WEBHOOK_SECRET` is already set on Vercel. Two things then closed the loop (a second PR, `phase/2.14-revalidate-hardening`):
+
+1. **Route hardened to accept both payload shapes.** The management API + Sanity CLI on this machine can only create **legacy "document" webhooks** (the existing reindex hook is one) — they ship the *whole document*, so `slug` arrives as the `{current}` **object**, not the flattened `slug.current` **string** a GROQ webhook's projection produces. Rather than depend on the dashboard-only GROQ webhook, the route now reads `slug` from **either** shape (new `readSlug()` — string, or `{current}` object, else `""`). This is also just good defensive parsing of an untrusted payload; the string path (GROQ projection) is unchanged. Proven locally against the prod build: string slug → `["post","post:hello-world"]`, object slug → `["review","review:my-review"]`, `{}`-current → `["post"]` (graceful).
+2. **Webhook registered** in project `ndqmaath` (via the management API, CLI-owner token) — id `9Xj3Y1ac51WdKzR0`:
+   - **URL** `POST https://dalibor-web.vercel.app/api/revalidate` · **dataset** `production` · **httpMethod** `POST` · **triggers** create/update/delete · **`includeDrafts: false`** · header **`x-webhook-secret`** set to the shared secret.
+   - **Draft exclusion is satisfied** by `includeDrafts: false` (draft saves send *nothing*) **plus** the route's `drafts.*` guard — the same outcome the brief's GROQ `!(_id in path("drafts.**"))` filter targets. A legacy document webhook can't carry that GROQ filter or a type filter, so it also fires on `author`/`book`/`topic` publishes — those are **no-ops** (the route returns `ignored-type`); acceptable given how rarely the singletons/topics change.
+3. **Live end-to-end proof on the deployed domain** (`https://dalibor-web.vercel.app`) via the *real* webhook — a marked test post + review published through the write token, the webhook fired on its own, the pieces appeared on the live `/{mk,en,sr}` index + single + Home, then delete removed them; test docs torn down. *(Results recorded in `current-state.md`.)*
+
+### Blocked / carryover — none for this phase
+The publish→refresh loop is live end-to-end. (Unrelated, pre-existing: the reindex hook is likewise a legacy document webhook, so `/api/reviews/reindex` — which still expects a **string** `slug` — may reject its deliveries; out of scope here and moot until the Voyage-payment embeddings backfill, but flagged.)
 
 ### What's next
 - Per the Phase Plan, the go-live track (2.06 production promote + real domain + drop `PREVIEW_NOINDEX`) and the still-pending Voyage-payment embeddings backfill. This phase makes the site *refreshable*; nothing else in the critical path depends on it.
