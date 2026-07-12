@@ -11,9 +11,10 @@ import { ReviewsList } from "@/components/reviews/reviews-list";
 import { TopicFilter } from "@/components/topic-filter";
 import { routing } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo/metadata";
-import { client } from "@/sanity/lib/client";
+import { client, clientFresh } from "@/sanity/lib/client";
 import { localizedValue } from "@/sanity/lib/localize";
 import { REVIEWS_LIST_QUERY, TOPICS_QUERY } from "@/sanity/lib/queries";
+import { REVIEW_TAG } from "@/sanity/lib/tags";
 
 export async function generateMetadata({
   params,
@@ -56,7 +57,11 @@ export default async function ReviewsPage({
   const t = await getTranslations();
 
   const [reviews, topics] = await Promise.all([
-    client.fetch(REVIEWS_LIST_QUERY),
+    clientFresh.fetch(
+      REVIEWS_LIST_QUERY,
+      {},
+      { cache: "force-cache", next: { tags: [REVIEW_TAG] } },
+    ),
     client.fetch(TOPICS_QUERY),
   ]);
 

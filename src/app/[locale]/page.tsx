@@ -11,13 +11,14 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { routing } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { personJsonLd } from "@/lib/seo/jsonld";
-import { client } from "@/sanity/lib/client";
+import { client, clientFresh } from "@/sanity/lib/client";
 import {
   HOME_FEATURED_BOOK_QUERY,
   HOME_HERO_QUERY,
   HOME_POSTS_QUERY,
   HOME_REVIEWS_QUERY,
 } from "@/sanity/lib/queries";
+import { POST_TAG, REVIEW_TAG } from "@/sanity/lib/tags";
 
 /** Home metadata: the title is used verbatim (absolute) — it already carries the
  *  full brand + role line, so it is not wrapped by the layout's title template. */
@@ -53,11 +54,21 @@ export default async function HomePage({
   }
   setRequestLocale(locale);
 
+  // The two content grids carry cache tags so a publish can refresh them via
+  // the revalidate webhook (Phase 2.14); hero + book stay plain (out of scope).
   const [hero, book, reviews, posts] = await Promise.all([
     client.fetch(HOME_HERO_QUERY),
     client.fetch(HOME_FEATURED_BOOK_QUERY),
-    client.fetch(HOME_REVIEWS_QUERY),
-    client.fetch(HOME_POSTS_QUERY),
+    clientFresh.fetch(
+      HOME_REVIEWS_QUERY,
+      {},
+      { cache: "force-cache", next: { tags: [REVIEW_TAG] } },
+    ),
+    clientFresh.fetch(
+      HOME_POSTS_QUERY,
+      {},
+      { cache: "force-cache", next: { tags: [POST_TAG] } },
+    ),
   ]);
 
   return (

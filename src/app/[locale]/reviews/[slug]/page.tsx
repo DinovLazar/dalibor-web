@@ -13,7 +13,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { ReviewBookAside } from "@/components/reviews/review-book-aside";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
-import { client } from "@/sanity/lib/client";
+import { client, clientFresh } from "@/sanity/lib/client";
 import { siteUrl } from "@/sanity/env";
 import { urlForImage } from "@/sanity/lib/image";
 import {
@@ -25,12 +25,17 @@ import {
   resolvedLanguage,
 } from "@/sanity/lib/localize";
 import { REVIEW_BY_SLUG_QUERY, REVIEW_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { reviewSlugTag } from "@/sanity/lib/tags";
 import { formatFullDate } from "@/lib/datetime";
 
 /** One review by slug, memoized per request so generateMetadata + the page
  *  component share a single fetch instead of hitting Sanity twice. */
 const getReview = cache((slug: string) =>
-  client.fetch(REVIEW_BY_SLUG_QUERY, { slug }),
+  clientFresh.fetch(
+    REVIEW_BY_SLUG_QUERY,
+    { slug },
+    { cache: "force-cache", next: { tags: [reviewSlugTag(slug)] } },
+  ),
 );
 
 /**

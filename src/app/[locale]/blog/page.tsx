@@ -11,9 +11,10 @@ import { PostCard } from "@/components/blog/post-card";
 import { TopicFilter } from "@/components/topic-filter";
 import { routing } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo/metadata";
-import { client } from "@/sanity/lib/client";
+import { client, clientFresh } from "@/sanity/lib/client";
 import { localizedValue } from "@/sanity/lib/localize";
 import { POSTS_LIST_QUERY, TOPICS_QUERY } from "@/sanity/lib/queries";
+import { POST_TAG } from "@/sanity/lib/tags";
 
 export async function generateMetadata({
   params,
@@ -54,7 +55,11 @@ export default async function BlogPage({
   const t = await getTranslations();
 
   const [posts, topics] = await Promise.all([
-    client.fetch(POSTS_LIST_QUERY),
+    clientFresh.fetch(
+      POSTS_LIST_QUERY,
+      {},
+      { cache: "force-cache", next: { tags: [POST_TAG] } },
+    ),
     client.fetch(TOPICS_QUERY),
   ]);
 
