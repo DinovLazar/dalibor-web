@@ -40,6 +40,14 @@
 
 ---
 
+## 2026-07-12 — Phase 2.14 (publish → live-site refresh)
+
+27. **Reuse the one `SANITY_WEBHOOK_SECRET` to guard both Sanity → site webhook routes** (`/api/reviews/reindex` and the new `/api/revalidate`), rather than minting a second secret. — *Why:* both are same-origin Sanity webhooks with the same trust boundary; one secret means one value to set on Vercel and to paste into two webhooks, and one rotation covers both. The reindex route's code is byte-unchanged.
+
+28. **Publish-refresh mechanism = Next cache tags + `revalidateTag(tag, {expire: 0})`, fed by a dedicated `useCdn: false` read client (`clientFresh`); the site stays static-by-default.** — *Why:* the canonical Sanity + Next.js App Router recipe. Verification against a real production build proved that with `useCdn: true` the post-revalidate re-fetch reads Sanity's API CDN, which lags per-query and cached a stale render (deletes lingered ~1–2 min, a Home grid never updated) — so the revalidatable blog/review/Home reads go through a CDN-bypassing client, giving deterministic ~sub-second refresh. Kept surgical (a *second* client, not a global flip) so the semantic-search + reindex pipeline stays byte-identical; `{expire: 0}` (not `'max'`) because a webhook needs the *next* visitor to see fresh content, not lazy stale-while-revalidate. The route makes the site *refreshable*, not dynamic.
+
+---
+
 ### Decision-log conventions
 - **Append only.** Never edit or delete a past entry.
 - A **reversed** decision gets a new dated entry that states the change and references the original number (e.g. "Reverses #14: dark mode is now in scope because …").

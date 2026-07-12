@@ -149,6 +149,13 @@ than a blog post, because it also records details about the book you reviewed.
 - To take something off the public site, use the **⋯** menu and choose
   **Unpublish** (it stays here as a draft, just not on the website).
 
+> **How soon does it show up?** After you click **Publish**, your post appears on
+> the live website within a **minute or two** — you don't need to do anything
+> else, and nobody has to "rebuild" the site. It's the same when you **edit** or
+> **unpublish** something: the website quietly catches up within a minute or two.
+> This also covers posts written in the **Vertex blog portal** — publishing there
+> refreshes this website in exactly the same way.
+
 > **Heads-up:** some content may already be waiting for you here as **drafts**
 > (for example, reviews that were imported for you to check). They won't be on
 > the live site until you review them and click **Publish** — so you're always in

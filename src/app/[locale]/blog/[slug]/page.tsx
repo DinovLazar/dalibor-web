@@ -12,7 +12,7 @@ import { PortableText } from "@/components/portable-text";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
-import { client } from "@/sanity/lib/client";
+import { client, clientFresh } from "@/sanity/lib/client";
 import { siteUrl } from "@/sanity/env";
 import { urlForImage } from "@/sanity/lib/image";
 import {
@@ -24,6 +24,7 @@ import {
   resolvedLanguage,
 } from "@/sanity/lib/localize";
 import { POST_BY_SLUG_QUERY, POST_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { postSlugTag } from "@/sanity/lib/tags";
 import { formatFullDate } from "@/lib/datetime";
 
 /**
@@ -39,7 +40,11 @@ import { formatFullDate } from "@/lib/datetime";
 /** One post by slug, memoized per request so generateMetadata + the page
  *  component share a single fetch instead of hitting Sanity twice. */
 const getPost = cache((slug: string) =>
-  client.fetch(POST_BY_SLUG_QUERY, { slug }),
+  clientFresh.fetch(
+    POST_BY_SLUG_QUERY,
+    { slug },
+    { cache: "force-cache", next: { tags: [postSlugTag(slug)] } },
+  ),
 );
 
 export async function generateStaticParams() {
