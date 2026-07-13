@@ -1,10 +1,10 @@
 import { getTranslations } from "next-intl/server";
 
-import { Link } from "@/i18n/navigation";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Container } from "@/components/layout/container";
 import { MobileMenu } from "@/components/layout/mobile-menu";
 import { PrimaryNav } from "@/components/layout/primary-nav";
+import { Wordmark } from "@/components/layout/wordmark";
 import { siteLinks } from "@/lib/site-links";
 
 /**
@@ -19,12 +19,7 @@ export async function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-[rgb(244_237_225_/_0.85)] backdrop-blur-[8px]">
       <Container className="flex h-14 items-center gap-6 sm:h-16">
-        <Link
-          href="/"
-          className="shrink-0 whitespace-nowrap font-display text-[1.25rem] font-semibold text-text outline-none focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-        >
-          {t("wordmark")}
-        </Link>
+        <Wordmark text={t("wordmark")} />
 
         {/* Builder credit (§6.3) — a muted lead-in with the studio name as the only
             link. Shown only at xl, where the shell has room beside the widest

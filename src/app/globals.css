@@ -130,6 +130,23 @@ h1,h2,h3,h4,.font-display { font-family: var(--font-display); }
 .reveal-3 { animation-delay: 160ms; }
 .reveal-4 { animation-delay: 240ms; }
 
+/* Wordmark foil glint (§6.3, Phase 2.15) — a single caramel→gold sweep on hover /
+   keyboard focus of the header wordmark. `--wordmark-shine-x` is a registered
+   custom property (so @keyframes can interpolate it) positioning a diagonal
+   highlight band clipped to the glyphs; it starts, and — with the default
+   `animation-fill-mode: none` — resets, off-screen at 100%, sweeping once to -100%.
+   The reduced-motion block below disables the animation; the wordmark additionally
+   drops the whole overlay under `useReducedMotion()`. */
+@property --wordmark-shine-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@keyframes wordmark-shine {
+  from { --wordmark-shine-x: 100%; }
+  to   { --wordmark-shine-x: -100%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
