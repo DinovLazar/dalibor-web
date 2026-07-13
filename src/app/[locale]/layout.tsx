@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Lora, Playfair_Display } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Analytics } from "@vercel/analytics/next";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -111,6 +112,7 @@ export default async function LocaleLayout({
           </main>
           <SiteFooter />
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
