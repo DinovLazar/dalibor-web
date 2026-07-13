@@ -29,7 +29,9 @@ export async function FeaturedBook({
   const t = await getTranslations("home");
   const title = localizedValue(book.title, locale);
   const blurb = localizedValue(book.tagline, locale);
-  const sub = [book.publisher, book.publicationYear].filter(Boolean).join(" · ");
+  const sub = [localizedValue(book.publisher, locale), book.publicationYear]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <section className={cn("border-y border-border bg-surface", className)}>

@@ -139,6 +139,7 @@ export default async function AboutPage({
             translations; renders nothing when the array is empty. */}
         <Translations
           translations={author?.translations}
+          locale={locale}
           className="mt-14 reveal reveal-3"
         />
 

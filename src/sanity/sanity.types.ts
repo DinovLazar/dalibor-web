@@ -102,7 +102,7 @@ export type Author = {
   bio?: LocalizedBlockContent;
   education?: LocalizedString;
   translations?: Array<{
-    title?: string;
+    title?: LocalizedString;
     originalAuthor?: string;
     fromLang?: "mk" | "sr" | "bg" | "hr" | "en" | "fr";
     toLang?: "mk" | "sr" | "bg" | "hr" | "en" | "fr";
@@ -132,7 +132,7 @@ export type Book = {
   coverImage?: LocalizedImage;
   description?: LocalizedBlockContent;
   genre?: LocalizedString;
-  publisher?: string;
+  publisher?: LocalizedString;
   publicationYear?: number;
   isbn?: string;
   purchaseLinks?: Array<{
@@ -482,7 +482,7 @@ export type BOOK_QUERY_RESULT = {
     _type: "purchaseLink";
     _key: string;
   }> | null;
-  publisher: string | null;
+  publisher: LocalizedString | null;
   publicationYear: number | null;
   authorName: LocalizedString | null;
 } | null;
@@ -499,7 +499,7 @@ export type ABOUT_QUERY_RESULT = {
   photo: LocalizedImage | null;
   education: LocalizedString | null;
   translations: Array<{
-    title: string | null;
+    title: LocalizedString | null;
     originalAuthor: string | null;
     fromLang: "bg" | "en" | "fr" | "hr" | "mk" | "sr" | null;
     toLang: "bg" | "en" | "fr" | "hr" | "mk" | "sr" | null;
@@ -546,7 +546,7 @@ export type HOME_FEATURED_BOOK_QUERY_RESULT = {
   title: LocalizedString | null;
   tagline: LocalizedString | null;
   coverImage: LocalizedImage | null;
-  publisher: string | null;
+  publisher: LocalizedString | null;
   publicationYear: number | null;
 } | null;
 

@@ -557,7 +557,8 @@
               "title": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "string"
+                  "type": "inline",
+                  "name": "localizedString"
                 },
                 "optional": true
               },
@@ -823,7 +824,8 @@
       "publisher": {
         "type": "objectAttribute",
         "value": {
-          "type": "string"
+          "type": "inline",
+          "name": "localizedString"
         },
         "optional": true
       },

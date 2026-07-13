@@ -1,5 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
+import { localizedValue, type LocalizedField } from "@/sanity/lib/localize";
+
 /**
  * About » "Translations" block (Phase 2.01b). A quiet Style A section that lists
  * Dalibor's published literary translations from `author.translations[]`.
@@ -15,7 +17,7 @@ import { getTranslations } from "next-intl/server";
 type TranslationLang = "bg" | "en" | "fr" | "hr" | "mk" | "sr";
 
 export interface TranslationEntry {
-  title: string | null;
+  title: LocalizedField<string>;
   originalAuthor: string | null;
   fromLang: TranslationLang | null;
   toLang: TranslationLang | null;
@@ -26,12 +28,16 @@ export interface TranslationEntry {
 
 export async function Translations({
   translations,
+  locale,
   className,
 }: {
   translations: ReadonlyArray<TranslationEntry> | null | undefined;
+  locale: string;
   className?: string;
 }) {
-  const items = (translations ?? []).filter((t) => t.title);
+  const items = (translations ?? [])
+    .map((t) => ({ ...t, resolvedTitle: localizedValue(t.title, locale) }))
+    .filter((t) => t.resolvedTitle);
   if (items.length === 0) return null;
 
   const t = await getTranslations("about.translations");
@@ -64,10 +70,12 @@ export async function Translations({
 
           return (
             <li
-              key={`${item.title}-${i}`}
+              key={`${item.resolvedTitle}-${i}`}
               className="border-b border-border py-4"
             >
-              <p className="font-display text-h4 text-text">{item.title}</p>
+              <p className="font-display text-h4 text-text">
+                {item.resolvedTitle}
+              </p>
               {meta.length > 0 ? (
                 <p className="mt-1 text-meta text-text-muted">
                   {meta.join(" · ")}

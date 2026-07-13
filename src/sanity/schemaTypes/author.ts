@@ -73,8 +73,9 @@ export const author = defineType({
       type: "array",
       description:
         "Dalibor's published literary translations — rendered in the About page " +
-        "\"Translations\" block. Titles are proper nouns: write them exactly as " +
-        "published (not localized).",
+        "\"Translations\" block. Give the title as published (mk/sr keep the " +
+        "original); the English slot may add a gloss, e.g. " +
+        "\"Između (In Between)\".",
       of: [
         defineArrayMember({
           type: "object",
@@ -83,8 +84,16 @@ export const author = defineType({
             defineField({
               name: "title",
               title: "Title (as published)",
-              type: "string",
-              validation: (Rule) => Rule.required(),
+              type: "localizedString",
+              validation: (Rule) =>
+                Rule.custom((value) => {
+                  const v = value as
+                    | {mk?: string; en?: string; sr?: string}
+                    | undefined;
+                  return v?.mk?.trim() || v?.en?.trim() || v?.sr?.trim()
+                    ? true
+                    : "A title (in at least one language) is required.";
+                }),
             }),
             defineField({
               name: "originalAuthor",

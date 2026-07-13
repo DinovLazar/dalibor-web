@@ -6,7 +6,7 @@ import { routing } from "./i18n/routing";
 /**
  * Next.js 16 renamed the Middleware file convention to `proxy.ts`. next-intl's
  * request handler is filename-agnostic, so `createMiddleware` mounts here
- * unchanged and handles the `/` → `/mk` redirect plus all locale routing.
+ * unchanged and handles the `/` → `/en` redirect plus all locale routing.
  */
 const handleI18nRouting = createMiddleware(routing);
 

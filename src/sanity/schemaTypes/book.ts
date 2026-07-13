@@ -24,7 +24,14 @@ export const book = defineType({
       description:
         "Editable — do not hard-code \"novel\" vs \"story collection\" (sources disagree).",
     }),
-    defineField({name: "publisher", title: "Publisher", type: "string"}),
+    defineField({
+      name: "publisher",
+      title: "Publisher",
+      type: "localizedString",
+      description:
+        "The publisher's name per language — Cyrillic for Macedonian, Latin for " +
+        "English/Serbian. Falls back mk→en→sr like every other localized field.",
+    }),
     defineField({
       name: "publicationYear",
       title: "Publication year",

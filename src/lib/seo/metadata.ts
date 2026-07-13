@@ -97,7 +97,7 @@ export async function buildPageMetadata(
 
   const canonical = urlFor(locale);
 
-  // hreflang alternates: one per locale plus x-default → the default (mk) URL.
+  // hreflang alternates: one per locale plus x-default → the default (en) URL.
   const languages: Record<string, string> = {
     "x-default": urlFor(routing.defaultLocale),
   };

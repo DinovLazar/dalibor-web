@@ -7,7 +7,8 @@ import { POST_SLUGS_QUERY, REVIEW_SLUGS_QUERY } from "@/sanity/lib/queries";
 
 /**
  * Localized sitemap (Phase 1.12). Emits one `<url>` entry per (path × locale),
- * each carrying the full hreflang `languages` map (mk/en/sr + x-default → mk) so
+ * each carrying the full hreflang `languages` map (mk/en/sr + x-default → the
+ * default locale, `en`) so
  * crawlers see every translation of every page. Paths are locale-relative; the
  * absolute URL for a path+locale is `${siteUrl}/${loc}${path}` (home = `${siteUrl}/${loc}`),
  * never with a trailing slash. Dynamic review/blog slugs are fetched from Sanity
@@ -26,7 +27,7 @@ function entriesForPath(path: string): MetadataRoute.Sitemap {
     mk: urlFor(path, "mk"),
     en: urlFor(path, "en"),
     sr: urlFor(path, "sr"),
-    "x-default": urlFor(path, "mk"),
+    "x-default": urlFor(path, routing.defaultLocale),
   };
 
   return routing.locales.map((loc) => ({

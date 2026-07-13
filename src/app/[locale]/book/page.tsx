@@ -76,7 +76,9 @@ export default async function BookPage({
 
   const title = localizedValue(book.title, locale) ?? t("book.title");
   // Neutral publication line — only rendered when at least one part exists.
-  const pub = [book.publisher, book.publicationYear].filter(Boolean).join(" · ");
+  const pub = [localizedValue(book.publisher, locale), book.publicationYear]
+    .filter(Boolean)
+    .join(" · ");
   // Purchase links are optional and may be url-less; keep only the actionable ones.
   const links = book.purchaseLinks?.filter((l) => l.url) ?? [];
 
@@ -86,7 +88,7 @@ export default async function BookPage({
   const bookSchema = bookJsonLd({
     name: title,
     url: `${siteUrl}/${locale}/book`,
-    publisher: book.publisher ?? undefined,
+    publisher: localizedValue(book.publisher, locale) ?? undefined,
     datePublished: book.publicationYear
       ? String(book.publicationYear)
       : undefined,
