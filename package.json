@@ -21,6 +21,7 @@
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^5.30.0",
     "@supabase/supabase-js": "^2.107.0",
+    "@vercel/analytics": "^2.0.1",
     "ai": "^6.0.197",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -45,8 +46,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
-    "sharp": "0.34.5",
     "shadcn": "^4.10.0",
+    "sharp": "0.34.5",
     "tailwindcss": "^4",
     "tsx": "^4.22.4",
     "typescript": "^5"
