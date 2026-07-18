@@ -12,7 +12,7 @@ import { PortableText } from "@/components/portable-text";
 import { JsonLd } from "@/components/seo/json-ld";
 import { ReviewBookAside } from "@/components/reviews/review-book-aside";
 import { buildPageMetadata } from "@/lib/seo/metadata";
-import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { breadcrumbJsonLd, reviewJsonLd } from "@/lib/seo/jsonld";
 import { client, clientFresh } from "@/sanity/lib/client";
 import { siteUrl } from "@/sanity/env";
 import { urlForImage } from "@/sanity/lib/image";
@@ -106,19 +106,36 @@ export default async function ReviewPage({
   const sourceName = review.source?.sourceName;
   const sourceUrl = review.source?.sourceUrl;
 
-  // Structured data: Article (the review) + BreadcrumbList (Home › Reviews › title).
+  // Structured data: Review (the review, with the reviewed book as `itemReviewed`)
+  // + BreadcrumbList (Home › Reviews › title). `Review` replaces the earlier
+  // generic `Article`: it states that this text assesses a specific book, which
+  // is both more accurate and what lets answer engines connect Dalibor to the
+  // titles he has written about.
   const canonical = `${siteUrl}/${locale}/reviews/${slug}`;
-  const articleSchema = articleJsonLd({
-    type: "Article",
+  const coverImage = review.coverImage?.asset
+    ? urlForImage(review.coverImage).width(1200).url()
+    : undefined;
+  const reviewedBookTitle = localizedValue(review.bookTitle, locale) ?? "";
+  const reviewSchema = reviewJsonLd({
     headline: title,
     url: canonical,
     datePublished: review.publishedAt ?? undefined,
     dateModified: review._updatedAt ?? undefined,
     inLanguage: resolvedLanguage(review.body, locale) ?? locale,
-    image: review.coverImage?.asset
-      ? urlForImage(review.coverImage).width(1200).url()
-      : undefined,
-    description: localizedValue(review.excerpt, locale) ?? undefined,
+    image: coverImage,
+    description: summary ?? undefined,
+    book: {
+      // Fall back to the review's own title if the book title is missing, so
+      // `itemReviewed` is never emitted nameless.
+      name: reviewedBookTitle || title,
+      author: review.bookAuthor ?? undefined,
+      publisher: review.publisher ?? undefined,
+      datePublished:
+        review.publicationYear != null
+          ? String(review.publicationYear)
+          : undefined,
+      image: coverImage,
+    },
   });
   const breadcrumbSchema = breadcrumbJsonLd([
     { name: t("nav.home"), url: `${siteUrl}/${locale}` },
@@ -128,7 +145,7 @@ export default async function ReviewPage({
 
   return (
     <Section>
-      <JsonLd data={[articleSchema, breadcrumbSchema]} />
+      <JsonLd data={[reviewSchema, breadcrumbSchema]} />
       <div className="mx-auto w-full max-w-[63rem] px-5 sm:px-8 lg:px-12">
         {/* Head — back link, breadcrumb, title, §6.16 double rule, date / note. */}
         <div className="reveal max-w-prose">

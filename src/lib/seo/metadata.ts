@@ -73,6 +73,30 @@ type MetadataTranslatorFactory = (opts: {
 const getMetadataTranslations =
   getTranslations as unknown as MetadataTranslatorFactory;
 
+/**
+ * Read the localized SEO copy for a page out of the `metadata` namespace.
+ *
+ * Exported so pages that need the same strings for something *other* than
+ * `<head>` metadata — currently the WebSite JSON-LD on Home — can reuse them
+ * instead of re-implementing the typed-translator bridge above or hardcoding an
+ * English copy that would drift from the real one.
+ */
+export async function getMetadataCopy(
+  localeInput: string,
+  page: string,
+): Promise<{ siteName: string; title: string; description: string }> {
+  const locale = hasLocale(routing.locales, localeInput)
+    ? localeInput
+    : routing.defaultLocale;
+  const t = await getMetadataTranslations({ locale, namespace: "metadata" });
+
+  return {
+    siteName: t("siteName"),
+    title: t(`${page}.title`),
+    description: t(`${page}.description`),
+  };
+}
+
 export async function buildPageMetadata(
   opts: BuildPageMetadataOptions,
 ): Promise<Metadata> {

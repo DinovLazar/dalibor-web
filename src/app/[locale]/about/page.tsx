@@ -15,8 +15,9 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { buttonVariants } from "@/components/ui/button";
 import { routing } from "@/i18n/routing";
 import { buildPageMetadata } from "@/lib/seo/metadata";
-import { personJsonLd } from "@/lib/seo/jsonld";
+import { profilePageJsonLd } from "@/lib/seo/jsonld";
 import { client } from "@/sanity/lib/client";
+import { siteUrl } from "@/sanity/env";
 import { urlForImage } from "@/sanity/lib/image";
 import { contentLang, localizedValue } from "@/sanity/lib/localize";
 import { ABOUT_QUERY } from "@/sanity/lib/queries";
@@ -73,8 +74,24 @@ export default async function AboutPage({
 
   return (
     <Section>
-      {/* Person structured data — About is a canonical entity page (also on Home). */}
-      <JsonLd data={personJsonLd()} />
+      {/* ProfilePage structured data — this page IS his authoritative profile,
+          which is a stronger signal than a bare Person node. The nested Person
+          shares the site-wide `@id`, and carries the portrait when one is set. */}
+      <JsonLd
+        data={profilePageJsonLd({
+          url: `${siteUrl}/${locale}/about`,
+          inLanguage: locale,
+          ...(photo
+            ? {
+                image: urlForImage(photo)
+                  .width(800)
+                  .height(1000)
+                  .auto("format")
+                  .url(),
+              }
+            : {}),
+        })}
+      />
       <Container>
         {/* 1 · Page head — name (h1) over roles (eyebrow) + tagline (description). */}
         <PageHeader

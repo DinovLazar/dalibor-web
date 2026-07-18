@@ -22,7 +22,10 @@ function urlFor(path: string, loc: string): string {
 }
 
 /** Three entries (one per locale) for a path, each with the full hreflang map. */
-function entriesForPath(path: string): MetadataRoute.Sitemap {
+function entriesForPath(
+  path: string,
+  lastModified?: Date,
+): MetadataRoute.Sitemap {
   const languages = {
     mk: urlFor(path, "mk"),
     en: urlFor(path, "en"),
@@ -33,7 +36,35 @@ function entriesForPath(path: string): MetadataRoute.Sitemap {
   return routing.locales.map((loc) => ({
     url: urlFor(path, loc),
     alternates: { languages },
+    ...(lastModified ? { lastModified } : {}),
   }));
+}
+
+/**
+ * Per-document `_updatedAt`, keyed by slug, for review + post sitemap entries.
+ *
+ * Deliberately a raw GROQ string rather than a `defineQuery` in
+ * `sanity/lib/queries.ts`: adding a field to the typed slug queries would make
+ * the checked-in TypeGen output stale until someone re-runs `npm run typegen`,
+ * and a sitemap timestamp isn't worth coupling the build to that step. The
+ * response is narrow and explicitly typed here instead.
+ */
+async function lastModifiedBySlug(
+  type: "review" | "post",
+): Promise<Map<string, Date>> {
+  const rows = await client.fetch<{ slug: string | null; _updatedAt: string }[]>(
+    `*[_type == $type && defined(slug.current)]{ "slug": slug.current, _updatedAt }`,
+    { type },
+  );
+
+  const map = new Map<string, Date>();
+  for (const row of rows) {
+    if (!row.slug) continue;
+    const date = new Date(row._updatedAt);
+    // Guard against an unparseable timestamp poisoning the sitemap.
+    if (!Number.isNaN(date.getTime())) map.set(row.slug, date);
+  }
+  return map;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -47,22 +78,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/privacy",
   ];
 
-  const [reviewSlugs, postSlugs] = await Promise.all([
+  const [reviewSlugs, postSlugs, reviewDates, postDates] = await Promise.all([
     client.fetch(REVIEW_SLUGS_QUERY),
     client.fetch(POST_SLUGS_QUERY),
+    lastModifiedBySlug("review"),
+    lastModifiedBySlug("post"),
   ]);
 
-  const reviewPaths = reviewSlugs
+  const reviewSlugList = reviewSlugs
     .map(({ slug }) => slug)
-    .filter((slug): slug is string => Boolean(slug))
-    .map((slug) => `/reviews/${slug}`);
+    .filter((slug): slug is string => Boolean(slug));
 
-  const blogPaths = postSlugs
+  const blogSlugList = postSlugs
     .map(({ slug }) => slug)
-    .filter((slug): slug is string => Boolean(slug))
-    .map((slug) => `/blog/${slug}`);
+    .filter((slug): slug is string => Boolean(slug));
 
-  const allPaths = [...staticPaths, ...reviewPaths, ...blogPaths];
+  // Static pages carry no timestamp (they have no single source document), but
+  // content pages do: `lastModified` is a recrawl hint, so a fresh review or post
+  // gets picked up sooner than it would on crawl scheduling alone.
+  const staticEntries = staticPaths.flatMap((path) => entriesForPath(path));
 
-  return allPaths.flatMap(entriesForPath);
+  const reviewEntries = reviewSlugList.flatMap((slug) =>
+    entriesForPath(`/reviews/${slug}`, reviewDates.get(slug)),
+  );
+
+  const blogEntries = blogSlugList.flatMap((slug) =>
+    entriesForPath(`/blog/${slug}`, postDates.get(slug)),
+  );
+
+  return [...staticEntries, ...reviewEntries, ...blogEntries];
 }

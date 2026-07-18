@@ -9,8 +9,8 @@ import { Hero } from "@/components/home/hero";
 import { LatestReviews } from "@/components/home/latest-reviews";
 import { JsonLd } from "@/components/seo/json-ld";
 import { routing } from "@/i18n/routing";
-import { buildPageMetadata } from "@/lib/seo/metadata";
-import { personJsonLd } from "@/lib/seo/jsonld";
+import { buildPageMetadata, getMetadataCopy } from "@/lib/seo/metadata";
+import { personJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
 import { client, clientFresh } from "@/sanity/lib/client";
 import {
   HOME_FEATURED_BOOK_QUERY,
@@ -54,6 +54,10 @@ export default async function HomePage({
   }
   setRequestLocale(locale);
 
+  // Localized site name + description for the WebSite JSON-LD, read from the same
+  // `metadata` namespace the page's own <head> copy comes from (never duplicated).
+  const { siteName, description } = await getMetadataCopy(locale, "home");
+
   // The two content grids carry cache tags so a publish can refresh them via
   // the revalidate webhook (Phase 2.14); hero + book stay plain (out of scope).
   const [hero, book, reviews, posts] = await Promise.all([
@@ -73,8 +77,16 @@ export default async function HomePage({
 
   return (
     <>
-      {/* Person structured data — Home is the canonical entity page (also on About). */}
-      <JsonLd data={personJsonLd()} />
+      {/* Structured data — Home carries both the WebSite node (this site is his,
+          in three languages) and the Person node (who he is). They share one
+          `@id` for the Person, so crawlers resolve a single entity across the
+          site rather than a separate person per page. */}
+      <JsonLd
+        data={[
+          websiteJsonLd({ name: siteName, description }),
+          personJsonLd(),
+        ]}
+      />
       <Hero hero={hero} locale={locale} className="reveal" />
       <FeaturedBook book={book} locale={locale} className="reveal reveal-2" />
       <LatestReviews reviews={reviews} locale={locale} className="reveal reveal-3" />
