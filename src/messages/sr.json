@@ -194,7 +194,8 @@
   "notFound": {
     "title": "Ova stranica ne postoji",
     "body": "Stranica koju ste tražili možda je premeštena ili je veza neispravna.",
-    "cta": "Na početnu"
+    "cta": "Na početnu",
+    "explore": "Ili probajte neku od ovih stranica"
   },
   "footer": {
     "contactHeading": "Kontakt",

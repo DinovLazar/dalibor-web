@@ -202,7 +202,8 @@
   "notFound": {
     "title": "This page isn't here",
     "body": "The page you were looking for may have moved, or the link may be broken.",
-    "cta": "Go to the homepage"
+    "cta": "Go to the homepage",
+    "explore": "Or try one of these pages"
   },
   "footer": {
     "contactHeading": "Contact",

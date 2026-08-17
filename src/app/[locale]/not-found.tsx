@@ -5,6 +5,7 @@ import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { buttonVariants } from "@/components/ui/button";
+import { primaryNav } from "@/lib/nav";
 
 /**
  * Localized 404 (Phase 1.12). Rendered inside the `[locale]` layout, so it keeps
@@ -19,6 +20,10 @@ import { buttonVariants } from "@/components/ui/button";
  */
 export default async function NotFound() {
   const t = await getTranslations("notFound");
+  const tNav = await getTranslations("nav");
+
+  // Everything except Home — the primary CTA below already covers it.
+  const suggestions = primaryNav.filter((item) => item.href !== "/");
 
   return (
     <Section>
@@ -30,6 +35,32 @@ export default async function NotFound() {
             {t("cta")}
           </Link>
         </div>
+
+        {/* A dead end is a bad 404. The rest of the nav set is offered inline so
+            the page is a way back rather than just an apology. Read from
+            `@/lib/nav`, so a future nav change flows through here too. */}
+        <nav aria-labelledby="notfound-explore" className="mt-10">
+          <h2
+            id="notfound-explore"
+            className="text-eyebrow uppercase text-primary-strong eyebrow"
+          >
+            {t("explore")}
+          </h2>
+          <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+            {suggestions.map((item) => (
+              <li key={item.key}>
+                <Link
+                  href={item.href}
+                  /* inline-block + py-1 lifts the hit area past the 24px floor
+                     of WCAG 2.2 SC 2.5.8 (bare inline text lands at 23px). */
+                  className="inline-block rounded-sm py-1 text-body text-primary-strong underline underline-offset-4 outline-none transition-colors hover:text-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                >
+                  {tNav(item.key)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </Container>
     </Section>
   );
