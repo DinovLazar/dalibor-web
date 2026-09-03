@@ -102,10 +102,12 @@ export default async function AboutPage({
         />
 
         {/* 2 · Two-column body: portrait first (stacks on top of mobile, sits
-            beside the bio on desktop), mirroring the home hero's grid. */}
-        <div className="mt-10 grid gap-10 reveal reveal-2 md:grid-cols-[minmax(240px,300px)_1fr] md:items-start">
+            beside the bio on desktop), mirroring the home hero's grid. Below
+            `sm` the portrait is full-bleed (Phase 3.01) and the column gap
+            tightens, since the image now supplies its own separation. */}
+        <div className="mt-10 grid gap-10 reveal reveal-2 max-sm:mt-8 max-sm:gap-7 md:grid-cols-[minmax(240px,300px)_1fr] md:items-start">
           {/* Portrait — 4:5 framed image, or the graceful no-photo placeholder. */}
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-image shadow-cover">
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-image shadow-cover max-sm:full-bleed max-sm:shadow-none">
             {photo ? (
               <Image
                 src={urlForImage(photo)
@@ -115,7 +117,7 @@ export default async function AboutPage({
                   .url()}
                 alt={localizedValue(photo.alt, locale) ?? name}
                 fill
-                sizes="(max-width: 768px) 100vw, 300px"
+                sizes="(max-width: 639px) 100vw, 300px"
                 className="object-cover"
               />
             ) : (

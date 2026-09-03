@@ -7,7 +7,9 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { BackToTop } from "@/components/layout/back-to-top";
 import { Section } from "@/components/layout/section";
+import { buttonVariants } from "@/components/ui/button";
 import { PortableText } from "@/components/portable-text";
 import { JsonLd } from "@/components/seo/json-ld";
 import { ReviewBookAside } from "@/components/reviews/review-book-aside";
@@ -27,6 +29,7 @@ import {
 import { REVIEW_BY_SLUG_QUERY, REVIEW_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { reviewSlugTag } from "@/sanity/lib/tags";
 import { formatFullDate } from "@/lib/datetime";
+import { cn } from "@/lib/utils";
 
 /** One review by slug, memoized per request so generateMetadata + the page
  *  component share a single fetch instead of hitting Sanity twice. */
@@ -146,12 +149,13 @@ export default async function ReviewPage({
   return (
     <Section>
       <JsonLd data={[reviewSchema, breadcrumbSchema]} />
-      <div className="mx-auto w-full max-w-[63rem] px-5 sm:px-8 lg:px-12">
+      <BackToTop />
+      <div className="mx-auto w-full max-w-[63rem] page-gutter">
         {/* Head — back link, breadcrumb, title, §6.16 double rule, date / note. */}
         <div className="reveal max-w-prose">
           <Link
             href="/reviews"
-            className="inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            className="tap-target inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             <ArrowLeft className="size-[18px]" strokeWidth={1.75} aria-hidden />{" "}
             {t("reviews.backToReviews")}
@@ -293,12 +297,12 @@ export default async function ReviewPage({
             )}
 
             {topics.length ? (
-              <ul className="mt-8 flex flex-wrap gap-2">
+              <ul className="mt-8 flex flex-wrap gap-2 max-sm:gap-y-3">
                 {topics.map((tp) => (
                   <li key={tp.slug}>
                     <Link
                       href={`/reviews?topic=${encodeURIComponent(tp.slug)}`}
-                      className="inline-flex h-7 items-center rounded-pill border border-primary px-3 text-chip text-primary-strong outline-none transition-colors hover:bg-[rgb(168_116_55_/_0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                      className="tap-target inline-flex h-7 items-center rounded-pill border border-primary px-3 text-chip text-primary-strong outline-none transition-colors max-sm:h-9 hover:bg-[rgb(168_116_55_/_0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                     >
                       {tp.label}
                     </Link>
@@ -311,7 +315,7 @@ export default async function ReviewPage({
 
             <Link
               href="/reviews"
-              className="mt-6 inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+              className={cn(buttonVariants({ variant: "outline" }), "mt-6 gap-1.5 max-sm:h-12 max-sm:w-full")}
             >
               <ArrowLeft className="size-[18px]" strokeWidth={1.75} aria-hidden />{" "}
               {t("reviews.backToReviews")}
