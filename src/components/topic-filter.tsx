@@ -31,7 +31,7 @@ export function TopicFilter({
   className?: string;
 }) {
   const base =
-    "inline-flex h-8 items-center rounded-pill border px-3 text-eyebrow font-semibold outline-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus";
+    "inline-flex h-8 items-center rounded-pill border px-3 text-chip outline-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus";
   const inactive =
     "border-primary text-primary-strong hover:bg-[rgb(168_116_55_/_0.12)]";
   const active =

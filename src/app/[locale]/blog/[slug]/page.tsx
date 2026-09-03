@@ -160,7 +160,7 @@ export default async function BlogPostPage({
 
           <h1
             lang={contentLang(post.title, locale)}
-            className="mt-4 font-display text-h1 text-text max-sm:text-[2.125rem]"
+            className="mt-4 font-display text-h1 text-text"
           >
             {title}
           </h1>
@@ -196,7 +196,7 @@ export default async function BlogPostPage({
                 <li key={tp.slug}>
                   <Link
                     href={`/blog?topic=${encodeURIComponent(tp.slug)}`}
-                    className="inline-flex h-7 items-center rounded-pill border border-primary px-3 text-eyebrow font-semibold text-primary-strong outline-none transition-colors hover:bg-[rgb(168_116_55_/_0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                    className="inline-flex h-7 items-center rounded-pill border border-primary px-3 text-chip text-primary-strong outline-none transition-colors hover:bg-[rgb(168_116_55_/_0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                   >
                     {tp.label}
                   </Link>

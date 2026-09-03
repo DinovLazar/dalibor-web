@@ -49,7 +49,7 @@ export async function FeaturedBook({
             {t("featuredEyebrow")}
           </p>
           {title ? (
-            <h2 className="mt-1 font-display text-h2 text-text max-sm:text-[1.625rem]">
+            <h2 className="mt-1 font-display text-h2 text-text">
               {title}
             </h2>
           ) : null}

@@ -74,7 +74,7 @@ export async function ReviewBookAside({
     ) : null;
 
   return (
-    <div className="grid grid-cols-[96px_1fr] gap-[18px] rounded-card border border-border bg-surface p-5 shadow-card sm:grid-cols-[120px_1fr] lg:block">
+    <div className="grid grid-cols-[96px_1fr] gap-[18px] card-surface p-5 sm:grid-cols-[120px_1fr] lg:block">
       <Cover
         image={review.coverImage}
         locale={locale}

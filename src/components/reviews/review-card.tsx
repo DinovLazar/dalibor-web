@@ -54,7 +54,7 @@ export function ReviewCard({
   return (
     <Link
       href={href}
-      className="group/card flex gap-[18px] rounded-card border border-border bg-surface p-5 shadow-card outline-none transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus max-xs:flex-col"
+      className="group/card flex gap-[18px] card-surface p-5 outline-none transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus max-xs:flex-col"
     >
       <Cover
         image={coverImage}
@@ -94,13 +94,13 @@ export function ReviewCard({
             {shownTopics.map((tp) => (
               <li
                 key={tp.slug}
-                className="inline-flex h-7 items-center rounded-pill border border-primary px-3 text-eyebrow font-semibold text-primary-strong"
+                className="inline-flex h-7 items-center rounded-pill border border-primary px-3 text-chip text-primary-strong"
               >
                 {tp.label}
               </li>
             ))}
             {extraTopics > 0 ? (
-              <li className="inline-flex h-7 items-center text-eyebrow font-semibold text-text-muted">
+              <li className="inline-flex h-7 items-center text-chip text-text-muted">
                 +{extraTopics}
               </li>
             ) : null}

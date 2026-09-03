@@ -16,8 +16,11 @@ import { siteLinks } from "@/lib/site-links";
 export async function SiteHeader() {
   const t = await getTranslations("common");
 
+  // `safe-top` pads the bar clear of the notch when the page paints under it
+  // (viewport-fit=cover); it resolves to 0 in a normal browser tab, where the UA
+  // chrome already occupies that strip. Side insets come from Container.
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-[rgb(244_237_225_/_0.85)] backdrop-blur-[8px]">
+    <header className="sticky top-0 z-40 border-b border-border bg-[rgb(244_237_225_/_0.85)] backdrop-blur-[8px] safe-top">
       <Container className="flex h-14 items-center gap-6 sm:h-16">
         <Wordmark text={t("wordmark")} />
 

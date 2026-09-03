@@ -59,7 +59,10 @@ export async function SiteFooter() {
 
   return (
     <footer className="border-t-2 border-primary bg-footer text-on-footer">
-      <Container className="pb-12 pt-16">
+      {/* The walnut band terminates the page, so it is what sits under the home
+          indicator: `safe-bottom` adds the inset on top of the designed 48px
+          (`--safe-bottom-base`), and resolves to exactly 48px everywhere else. */}
+      <Container className="pt-16 pb-0 [--safe-bottom-base:3rem] safe-bottom">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
           <FooterGroup heading={t("contactHeading")}>
             {/* Live mailto — un-inerted in 2.01b (shown publicly per intake §7). */}

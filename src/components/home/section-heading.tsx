@@ -19,7 +19,7 @@ export function SectionHeading({
         <p className="eyebrow text-eyebrow uppercase text-primary-strong">
           {eyebrow}
         </p>
-        <h2 className="mt-1 font-display text-h2 text-text max-sm:text-[1.625rem]">
+        <h2 className="mt-1 font-display text-h2 text-text">
           {title}
         </h2>
       </div>

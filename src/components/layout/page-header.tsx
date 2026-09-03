@@ -29,7 +29,7 @@ export function PageHeader({
       <Heading
         className={cn(
           "font-display text-text",
-          Heading === "h1" ? "text-h1 max-sm:text-[2.125rem]" : "text-h2 max-sm:text-[1.625rem]",
+          Heading === "h1" ? "text-h1" : "text-h2",
         )}
       >
         {title}

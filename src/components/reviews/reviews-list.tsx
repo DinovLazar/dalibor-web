@@ -31,7 +31,7 @@ export async function ReviewsList({
 
   if (reviews.length === 0) {
     return (
-      <div className="rounded-card border border-border bg-surface px-6 py-12 text-center">
+      <div className="card-flat px-6 py-12 text-center">
         <BookOpen
           aria-hidden
           className="mx-auto size-10 text-text-muted"

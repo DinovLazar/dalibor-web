@@ -33,7 +33,7 @@ const components: PortableTextComponents = {
       </p>
     ),
     h2: ({ children }) => (
-      <h2 className="mt-10 font-display text-h2 text-text first:mt-0 max-sm:text-[1.625rem]">
+      <h2 className="mt-10 font-display text-h2 text-text first:mt-0">
         {children}
       </h2>
     ),

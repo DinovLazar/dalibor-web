@@ -49,7 +49,7 @@ export async function PostCard({
   return (
     <Link
       href={href}
-      className="group/card block rounded-card border border-border bg-surface p-5 shadow-card outline-none transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+      className="group/card block card-surface p-5 outline-none transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
     >
       <div className={hasThumb ? "flex gap-4" : undefined}>
         {hasThumb ? (
@@ -92,13 +92,13 @@ export async function PostCard({
               {shownTopics.map((tp) => (
                 <li
                   key={tp.slug}
-                  className="inline-flex h-7 items-center rounded-pill border border-primary px-3 text-eyebrow font-semibold text-primary-strong"
+                  className="inline-flex h-7 items-center rounded-pill border border-primary px-3 text-chip text-primary-strong"
                 >
                   {tp.label}
                 </li>
               ))}
               {extraTopics > 0 ? (
-                <li className="inline-flex h-7 items-center text-eyebrow font-semibold text-text-muted">
+                <li className="inline-flex h-7 items-center text-chip text-text-muted">
                   +{extraTopics}
                 </li>
               ) : null}

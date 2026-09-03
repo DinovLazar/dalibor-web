@@ -54,7 +54,7 @@ export async function Hero({
       <section className={className}>
         <Container className="grid items-center gap-10 py-16 max-sm:py-12 md:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <h1 className="font-display text-display text-text max-sm:text-[2.5rem]">
+            <h1 className="font-display text-display text-text">
               {name}
             </h1>
             <p className="mt-3 max-w-[30rem] text-body-lg text-text-muted">
@@ -85,7 +85,7 @@ export async function Hero({
   return (
     <section className={className}>
       <Container className="pt-32 pb-20 text-center max-sm:pt-16 max-sm:pb-12">
-        <h1 className="font-display text-display text-text max-sm:text-[2.5rem]">
+        <h1 className="font-display text-display text-text">
           {name}
         </h1>
         <p className="mx-auto mt-3.5 max-w-[34rem] text-body-lg text-text-muted">

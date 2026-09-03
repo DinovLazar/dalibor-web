@@ -102,7 +102,7 @@ export default async function BlogPage({
           ariaLabel={t("blog.topicsLabel")}
         />
         {filtered.length === 0 ? (
-          <div className="mt-6 rounded-card border border-border bg-surface px-6 py-12 text-center reveal reveal-3">
+          <div className="mt-6 card-flat px-6 py-12 text-center reveal reveal-3">
             <BookOpen
               aria-hidden
               className="mx-auto size-10 text-text-muted"

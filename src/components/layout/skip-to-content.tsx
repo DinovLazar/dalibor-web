@@ -16,8 +16,12 @@ export function SkipToContent({
     <a
       href="#content"
       className={cn(
-        "sr-only rounded-button bg-primary-strong px-4 py-2 font-medium text-on-primary",
-        "focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:outline-2 focus:outline-offset-2 focus:outline-focus",
+        "sr-only rounded-button bg-primary-strong font-medium text-on-primary",
+        // When it appears it must be a real target: 44px tall, ≥44px wide, and
+        // clear of the notch. Previously 32×16, which failed WCAG 2.2 AA SC 2.5.8.
+        "focus:not-sr-only focus:fixed focus:z-[100] focus:inline-flex focus:min-h-11 focus:min-w-11 focus:items-center focus:justify-center focus:px-5 focus:py-2.5",
+        "focus:left-[max(1rem,env(safe-area-inset-left))] focus:top-[max(1rem,env(safe-area-inset-top))]",
+        "focus:outline-2 focus:outline-offset-2 focus:outline-focus",
         className,
       )}
     >

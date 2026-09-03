@@ -419,6 +419,26 @@ const EXTRA_FN = String.raw`
 })()
 `;
 
+/** Blocks until the real (non-fallback) faces are rendering. */
+const FONTS_READY_FN = String.raw`
+(async () => {
+  if (!document.fonts) return true;
+  const fam = (el) => el ? getComputedStyle(el).fontFamily : "";
+  const body = fam(document.body);
+  const display = fam(document.querySelector("h1, h2, h3, .font-display")) || body;
+  // Latin + Cyrillic so neither subset can be left un-requested.
+  const sample = "Aa Аа";
+  const specs = [
+    ["400 18px " + body], ["500 15px " + body], ["600 13px " + body],
+    ["600 20px " + display], ["700 44px " + display],
+  ];
+  await Promise.all(specs.map(([s]) => document.fonts.load(s, sample).catch(() => {})));
+  await document.fonts.ready;
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  return true;
+})()
+`;
+
 // ------------------------------------------------------------------ run -----
 
 type SmallTarget = {
@@ -542,7 +562,12 @@ async function main() {
     const loaded = cdp!.once("Page.loadEventFired");
     await call("Page.navigate", { url });
     await Promise.race([loaded, sleep(20000)]);
-    await evaluate<boolean>("document.fonts ? document.fonts.ready.then(() => true) : true");
+    // `document.fonts.ready` alone is not enough: with `display: swap` it can
+    // resolve before a face that nothing has *requested* yet starts loading, and
+    // the page then measures in the Georgia fallback — whose metrics wrap chip
+    // rows differently. Force the faces this page actually uses (both scripts,
+    // both families, the weights in play) and only then measure.
+    await evaluate<boolean>(FONTS_READY_FN);
     // Let the CSS reveal animation finish (360ms + up to 240ms stagger).
     await sleep(420);
 
