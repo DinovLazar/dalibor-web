@@ -1,6 +1,6 @@
 # Mobile audit — raw summary
 
-Generated 2026-09-03T04:29:52.622Z · 189 page measurements
+Generated 2026-09-03T11:05:53.126Z · 189 page measurements
 
 ## Per page (key viewports)
 
@@ -148,7 +148,7 @@ Generated 2026-09-03T04:29:52.622Z · 189 page measurements
 | a · O autoru | 9 | 67×32 | 49×32 |
 | a · Knjiga | 9 | 47×32 | 48×32 |
 | a · Kontakt | 9 | 60×32 | 49×32 |
-| a · Сите критики → | 6 | 125×23 | 49×23 |
+| a · Сите критики → | 6 | 125×23 | 49×24 |
 | a · Кон блогот → | 6 | 105×23 | 49×23 |
 | a · Есеј | 6 | 58×32 | 49×33 |
 | a · Женско писмо | 6 | 142×32 | 49×33 |
@@ -160,7 +160,7 @@ Generated 2026-09-03T04:29:52.622Z · 189 page measurements
 | a · Поезија | 6 | 87×32 | 49×33 |
 | a · Постјугословенска книжевност | 6 | 277×32 | 49×33 |
 | a · Раскази | 6 | 89×32 | 49×33 |
-| a · See all reviews → | 6 | 127×23 | 49×23 |
+| a · See all reviews → | 6 | 127×23 | 49×24 |
 | a · Read the blog → | 6 | 119×23 | 49×23 |
 | a · Essay | 6 | 68×32 | 49×33 |
 | a · Women's writing | 6 | 154×32 | 49×33 |
