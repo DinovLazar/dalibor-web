@@ -35,7 +35,7 @@ export async function FeaturedBook({
 
   return (
     <section className={cn("border-y border-border bg-surface", className)}>
-      <Container className="grid items-center gap-10 py-14 max-sm:py-12 md:grid-cols-[200px_1fr]">
+      <Container className="grid items-center gap-10 py-14 max-sm:py-10 md:grid-cols-[200px_1fr]">
         <Cover
           image={book.coverImage}
           locale={locale}

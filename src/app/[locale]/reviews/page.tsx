@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
+import { ListCap } from "@/components/reviews/list-cap";
 import { ReviewSearch } from "@/components/reviews/review-search";
 import { ReviewsList } from "@/components/reviews/reviews-list";
 import { TopicFilter } from "@/components/topic-filter";
@@ -27,8 +28,14 @@ export async function generateMetadata({
 
 /**
  * The real Style A Reviews list (§7.3) — replaces the Phase 1.05 connect-to-site
- * stub. A single ~48rem reading column: page head, then the §6.8 topic-filter
- * chips, then the §6.9 search box wrapping the server-rendered list.
+ * stub. A single ~48rem reading column: page head, then the §6.9 search box,
+ * then the §6.8 topic-filter chips, then the server-rendered list.
+ *
+ * Phase 3.01 reordered that head. The filter used to come first and, wrapped,
+ * was 312px tall on a phone — the search input did not appear until 615px down
+ * and the first review until 737px. Search is the primary tool, so it now leads;
+ * the filter is passed into `ReviewSearch` as a node so it can render between
+ * the input and the results without becoming a client component.
  *
  * Two complementary filtering paths share one URL contract:
  *  - SSR topic filter — `?topic=<slug>` re-renders the list server-side, so the
@@ -99,20 +106,27 @@ export default async function ReviewsPage({
           title={t("reviews.title")}
           description={t("reviews.lede")}
         />
-        <TopicFilter
-          basePath="/reviews"
-          className="mt-8 reveal reveal-2"
-          topics={topicChips}
-          activeTopic={activeTopic}
-          allLabel={t("reviews.allTopics")}
-          ariaLabel={t("reviews.topicsLabel")}
-        />
+        {/* Search first, then the filter, then the results (Phase 3.01). The
+            filter is handed to ReviewSearch as a node rather than rendered here
+            so it can sit between the input and the list while staying a Server
+            Component. */}
         <ReviewSearch
-          className="mt-6 reveal reveal-3"
+          className="mt-6 reveal reveal-2"
           locale={locale}
           topic={activeTopic ?? null}
+          filter={
+            <TopicFilter
+              basePath="/reviews"
+              topics={topicChips}
+              activeTopic={activeTopic}
+              allLabel={t("reviews.allTopics")}
+              ariaLabel={t("reviews.topicsLabel")}
+            />
+          }
         >
-          <ReviewsList reviews={filtered} locale={locale} />
+          <ListCap total={filtered.length}>
+            <ReviewsList reviews={filtered} locale={locale} />
+          </ListCap>
         </ReviewSearch>
       </Container>
     </Section>

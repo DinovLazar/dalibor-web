@@ -40,11 +40,11 @@ export async function BlogCard({
   return (
     <Link
       href={href}
-      className="group/card block card-surface p-5 outline-none transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+      className="group/card block card-surface p-5 outline-none max-sm:p-4 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
     >
       <h3
         lang={lang}
-        className="font-display text-h4 text-text transition-colors group-hover/card:text-primary-strong"
+        className="font-display text-h4 text-text transition-colors max-sm:line-clamp-2 group-hover/card:text-primary-strong"
       >
         {title}
       </h3>
@@ -54,7 +54,7 @@ export async function BlogCard({
         </p>
       ) : null}
       {excerpt ? (
-        <p lang={lang} className="mt-2 line-clamp-2 text-body text-text-muted">
+        <p lang={lang} className="mt-2 line-clamp-2 text-body text-text-muted max-sm:mt-1.5 max-sm:text-meta">
           {excerpt}
         </p>
       ) : null}

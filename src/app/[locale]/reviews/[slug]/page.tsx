@@ -277,7 +277,7 @@ export default async function ReviewPage({
                         href={sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-3 inline-flex items-center gap-1.5 text-body font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                        className="tap-target mt-3 inline-flex items-center gap-1.5 text-body font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                       >
                         {t("reviews.readFullReview", { source: sourceName })}
                         <ExternalLink

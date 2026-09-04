@@ -87,10 +87,20 @@ export default async function HomePage({
           personJsonLd(),
         ]}
       />
+      {/* Phone band rhythm (Phase 3.01). Below `sm` the page is built from
+          alternating full-width cream/parchment bands so the sections read as
+          separate objects instead of one flat cream field: the full-bleed
+          portrait, then parchment (name + CTAs), cream (the book), parchment
+          (latest reviews), cream (the blog), and the walnut footer terminating
+          it. Cards follow automatically — `--band-card` makes a card on a
+          parchment band cream and vice versa, so a card never sits on a ground
+          of its own value. Every `band-*` class is inert at `sm` and up, so the
+          desktop page is unchanged (the featured book keeps its parchment there).
+          The hero band lives inside <Hero>, which owns the photo/words split. */}
       <Hero hero={hero} locale={locale} className="reveal" />
-      <FeaturedBook book={book} locale={locale} className="reveal reveal-2" />
-      <LatestReviews reviews={reviews} locale={locale} className="reveal reveal-3" />
-      <FromTheBlog posts={posts} locale={locale} className="reveal reveal-4" />
+      <FeaturedBook book={book} locale={locale} className="reveal reveal-2 band-cream" />
+      <LatestReviews reviews={reviews} locale={locale} className="reveal reveal-3 band-parchment" />
+      <FromTheBlog posts={posts} locale={locale} className="reveal reveal-4 band-cream" />
     </>
   );
 }

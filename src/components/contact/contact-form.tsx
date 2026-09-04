@@ -166,7 +166,7 @@ export function ContactForm({ className }: { className?: string }) {
             <button
               type="button"
               onClick={reset}
-              className={cn(buttonVariants({ variant: "outline" }), "mt-4")}
+              className={cn(buttonVariants({ variant: "outline" }), "mt-4 max-sm:h-12 max-sm:w-full")}
             >
               {t("form.sendAnother")}
             </button>
@@ -297,7 +297,7 @@ export function ContactForm({ className }: { className?: string }) {
           <button
             type="submit"
             disabled={submitting}
-            className={cn(buttonVariants(), "w-full sm:w-auto")}
+            className={cn(buttonVariants(), "w-full max-sm:h-12 sm:w-auto")}
           >
             {submitting ? t("form.sending") : t("form.send")}
           </button>

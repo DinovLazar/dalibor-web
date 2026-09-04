@@ -296,7 +296,11 @@ const MEASURE_FN = String.raw`
       const p = getComputedStyle(n).position;
       if (p === 'fixed' || p === 'sticky') { fixed = true; break; }
     }
-    if (!fixed) window.scrollTo(0, Math.max(0, window.scrollY + r0.top - vh / 2 + r0.height / 2));
+    // scrollIntoView (not window.scrollTo) so NESTED scrollers are handled too:
+    // a chip inside the horizontal topic rail can sit outside the viewport
+    // horizontally, and probing it there would report it as obscured when it is
+    // simply not scrolled into view yet.
+    if (!fixed) el.scrollIntoView({ block: 'center', inline: 'center', behavior: 'auto' });
 
     const r = el.getBoundingClientRect();
     const cx = Math.round(r.left + r.width / 2);

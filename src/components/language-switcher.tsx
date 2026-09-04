@@ -22,6 +22,14 @@ const LOCALE_LABELS: Record<string, string> = {
  * current path (e.g. /en/reviews ↔ /mk/reviews). The active locale is real text
  * (not a link) with `aria-current`; the others are keyboard-focusable links with
  * a visible focus ring. `onNavigate` lets the mobile menu close on switch.
+ *
+ * Phase 3.01: each item is at least 44×44 below `sm`, where the only instance
+ * rendered is the one inside the mobile menu (the header's is `hidden sm:block`)
+ * — so the desktop switcher is untouched. They were 37×35 / 35×35 / 41×35. The
+ * active locale keeps `aria-current="true"` rather than `"page"`: switching
+ * language navigates to the same page in another language, so "true" (this is
+ * the current item in this set) is the accurate claim, not "this is the current
+ * page" — and the `·` separators stay `aria-hidden` decoration.
  */
 export function LanguageSwitcher({
   className,
@@ -50,7 +58,7 @@ export function LanguageSwitcher({
               {isActive ? (
                 <span
                   aria-current="true"
-                  className="px-2 py-1.5 font-semibold text-text"
+                  className="inline-flex items-center justify-center px-2 py-1.5 font-semibold text-text max-sm:min-h-11 max-sm:min-w-11 max-sm:px-3"
                 >
                   {LOCALE_LABELS[locale]}
                 </span>
@@ -59,7 +67,7 @@ export function LanguageSwitcher({
                   href={pathname}
                   locale={locale}
                   onClick={onNavigate}
-                  className="rounded-sm px-2 py-1.5 font-medium text-text-muted transition-colors hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                  className="inline-flex items-center justify-center rounded-sm px-2 py-1.5 font-medium text-text-muted transition-colors max-sm:min-h-11 max-sm:min-w-11 max-sm:px-3 hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                 >
                   {LOCALE_LABELS[locale]}
                 </Link>

@@ -354,6 +354,17 @@ h1,h2,h3,h4,.font-display { font-family: var(--font-display); }
 }
 .to-top[data-visible="true"] { opacity: 1; visibility: visible; }
 
+/* --------------------------------------------------------- mobile list cap --
+   Workstream B.7 — the Reviews archive is 20 cards. Below `sm` the client island
+   `ListCap` flips `data-capped` on and everything past the 12th card is removed
+   from the flow. `display: none` (rather than a visual hide) is the point: the
+   hidden cards leave the tab order and the accessibility tree, so nobody can
+   focus a card they cannot see. The attribute starts `"false"` on the server, so
+   with JavaScript off the full list renders exactly as before. */
+@media (width < 40rem) {
+  .list-cap[data-capped="true"] > ul > li:nth-child(n + 13) { display: none; }
+}
+
 /* --------------------------------------------------- horizontal chip rail --
    Workstream B.3 — the topic filter collapses from a 312px wrapped block into a
    single snap-scrolling row on a phone. The right-edge fade is a mask so it

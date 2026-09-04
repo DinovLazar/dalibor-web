@@ -16,16 +16,33 @@ import type { ReviewSummary, SearchResponse } from "@/lib/search/types";
  * locale-resolved results in place. No layout shift: the leading search glyph and
  * the trailing spinner/clear slot are fixed-width. Network errors fall through to
  * the empty state — the API already owns the keyword fallback. Client component.
+ *
+ * **Phase 3.01 — search comes first.** The topic filter used to sit above this
+ * box and, wrapped, was 312px tall on a phone, so the search input started 615px
+ * down the page and the first review at 737px. The order is now
+ * H1 → lede → search → filter → results: the filter is passed in as `filter` and
+ * rendered between the input and the results, rather than being a sibling the
+ * page places above. It stays a Server Component; only its scroll-into-view
+ * wrapper is client code, and passing it through as a node keeps it that way.
+ *
+ * The placeholder is the SHORT string (`common.searchPlaceholderShort`): the full
+ * one is 246px wide in Macedonian and was clipped inside the 192px of usable
+ * input width at 320px. The full instruction survives verbatim as the input's
+ * accessible name (`<label class="sr-only">`) and as the helper text below, so
+ * nothing is lost — only the visible hint is shorter.
  */
 export function ReviewSearch({
   locale,
   topic,
   className,
+  filter,
   children,
 }: {
   locale: string;
   topic: string | null;
   className?: string;
+  /** The topic filter, rendered between the input and the results (§6.8). */
+  filter?: React.ReactNode;
   children: React.ReactNode;
 }) {
   const t = useTranslations();
@@ -78,7 +95,7 @@ export function ReviewSearch({
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder={t("common.searchPlaceholder")}
+          placeholder={t("common.searchPlaceholderShort")}
           className="h-12 w-full rounded-input border border-border-strong bg-bg pl-11 pr-11 text-[1.0625rem] text-text placeholder:text-text-muted outline-none transition-shadow focus-visible:border-primary focus-visible:shadow-[0_0_0_3px_rgb(168_116_55_/_0.18)]"
         />
         <button
@@ -113,6 +130,12 @@ export function ReviewSearch({
           {t("reviews.searchHelp")}
         </p>
       ) : null}
+
+      {/* The topic filter narrows the SSR list, so it belongs with the results,
+          not with the search input — and it is hidden while client results are
+          showing, because those are already scoped by the same active topic and
+          a filter row that cannot be seen to apply is a lie. */}
+      {filter && results === null ? <div className="mt-5">{filter}</div> : null}
 
       <div className="mt-6">
         {results !== null ? (
