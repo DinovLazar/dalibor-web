@@ -7,8 +7,16 @@ import { Container } from "@/components/layout/container";
 import { siteLinks } from "@/lib/site-links";
 import { cn } from "@/lib/utils";
 
+/**
+ * A footer link. On desktop it is the same `w-fit` inline row it has always been
+ * (`text-meta` is 15px there — the literal value this used to hard-code). Below
+ * `sm` it becomes a full-width 44px row: at 33px, stacked with no gap, the 44px
+ * hit areas the `pointer: coarse` rule grants each link overlapped their
+ * neighbours' and the later sibling in paint order stole the taps — so half the
+ * footer was measurably unreachable. Real height is the only fix that holds.
+ */
 const FOOTER_LINK =
-  "inline-flex w-fit items-center gap-2 rounded-sm py-[5px] text-[0.9375rem] text-on-footer/[88%] transition-colors hover:text-on-footer hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-footer";
+  "inline-flex w-fit items-center gap-2 rounded-sm py-[5px] text-meta text-on-footer/[88%] transition-colors max-sm:flex max-sm:w-full max-sm:py-2.5 pointer-coarse:min-h-11 hover:text-on-footer hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-footer";
 
 function FooterGroup({
   heading,
@@ -22,7 +30,7 @@ function FooterGroup({
       <h2 className="mb-3 font-body text-eyebrow font-semibold uppercase tracking-[0.06em] text-on-footer/70">
         {heading}
       </h2>
-      <ul className="flex flex-col">{children}</ul>
+      <ul className="flex flex-col max-sm:divide-y max-sm:divide-on-footer/20">{children}</ul>
     </div>
   );
 }
@@ -59,8 +67,11 @@ export async function SiteFooter() {
 
   return (
     <footer className="border-t-2 border-primary bg-footer text-on-footer">
-      <Container className="pb-12 pt-16">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
+      {/* The walnut band terminates the page, so it is what sits under the home
+          indicator: `safe-bottom` adds the inset on top of the designed 48px
+          (`--safe-bottom-base`), and resolves to exactly 48px everywhere else. */}
+      <Container className="pt-16 pb-0 max-sm:pt-12 [--safe-bottom-base:2.5rem] safe-bottom">
+        <div className="grid grid-cols-1 gap-8 max-sm:gap-7 sm:grid-cols-2 md:grid-cols-4">
           <FooterGroup heading={t("contactHeading")}>
             {/* Live mailto — un-inerted in 2.01b (shown publicly per intake §7). */}
             <li>
@@ -101,12 +112,13 @@ export async function SiteFooter() {
           </FooterGroup>
         </div>
 
-        <div className="mt-9 flex flex-col gap-2 border-t border-on-footer/20 pt-5 text-[0.875rem] text-on-footer/80 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-9 flex flex-col gap-2 border-t border-on-footer/20 pt-5 text-[0.875rem] text-on-footer/80 max-sm:mt-7 sm:flex-row sm:items-center sm:justify-between">
           <p>{t("copyright", { year })}</p>
           <Link
             href="/privacy"
             className={cn(
-              "inline-flex min-h-[24px] w-fit items-center rounded-sm transition-colors hover:text-on-footer hover:underline",
+              "inline-flex min-h-[24px] w-fit items-center rounded-sm transition-colors max-sm:w-full pointer-coarse:min-h-11",
+              "hover:text-on-footer hover:underline",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-footer",
             )}
           >

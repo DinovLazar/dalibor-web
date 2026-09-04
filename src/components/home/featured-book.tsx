@@ -35,7 +35,7 @@ export async function FeaturedBook({
 
   return (
     <section className={cn("border-y border-border bg-surface", className)}>
-      <Container className="grid items-center gap-10 py-14 max-sm:py-12 md:grid-cols-[200px_1fr]">
+      <Container className="grid items-center gap-10 py-14 max-sm:py-10 md:grid-cols-[200px_1fr]">
         <Cover
           image={book.coverImage}
           locale={locale}
@@ -49,7 +49,7 @@ export async function FeaturedBook({
             {t("featuredEyebrow")}
           </p>
           {title ? (
-            <h2 className="mt-1 font-display text-h2 text-text max-sm:text-[1.625rem]">
+            <h2 className="mt-1 font-display text-h2 text-text">
               {title}
             </h2>
           ) : null}

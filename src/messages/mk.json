@@ -1,5 +1,13 @@
 {
-  "nav": { "home": "Почетна", "about": "За Далибор", "reviews": "Критики", "blog": "Блог", "book": "Книга", "contact": "Контакт", "primaryLabel": "Главна навигација" },
+  "nav": {
+    "home": "Почетна",
+    "about": "За Далибор",
+    "reviews": "Критики",
+    "blog": "Блог",
+    "book": "Книга",
+    "contact": "Контакт",
+    "primaryLabel": "Главна навигација"
+  },
   "common": {
     "siteName": "Далибор Плечиќ",
     "wordmark": "Dalibor Plečić",
@@ -11,7 +19,10 @@
     "closeMenu": "Затвори мени",
     "menu": "Мени",
     "availableIn": "Достапно на: {langs}",
-    "builtBy": "Изработиле"
+    "builtBy": "Изработиле",
+    "backToTop": "Назад на врвот",
+    "searchPlaceholderShort": "Пребарувај по тема…",
+    "showAllReviews": "Прикажи ги сите {count} критики"
   },
   "metadata": {
     "siteName": "Далибор Плечиќ",

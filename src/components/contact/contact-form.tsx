@@ -154,7 +154,7 @@ export function ContactForm({ className }: { className?: string }) {
           tabIndex={-1}
           role="status"
           aria-live="polite"
-          className="flex items-start gap-3 rounded-card border border-border bg-surface p-6 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+          className="flex items-start gap-3 card-flat p-6 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
         >
           <CircleCheck
             className="mt-0.5 size-6 shrink-0 text-primary-strong"
@@ -166,7 +166,7 @@ export function ContactForm({ className }: { className?: string }) {
             <button
               type="button"
               onClick={reset}
-              className={cn(buttonVariants({ variant: "outline" }), "mt-4")}
+              className={cn(buttonVariants({ variant: "outline" }), "mt-4 max-sm:h-12 max-sm:w-full")}
             >
               {t("form.sendAnother")}
             </button>
@@ -297,7 +297,7 @@ export function ContactForm({ className }: { className?: string }) {
           <button
             type="submit"
             disabled={submitting}
-            className={cn(buttonVariants(), "w-full sm:w-auto")}
+            className={cn(buttonVariants(), "w-full max-sm:h-12 sm:w-auto")}
           >
             {submitting ? t("form.sending") : t("form.send")}
           </button>

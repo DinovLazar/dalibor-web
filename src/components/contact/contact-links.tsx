@@ -25,7 +25,9 @@ const EXTERNAL = [
   { key: "booksa", href: siteLinks.booksa, Icon: ExternalLinkIcon },
 ] as const;
 
-const ROW = "flex items-start gap-3 py-1.5";
+// 44px minimum on touch: these rows were 24-33px tall and stacked, so their
+// granted hit areas overlapped and stole each other's taps (Phase 3.01).
+const ROW = "flex items-start gap-3 py-1.5 pointer-coarse:min-h-11 max-sm:items-center max-sm:py-2.5";
 const LINK_ROW = cn(
   ROW,
   "group -mx-1.5 rounded-md px-1.5 outline-none transition-colors",
@@ -97,7 +99,7 @@ export async function ContactLinks({ className }: { className?: string }) {
             <span className="text-meta text-text-muted">
               {t("interviewsDesc")}
             </span>
-            <span className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1">
+            <span className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 pointer-coarse:gap-y-2">
               {siteLinks.interviews.map((href, i) => (
                 <a
                   key={href}
@@ -105,7 +107,7 @@ export async function ContactLinks({ className }: { className?: string }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cn(
-                    "inline-flex items-center rounded-sm text-meta font-medium text-primary-strong outline-none hover:underline",
+                    "inline-flex items-center rounded-sm text-meta font-medium text-primary-strong outline-none pointer-coarse:min-h-11 hover:underline",
                     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
                   )}
                 >

@@ -49,7 +49,7 @@ export async function PostCard({
   return (
     <Link
       href={href}
-      className="group/card block rounded-card border border-border bg-surface p-5 shadow-card outline-none transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+      className="group/card block card-surface p-5 outline-none max-sm:p-4 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
     >
       <div className={hasThumb ? "flex gap-4" : undefined}>
         {hasThumb ? (
@@ -73,7 +73,7 @@ export async function PostCard({
               (no intervening h2). Styled as h4 — visual size unchanged. */}
           <h2
             lang={lang}
-            className="font-display text-h4 text-text transition-colors group-hover/card:text-primary-strong"
+            className="font-display text-h4 text-text transition-colors max-sm:line-clamp-2 group-hover/card:text-primary-strong"
           >
             {title}
           </h2>
@@ -83,22 +83,22 @@ export async function PostCard({
             </p>
           ) : null}
           {excerpt ? (
-            <p lang={lang} className="mt-2 line-clamp-2 text-body text-text-muted">
+            <p lang={lang} className="mt-2 line-clamp-2 text-body text-text-muted max-sm:mt-1.5 max-sm:text-meta">
               {excerpt}
             </p>
           ) : null}
           {shownTopics.length ? (
-            <ul className="mt-2 flex flex-wrap gap-2">
+            <ul className="mt-2 flex flex-wrap gap-2 max-sm:hidden">
               {shownTopics.map((tp) => (
                 <li
                   key={tp.slug}
-                  className="inline-flex h-7 items-center rounded-pill border border-primary px-3 text-eyebrow font-semibold text-primary-strong"
+                  className="inline-flex h-7 items-center rounded-pill border border-primary px-3 text-chip text-primary-strong"
                 >
                   {tp.label}
                 </li>
               ))}
               {extraTopics > 0 ? (
-                <li className="inline-flex h-7 items-center text-eyebrow font-semibold text-text-muted">
+                <li className="inline-flex h-7 items-center text-chip text-text-muted">
                   +{extraTopics}
                 </li>
               ) : null}

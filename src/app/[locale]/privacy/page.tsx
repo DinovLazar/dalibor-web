@@ -57,7 +57,7 @@ export default async function PrivacyPage({
     <Section>
       <Container className="max-w-prose">
         <div className="reveal">
-          <h1 className="font-display text-h1 text-text max-sm:text-[2.125rem]">
+          <h1 className="font-display text-h1 text-text">
             {t("title")}
           </h1>
 

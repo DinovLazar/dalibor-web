@@ -14,9 +14,15 @@ import { monogramOf } from "@/lib/strings";
  * The §7.4 reviewed-book card for the single-review page. Renders the book's
  * cover, title (with an alternate-script subtitle so e.g. /mk also shows the
  * Latin title), author · year, publisher, and — when present — the review's
- * `source` (where it first appeared). Two-column mini-card on small/tablet,
- * stacked at `lg` where the parent makes it the sticky sidebar; the parent owns
- * placement and stickiness, this is just the card. Server component (async — it
+ * `source` (where it first appeared). Two-column mini-card on tablet, stacked at
+ * `lg` where the parent makes it the sticky sidebar; the parent owns placement
+ * and stickiness, this is just the card.
+ *
+ * Below `sm` (Phase 3.01) it stacks and centres instead: a book cover is a 2:3
+ * object, so unlike the hero it must NOT go full-bleed — it is presented at
+ * 160×240 on the card's parchment ground with the metadata beneath, which reads
+ * as a book rather than as a cropped background. 96px beside a text column was
+ * too small to recognise a cover at arm's length. Server component (async — it
  * resolves i18n with `getTranslations`).
  */
 export async function ReviewBookAside({
@@ -62,7 +68,7 @@ export async function ReviewBookAside({
             href={sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-1 inline-flex items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            className="tap-target mt-1 inline-flex items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             {sourceName || sourceUrl}
             <ExternalLink className="size-4" strokeWidth={1.75} aria-hidden />
@@ -74,12 +80,12 @@ export async function ReviewBookAside({
     ) : null;
 
   return (
-    <div className="grid grid-cols-[96px_1fr] gap-[18px] rounded-card border border-border bg-surface p-5 shadow-card sm:grid-cols-[120px_1fr] lg:block">
+    <div className="grid grid-cols-[96px_1fr] gap-[18px] card-surface p-5 max-sm:block max-sm:text-center sm:grid-cols-[120px_1fr] lg:block">
       <Cover
         image={review.coverImage}
         locale={locale}
-        className="w-full max-w-[160px] lg:mb-4"
-        sizes="(max-width: 1023px) 120px, 160px"
+        className="w-full max-w-[160px] max-sm:mx-auto max-sm:mb-4 lg:mb-4"
+        sizes="(max-width: 639px) 160px, (max-width: 1023px) 120px, 160px"
         pixelWidth={400}
         monogram={monogramOf(bookTitle)}
       />

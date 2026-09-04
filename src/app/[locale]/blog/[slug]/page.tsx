@@ -7,7 +7,9 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { BackToTop } from "@/components/layout/back-to-top";
 import { Section } from "@/components/layout/section";
+import { buttonVariants } from "@/components/ui/button";
 import { PortableText } from "@/components/portable-text";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildPageMetadata } from "@/lib/seo/metadata";
@@ -26,6 +28,7 @@ import {
 import { POST_BY_SLUG_QUERY, POST_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { postSlugTag } from "@/sanity/lib/tags";
 import { formatFullDate } from "@/lib/datetime";
+import { cn } from "@/lib/utils";
 
 /**
  * Single blog-post page (§7.6). A single reading column constrained to the
@@ -126,12 +129,13 @@ export default async function BlogPostPage({
   return (
     <Section>
       <JsonLd data={[articleSchema, breadcrumbSchema]} />
-      <div className="mx-auto w-full max-w-prose px-5 sm:px-8">
+      <BackToTop />
+      <div className="mx-auto w-full max-w-prose page-gutter lg:px-8">
         {/* Head — back link, breadcrumb, title, §6.16 double rule, date / note. */}
         <div className="reveal">
           <Link
             href="/blog"
-            className="inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            className="inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none pointer-coarse:min-h-11 hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             <ArrowLeft className="size-[18px]" strokeWidth={1.75} aria-hidden />{" "}
             {t("blog.backToBlog")}
@@ -160,7 +164,7 @@ export default async function BlogPostPage({
 
           <h1
             lang={contentLang(post.title, locale)}
-            className="mt-4 font-display text-h1 text-text max-sm:text-[2.125rem]"
+            className="mt-4 font-display text-h1 text-text"
           >
             {title}
           </h1>
@@ -191,12 +195,12 @@ export default async function BlogPostPage({
           <PortableText value={body} dropCap lang={contentLang(post.body, locale)} />
 
           {topics.length ? (
-            <ul className="mt-8 flex flex-wrap gap-2">
+            <ul className="mt-8 flex flex-wrap gap-2 max-sm:gap-y-3">
               {topics.map((tp) => (
                 <li key={tp.slug}>
                   <Link
                     href={`/blog?topic=${encodeURIComponent(tp.slug)}`}
-                    className="inline-flex h-7 items-center rounded-pill border border-primary px-3 text-eyebrow font-semibold text-primary-strong outline-none transition-colors hover:bg-[rgb(168_116_55_/_0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                    className="tap-target inline-flex h-7 items-center rounded-pill border border-primary px-3 text-chip text-primary-strong outline-none transition-colors max-sm:h-9 hover:bg-[rgb(168_116_55_/_0.12)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                   >
                     {tp.label}
                   </Link>
@@ -217,7 +221,7 @@ export default async function BlogPostPage({
                   href={sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-1 inline-flex items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                  className="tap-target mt-1 inline-flex items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                 >
                   {sourceName || sourceUrl}
                   <ExternalLink className="size-4" strokeWidth={1.75} aria-hidden />
@@ -232,7 +236,7 @@ export default async function BlogPostPage({
 
           <Link
             href="/blog"
-            className="mt-6 inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            className={cn(buttonVariants({ variant: "outline" }), "mt-6 gap-1.5 max-sm:h-12 max-sm:w-full")}
           >
             <ArrowLeft className="size-[18px]" strokeWidth={1.75} aria-hidden />{" "}
             {t("blog.backToBlog")}

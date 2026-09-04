@@ -22,6 +22,15 @@ const LOCALE_LABELS: Record<string, string> = {
  * current path (e.g. /en/reviews ↔ /mk/reviews). The active locale is real text
  * (not a link) with `aria-current`; the others are keyboard-focusable links with
  * a visible focus ring. `onNavigate` lets the mobile menu close on switch.
+ *
+ * Phase 3.01: each item is at least 44×44 on a coarse pointer — the mobile menu
+ * instance, and the header instance on a phone held in landscape (844px wide, so
+ * `max-sm:` would have switched off exactly where a thumb still needs the room).
+ * A mouse-driven desktop is untouched. They were 37×35 / 35×35 / 41×35. The
+ * active locale keeps `aria-current="true"` rather than `"page"`: switching
+ * language navigates to the same page in another language, so "true" (this is
+ * the current item in this set) is the accurate claim, not "this is the current
+ * page" — and the `·` separators stay `aria-hidden` decoration.
  */
 export function LanguageSwitcher({
   className,
@@ -50,7 +59,7 @@ export function LanguageSwitcher({
               {isActive ? (
                 <span
                   aria-current="true"
-                  className="px-2 py-1.5 font-semibold text-text"
+                  className="inline-flex items-center justify-center px-2 py-1.5 font-semibold text-text pointer-coarse:min-h-11 pointer-coarse:min-w-11 pointer-coarse:px-3"
                 >
                   {LOCALE_LABELS[locale]}
                 </span>
@@ -59,7 +68,7 @@ export function LanguageSwitcher({
                   href={pathname}
                   locale={locale}
                   onClick={onNavigate}
-                  className="rounded-sm px-2 py-1.5 font-medium text-text-muted transition-colors hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                  className="inline-flex items-center justify-center rounded-sm px-2 py-1.5 font-medium text-text-muted transition-colors pointer-coarse:min-h-11 pointer-coarse:min-w-11 pointer-coarse:px-3 hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                 >
                   {LOCALE_LABELS[locale]}
                 </Link>

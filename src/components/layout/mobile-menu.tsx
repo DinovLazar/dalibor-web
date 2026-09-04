@@ -27,6 +27,10 @@ import { cn } from "@/lib/utils";
  * `aria-expanded` and the panel closes on navigation / language switch. The
  * hamburger sits top-right; opening swaps it for the X close in the same corner.
  *
+ * Phase 3.01: the panel takes `safe-top` and the `page-gutter` utility so it
+ * clears the notch and the landscape side insets — it is a `side="top"` panel
+ * that paints under the status bar now that the viewport is `viewport-fit=cover`.
+ *
  * Animation uses Framer's `LazyMotion` + the lightweight `m` component (1.12): the
  * DOM animation features load lazily only when the panel first mounts, keeping the
  * full Framer bundle out of the header's upfront JS on every page.
@@ -83,7 +87,7 @@ export function MobileMenu({ className }: { className?: string }) {
       </SheetTrigger>
 
       {open && (
-      <SheetContent side="top" showCloseButton={false} className="gap-0 px-5 pb-6">
+      <SheetContent side="top" showCloseButton={false} className="gap-0 pb-6 page-gutter safe-top">
         <SheetTitle className="sr-only">{t("common.menu")}</SheetTitle>
         <LazyMotion features={loadFeatures} strict>
         <m.div

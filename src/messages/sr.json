@@ -1,5 +1,13 @@
 {
-  "nav": { "home": "Početna", "about": "O autoru", "reviews": "Kritike", "blog": "Blog", "book": "Knjiga", "contact": "Kontakt", "primaryLabel": "Glavna navigacija" },
+  "nav": {
+    "home": "Početna",
+    "about": "O autoru",
+    "reviews": "Kritike",
+    "blog": "Blog",
+    "book": "Knjiga",
+    "contact": "Kontakt",
+    "primaryLabel": "Glavna navigacija"
+  },
   "common": {
     "siteName": "Dalibor Plečić",
     "wordmark": "Dalibor Plečić",
@@ -11,7 +19,10 @@
     "closeMenu": "Zatvori meni",
     "menu": "Meni",
     "availableIn": "Dostupno na: {langs}",
-    "builtBy": "Izradio"
+    "builtBy": "Izradio",
+    "backToTop": "Nazad na vrh",
+    "searchPlaceholderShort": "Pretraži po temi…",
+    "showAllReviews": "Prikaži svih {count} kritika"
   },
   "metadata": {
     "siteName": "Dalibor Plečić",

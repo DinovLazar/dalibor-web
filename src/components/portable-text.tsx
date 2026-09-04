@@ -20,6 +20,18 @@ import { cn } from "@/lib/utils";
  * Opt-in `dropCap` adds the `article-body` class so the first paragraph gets the
  * §3.6 Playfair caramel initial (CSS lives in globals.css); off by default, so
  * About + Book stay unchanged.
+ *
+ * There is deliberately **no figure / image renderer**: `blockContent` allows a
+ * single array member, `type: "block"`, so an editor cannot place an image in a
+ * body at all. Adding one would be a renderer for a block type that can never
+ * occur. In-article imagery that does exist (the About portrait) is handled by
+ * its own page (Phase 3.01).
+ *
+ * Phase 3.01 tunes the phone rhythm only: heading lead-in tightens (the mobile
+ * type scale already grew h2 to 28px, so the old 40px gap over-separated), and
+ * the pull-quote and list indents halve — at 375px the container is 335px wide
+ * and a 24px indent is measure we cannot spare. Paragraph spacing stays at the
+ * §4.1 1em, and body prose stays 18px/1.7 (§3.3) at every width.
  */
 
 /** The value shape `@portabletext/react` accepts (a single block or an array). */
@@ -33,12 +45,12 @@ const components: PortableTextComponents = {
       </p>
     ),
     h2: ({ children }) => (
-      <h2 className="mt-10 font-display text-h2 text-text first:mt-0 max-sm:text-[1.625rem]">
+      <h2 className="mt-10 font-display text-h2 text-text first:mt-0 max-sm:mt-8">
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="mt-8 font-display text-h3 text-text first:mt-0">
+      <h3 className="mt-8 font-display text-h3 text-text first:mt-0 max-sm:mt-7">
         {children}
       </h3>
     ),
@@ -48,19 +60,19 @@ const components: PortableTextComponents = {
       </h4>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="mt-6 border-l-[3px] border-primary pl-6 font-display text-h3 font-medium italic text-text first:mt-0">
+      <blockquote className="mt-6 border-l-[3px] border-primary pl-6 font-display text-h3 font-medium italic text-text first:mt-0 max-sm:pl-4">
         {children}
       </blockquote>
     ),
   },
   list: {
     bullet: ({ children }) => (
-      <ul className="mt-[1em] list-disc space-y-[0.4em] pl-5 text-body text-text marker:text-primary">
+      <ul className="mt-[1em] list-disc space-y-[0.4em] pl-5 max-sm:pl-4 text-body text-text marker:text-primary">
         {children}
       </ul>
     ),
     number: ({ children }) => (
-      <ol className="mt-[1em] list-decimal space-y-[0.4em] pl-5 text-body text-text marker:font-medium marker:text-text-muted">
+      <ol className="mt-[1em] list-decimal space-y-[0.4em] pl-5 max-sm:pl-4 text-body text-text marker:font-medium marker:text-text-muted">
         {children}
       </ol>
     ),

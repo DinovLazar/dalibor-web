@@ -13,7 +13,10 @@
     "import:content": "node --conditions=react-server --import tsx --env-file=.env.local scripts/import-content.mts",
     "import:assets": "node --conditions=react-server --import tsx --env-file=.env.local scripts/import-assets.mts",
     "import:translations": "node --conditions=react-server --import tsx --env-file=.env.local scripts/import-translations.mts",
-    "make:favicon": "node --import tsx scripts/make-favicon.mts"
+    "make:favicon": "node --import tsx scripts/make-favicon.mts",
+    "audit:mobile": "node --import tsx scripts/mobile-audit.mts",
+    "audit:report": "node --import tsx scripts/mobile-audit-report.mts",
+    "audit:lighthouse": "node --import tsx scripts/lighthouse-mobile.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

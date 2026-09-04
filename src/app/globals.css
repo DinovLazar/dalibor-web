@@ -17,6 +17,9 @@
   --text-meta: 0.9375rem;   --text-meta--line-height: 1.5;     --text-meta--letter-spacing: 0.01em;
   --text-caption: 0.875rem; --text-caption--line-height: 1.5;
   --text-eyebrow: 0.8125rem;--text-eyebrow--line-height: 1.4;  --text-eyebrow--letter-spacing: 0.08em;
+  /* Chip / tag label (3.01) — split out of `eyebrow` so a phone can grow chips to
+     14px while eyebrow labels stay 13px. */
+  --text-chip: 0.8125rem;   --text-chip--line-height: 1.4;     --text-chip--letter-spacing: 0.08em;     --text-chip--font-weight: 600;
 
   /* ---------- Colour (semantic; values locked & AA-verified) ---------- */
   --color-bg: #F4EDE1;             /* Cream  — page background        */
@@ -77,6 +80,10 @@
   --radius-xl: calc(var(--radius) * 1.4);
 
   /* ---------- Shadow (warm, subtle) ---------- */
+  /* Mobile card lift (3.01): parchment-on-cream is only a 1.12:1 value step, so
+     on a phone a card needs a slightly firmer edge + shadow to read as an object
+     at arm's length outdoors. Still a hardcover, not a dashboard. */
+  --shadow-card-mobile: 0 1px 2px rgb(46 34 24 / 0.06), 0 4px 12px rgb(46 34 24 / 0.05);
   --shadow-card:       0 1px 2px rgb(46 34 24 / 0.04), 0 6px 18px rgb(46 34 24 / 0.06);
   --shadow-card-hover: 0 2px 4px rgb(46 34 24 / 0.06), 0 14px 30px rgb(46 34 24 / 0.11);
   --shadow-cover:      0 2px 6px rgb(46 34 24 / 0.12), 0 14px 32px rgb(46 34 24 / 0.18);
@@ -106,6 +113,19 @@ h1,h2,h3,h4,.font-display { font-family: var(--font-display); }
    scroll affordance — no visual layout impact. */
 :is(a, button, input, textarea, select, summary, [tabindex], h1, h2, h3, h4) {
   scroll-margin-top: 5.5rem;
+}
+
+/* Italic families (Phase 3.01 font trim). The italic cuts live in their own
+   `next/font` instances so they are not preloaded on every page; that also means
+   they are separate font *families*, so every italic context has to name one
+   explicitly — otherwise the browser would find no italic face in the roman
+   family and synthesise an oblique (§3.4 warns about exactly that for Cyrillic).
+   Display italic (pull-quotes, §6.10) wins via the higher-specificity rule. */
+:is(em, i, cite, address, .italic) {
+  font-family: var(--font-lora-italic), var(--font-body);
+}
+:is(.font-display.italic, .font-display em, .font-display i, .font-display cite) {
+  font-family: var(--font-playfair-italic), var(--font-display);
 }
 
 /* Cyrillic eyebrow tracking tweak (§3.4) */
@@ -149,4 +169,238 @@ h1,h2,h3,h4,.font-display { font-family: var(--font-display); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+
+/* ==========================================================================
+   MOBILE FOUNDATIONS — Phase 3.01
+   Everything below either (a) only takes effect under `width < 40rem`
+   (Tailwind's `sm`) / `pointer: coarse`, or (b) is an opt-in class no desktop
+   layout uses. Desktop output is unchanged by design.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- gutters --
+   One source of truth for the §4.6 page gutter, so `.full-bleed` can cancel it
+   exactly and never guess. Values match the previous `px-5 sm:px-8 lg:px-12`
+   at every width except below 360px, where the gutter drops to 16px to buy back
+   line length on the smallest phones (3.01 Workstream A.4). */
+:root { --page-gutter: 1.25rem; }            /* 20px */
+@media (width < 22.5rem)  { :root { --page-gutter: 1rem; } }   /* <360px → 16px */
+@media (width >= 40rem)   { :root { --page-gutter: 2rem; } }   /* sm  → 32px    */
+@media (width >= 64rem)   { :root { --page-gutter: 3rem; } }   /* lg  → 48px    */
+
+/* ------------------------------------------------------------ full bleed --
+   Breaks a child of a gutter'd container out to the container's own edges.
+   Deliberately cancels the *gutter* rather than using `100vw`: at `100vw` a
+   classic desktop scrollbar makes the element wider than the scrollport and
+   introduces horizontal overflow. Below `sm` every container on this site is
+   narrower than its max-width, so the container edge IS the viewport edge and
+   this is true full-bleed with zero overflow risk. Use it as `max-sm:full-bleed`. */
+@utility full-bleed {
+  margin-inline: calc(-1 * var(--page-gutter));
+  width: auto;
+  max-width: none;
+  border-radius: 0;
+}
+
+/* ----------------------------------------------------------------- bands --
+   The phone page is built from alternating full-width colour bands so it has
+   visible structure instead of one flat cream field (3.01 Workstream A.2).
+   The rule a band enforces: **a card never sits on a ground of its own value.**
+   `--band-card` is what every card reads for its background, so a card inside a
+   parchment band flips to cream automatically — no per-card overrides.
+   Inert at `sm` and up, so desktop keeps today's cream page / parchment cards. */
+:root { --band-card: var(--color-surface); }
+
+@media (width < 40rem) {
+  .band-cream     { background-color: var(--color-bg);      --band-card: var(--color-surface); }
+  .band-parchment { background-color: var(--color-surface); --band-card: var(--color-bg); }
+  /* Hairlines only where two same-value bands would otherwise touch. */
+  .band-parchment + .band-parchment,
+  .band-cream + .band-cream { border-top: 1px solid var(--color-border); }
+}
+
+/* ------------------------------------------------------------ card shell --
+   The single card recipe (§6.6 / §6.7): identical to the previous
+   `rounded-card border border-border bg-surface shadow-card` on desktop, and on
+   a phone it firms the hairline from 12% to 20% and swaps in the tighter mobile
+   shadow so a card reads as an object outdoors (3.01 Workstream A.3). */
+@layer components {
+  .card-surface {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background-color: var(--band-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Same shell without elevation — empty states, notices and the contact
+     success panel, which were never raised. Keeps them flipping ground inside a
+     parchment band without gaining a shadow they did not have. */
+  .card-flat {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background-color: var(--band-card);
+  }
+
+  @media (width < 40rem) {
+    .card-surface {
+      border-color: rgb(46 34 24 / 0.20);
+      box-shadow: var(--shadow-card-mobile);
+    }
+    .card-flat { border-color: rgb(46 34 24 / 0.20); }
+  }
+}
+
+/* ------------------------------------------------------ mobile type scale --
+   The §3.2 scale gets an explicit phone branch instead of inheriting the
+   desktop defaults. Overriding the `@theme` custom properties (rather than
+   sprinkling `max-sm:text-[…]` utilities) means every `text-h1` / `text-h2` /
+   `text-meta` on the site moves together and nothing can drift. Body prose is
+   deliberately NOT touched — it stays 18px/1.7 (§3.3). */
+@media (width < 40rem) {
+  :root {
+    --text-display: 2.75rem;            /* 44px — was 40px via a local override */
+    --text-display--line-height: 1.02;
+    --text-display--letter-spacing: -0.02em;
+
+    --text-h1: 2.25rem;                 /* 36px — was 34px */
+    --text-h1--line-height: 1.08;
+
+    --text-h2: 1.75rem;                 /* 28px — was 26px */
+    --text-h2--line-height: 1.12;
+
+    --text-h3: 1.375rem;                /* 22px, per the §3.2 mobile column */
+    --text-h4--line-height: 1.2;        /* card titles, 20px, 2-line clamp */
+
+    --text-eyebrow--font-weight: 600;   /* §3.2 says 600; desktop inherits 400 */
+
+    --text-meta: 1rem;                  /* 16px — was 15px (card meta, footer) */
+    --text-chip: 0.875rem;              /* 14px — was 13px (chips + tags)      */
+  }
+}
+
+/* ---------------------------------------------------------- touch targets --
+   WCAG 2.2 AA SC 2.5.8 asks for 24×24; Style A targets 44×44 on touch (§10).
+   `.tap-target` grows the *hit* area with a centred `::before` overlay while the
+   painted control keeps its designed size — so a 28px tag pill stays a 28px pill
+   and still takes a thumb. `::before` is used (not `::after`) because the nav's
+   active underline already owns `::after`.
+
+   Applied only under `pointer: coarse`, so a mouse/keyboard desktop is untouched
+   and adjacent small controls don't grow overlapping hit zones on a pointer
+   device where they aren't needed. */
+@media (pointer: coarse) {
+  .tap-target { position: relative; }
+  .tap-target::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    width: 100%;
+    height: 100%;
+    min-width: 44px;
+    min-height: 44px;
+    /* Purely a hit area — never paints, never blocks the control's own children. */
+    background: transparent;
+    pointer-events: auto;
+  }
+
+  /* Site chrome is fully under our control and holds no prose, so every
+     interactive element in it gets the hit area without an opt-in. Prose links
+     are deliberately excluded everywhere (SC 2.5.8 "Inline" exception): growing
+     them would overlap neighbouring lines and make body text *harder* to tap. */
+  :is(header, footer, nav) :is(a[href], button, summary, [role="button"]):not(.tap-none) {
+    position: relative;
+  }
+  :is(header, footer, nav) :is(a[href], button, summary, [role="button"]):not(.tap-none)::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    width: 100%;
+    height: 100%;
+    min-width: 44px;
+    min-height: 44px;
+    background: transparent;
+  }
+}
+
+/* --------------------------------------------------------- safe areas -----
+   `viewport-fit=cover` (set by the layout's `viewport` export) lets the page
+   paint under the notch and the home indicator, which means we now have to
+   honour the insets ourselves. `max()` keeps the designed gutter whenever the
+   inset is smaller (i.e. everywhere except a notched device in landscape). */
+@utility page-gutter {
+  padding-inline-start: max(var(--page-gutter), env(safe-area-inset-left));
+  padding-inline-end:   max(var(--page-gutter), env(safe-area-inset-right));
+}
+@utility safe-top    { padding-top: env(safe-area-inset-top); }
+@utility safe-bottom { padding-bottom: calc(var(--safe-bottom-base, 0px) + env(safe-area-inset-bottom)); }
+
+/* ------------------------------------------------------------ back to top --
+   Workstream D.1 — a thumb-zone control on long articles. Shown only once the
+   reader is two screens down (the client island toggles `data-visible`), and it
+   fades rather than slides so `prefers-reduced-motion` costs it nothing. */
+.to-top {
+  position: fixed;
+  right: max(var(--page-gutter), env(safe-area-inset-right));
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  z-index: 30;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 180ms ease, visibility 180ms;
+}
+.to-top[data-visible="true"] { opacity: 1; visibility: visible; }
+
+/* --------------------------------------------------------- mobile list cap --
+   Workstream B.7 — the Reviews archive is 20 cards. Below `sm` the client island
+   `ListCap` flips `data-capped` on and everything past the 12th card is removed
+   from the flow. `display: none` (rather than a visual hide) is the point: the
+   hidden cards leave the tab order and the accessibility tree, so nobody can
+   focus a card they cannot see. The attribute starts `"false"` on the server, so
+   with JavaScript off the full list renders exactly as before. */
+@media (width < 40rem) {
+  .list-cap[data-capped="true"] > ul > li:nth-child(n + 13) { display: none; }
+}
+
+/* --------------------------------------------------- horizontal chip rail --
+   Workstream B.3 — the topic filter collapses from a 312px wrapped block into a
+   single snap-scrolling row on a phone. The right-edge fade is a mask so it
+   works over either band colour without a hard-coded gradient stop. */
+.chip-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Wrapped (>= sm) on a touch device the chips are 36px tall, so an 8px row gap
+   puts the pitch at exactly 44 — no room at all between two rows' hit areas.
+   12px takes it to 48. */
+@media (pointer: coarse) {
+  .chip-rail { row-gap: 0.75rem; }
+}
+
+@media (width < 40rem) {
+  .chip-rail {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Bleed to the screen edges so the row reads as "there is more this way",
+       with the gutter restored as scroll padding. */
+    margin-inline: calc(-1 * var(--page-gutter));
+    padding-inline: var(--page-gutter);
+    scroll-padding-inline: var(--page-gutter);
+    /* Vertical padding leaves room for the 44px hit areas + focus rings. */
+    padding-block: 0.25rem;
+    mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent 100%);
+  }
+  .chip-rail::-webkit-scrollbar { display: none; }
+  .chip-rail > * { scroll-snap-align: start; flex: 0 0 auto; }
+  /* The last chip must be able to clear the fade, or it can never be read. */
+  .chip-rail::after { content: ""; flex: 0 0 1.5rem; }
 }

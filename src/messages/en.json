@@ -19,7 +19,10 @@
     "closeMenu": "Close menu",
     "menu": "Menu",
     "availableIn": "Available in: {langs}",
-    "builtBy": "Built by"
+    "builtBy": "Built by",
+    "backToTop": "Back to top",
+    "searchPlaceholderShort": "Search by topic…",
+    "showAllReviews": "Show all {count} reviews"
   },
   "metadata": {
     "siteName": "Dalibor Plečić",
