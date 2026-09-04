@@ -21,10 +21,14 @@ import { cn } from "@/lib/utils";
  * snap-scrolling row with a right-edge fade, taking ~56px instead. At `sm` and up
  * `.chip-rail` is exactly `flex flex-wrap gap-2`, so the desktop row is unchanged.
  *
- * The chips are 36px tall on a phone (the label grew to 14px via `text-chip`) and
- * carry `tap-target`, which grows the *hit* area to 44×44 under `pointer: coarse`
- * without changing the painted pill. Horizontally they are separated by the 8px
- * rail gap plus 24px of pill padding, so neighbouring hit areas do not overlap.
+ * The chips are 36px tall on any touch device (the label grew to 14px via
+ * `text-chip`) and carry `tap-target`, which grows the *hit* area to 44×44 under
+ * `pointer: coarse` without changing the painted pill. Sizing keys off the
+ * pointer rather than the width because a phone in landscape is 844px wide — the
+ * wrapped desktop row on a thumb — where a `max-sm:` rule would have switched
+ * off. Horizontally the 8px rail gap plus 24px of pill padding keeps neighbours
+ * apart; vertically the wrapped row's gap goes to 12px on coarse pointers so two
+ * rows of 36px chips sit at a 48px pitch.
  *
  * Only the `<nav>` wrapper is a client island ({@link TopicRail}), and only so
  * that the active chip can be scrolled into view on arrival; the chips themselves
@@ -47,7 +51,7 @@ export function TopicFilter({
   className?: string;
 }) {
   const base =
-    "tap-target inline-flex h-8 shrink-0 items-center rounded-pill border px-3 text-chip whitespace-nowrap outline-none transition-colors max-sm:h-9 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus";
+    "tap-target inline-flex h-8 shrink-0 items-center rounded-pill border px-3 text-chip whitespace-nowrap outline-none transition-colors pointer-coarse:h-9 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus";
   const inactive =
     "border-primary text-primary-strong hover:bg-[rgb(168_116_55_/_0.12)]";
   const active =

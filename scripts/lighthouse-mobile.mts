@@ -12,13 +12,26 @@
  *   npm run audit:lighthouse -- --base http://localhost:3210
  */
 
-import { execFile } from "node:child_process";
+import { spawn } from "node:child_process";
+import { existsSync } from "node:fs";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { promisify } from "node:util";
 
-const run = promisify(execFile);
+/**
+ * Lighthouse is chatty and long-running; capturing its output through a pipe
+ * (execFile/exec) deadlocks here, so the child's stdio is discarded outright and
+ * we read the result from the JSON file it writes.
+ */
+function run(cmd: string, argv: string[], env: NodeJS.ProcessEnv) {
+  return new Promise<void>((resolve, reject) => {
+    const child = spawn(cmd, argv, { stdio: "ignore", env });
+    child.on("error", reject);
+    child.on("close", (code) =>
+      code === 0 ? resolve() : reject(new Error(`${cmd} exited ${code}`)),
+    );
+  });
+}
 
 const args = process.argv.slice(2);
 const argOf = (name: string, fallback: string) => {
@@ -30,6 +43,9 @@ const BASE = argOf("base", "http://localhost:3210");
 const LOCALE = argOf("locale", "mk");
 const RUNS = Number(argOf("runs", "1"));
 const OUT = "docs/mobile-audit/lighthouse.json";
+// Comma-separated page keys, so a long run can be split across invocations.
+const ONLY = argOf("pages", "");
+const APPEND = args.includes("--append");
 
 const CHROME =
   process.env.CHROME_PATH ??
@@ -75,10 +91,9 @@ async function audit(dir: string, p: Page): Promise<Result> {
       "--output=json",
       `--output-path=${out}`,
       "--only-categories=performance,accessibility,best-practices,seo",
-      "--chrome-flags=--headless=new --no-first-run --no-default-browser-check --disable-extensions",
-      "--max-wait-for-load=60000",
+      "--chrome-flags=--headless=new --no-first-run",
     ],
-    { env: { ...process.env, CHROME_PATH: CHROME }, maxBuffer: 1024 * 1024 * 64 },
+    { ...process.env, CHROME_PATH: CHROME },
   );
 
   const lhr = JSON.parse(await readFile(out, "utf8"));
@@ -120,7 +135,8 @@ function median(rs: Result[]): Result {
 }
 
 async function main() {
-  const pages = await discover();
+  const all = await discover();
+  const pages = ONLY ? all.filter((p) => ONLY.split(",").includes(p.page)) : all;
   const dir = await mkdtemp(join(tmpdir(), "lh-"));
   const results: Result[] = [];
   try {
@@ -143,7 +159,13 @@ async function main() {
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
-  await writeFile(OUT, JSON.stringify(results, null, 2));
+  const prior: Result[] =
+    APPEND && existsSync(OUT) ? JSON.parse(await readFile(OUT, "utf8")) : [];
+  const order = all.map((p) => p.page);
+  const merged = [...prior.filter((r) => !results.some((x) => x.page === r.page)), ...results].sort(
+    (a, b) => order.indexOf(a.page) - order.indexOf(b.page),
+  );
+  await writeFile(OUT, JSON.stringify(merged, null, 2));
   console.log(`✔ ${OUT}`);
 }
 

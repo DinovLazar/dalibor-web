@@ -135,7 +135,7 @@ export default async function BlogPostPage({
         <div className="reveal">
           <Link
             href="/blog"
-            className="tap-target inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            className="inline-flex min-h-[24px] items-center gap-1.5 text-meta font-medium text-primary-strong outline-none pointer-coarse:min-h-11 hover:text-primary-hover hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             <ArrowLeft className="size-[18px]" strokeWidth={1.75} aria-hidden />{" "}
             {t("blog.backToBlog")}

@@ -399,3 +399,60 @@
 **Focus-ring gotcha discovered (pre-existing, site-wide, NOT fixed in 2.15).** In Tailwind v4, `.outline-none` compiles to `{ --tw-outline-style: none; outline-style: none }` and `.outline-2` to `{ outline-style: var(--tw-outline-style); outline-width: 2px }`. The site's shared focus pattern `outline-none focus-visible:outline-2 …` therefore resolves `outline-style: none` even when `:focus-visible` is active (the `outline-none`-set ambient `--tw-outline-style: none` is never re-asserted to `solid`) — so keyboard focus rings do not paint (verified identical on the wordmark and `primary-nav`). axe does not flag SC 2.4.7, so prior "axe 0" passes missed it. Fix is design-system-wide (`outline-hidden` instead of `outline-none`, or add `focus-visible:outline-solid`, or a global `:focus-visible { outline-style: solid }`) — left for a dedicated task; 2.15 preserved the wordmark's focus classes verbatim to match the rest of the site.
 
 **No new dependency, no schema change (no `typegen` diff), no deploy from this machine, no Vercel env change.** `npm audit` unchanged.
+
+
+## 2026-09-04 — Part 3 · Phase 3.01 (Code): mobile experience overhaul
+
+**No dependency added or removed.** `package.json` gained three script entries only:
+`audit:mobile`, `audit:report`, `audit:lighthouse`. Lighthouse runs through `npx
+lighthouse@13` — an audit tool is not an app dependency, and nothing in `src/`
+imports it. Installed versions unchanged from the 2.15 entry (Next.js 16.2.7,
+React 19.2.4, Tailwind CSS 4.3.0, next-intl 4.13.0, `@base-ui/react` 1.5.0,
+tailwind-merge 3.6.0, sharp 0.34.5 devDep).
+
+**Fonts — switched to the variable cuts, and italic split out of the preload.**
+`next/font/google` calls for Playfair Display and Lora now omit `weight`, so the
+variable font ships instead of the static 500/600/700 and 400/500/600 instances.
+Italic moved to its own instance per family with `preload: false`, and
+`globals.css` names those families explicitly for `em / i / cite / .italic` (and
+their `.font-display` variants) so no oblique is ever synthesised — §3.4 warns
+about exactly that for Cyrillic.
+
+| | before | after |
+|---|---:|---:|
+| `@font-face` rules | 68 | 24 |
+| font CSS bytes | 31,302 | ~14,500 |
+| preloaded font files per page | 8 | 4 |
+| **preloaded font bytes per page** | **244,436** | **118,648** (−51.5%) |
+
+The italic faces (Playfair + Lora × latin + cyrillic) were 125,788 of the
+original 244,436 bytes, preloaded on every page for pull-quotes and in-prose
+`<em>` that most pages never render.
+
+**`tailwind-merge` now knows the Style A type scale.** `src/lib/utils.ts` wraps
+`extendTailwindMerge` and declares `text-display|h1|h2|h3|h4|body-lg|body|meta|
+caption|eyebrow|chip` as the `font-size` group. Out of the box tailwind-merge
+only knows Tailwind's stock scales, so it classified every one of those as a text
+*colour* and let a real colour later in the same `cn()` call override it —
+`cn("text-h4 text-text")` returned `"text-text"` and the element fell back to the
+inherited 16px. Keep the list in sync with the `--text-*` tokens in `globals.css`.
+
+**Viewport / platform.** The locale layout now exports `viewport` with
+`themeColor: "#F4EDE1"` and `viewportFit: "cover"` (the latter is what makes
+`env(safe-area-inset-*)` report non-zero; without it the safe-area CSS is dead
+code). `initialScale: 1` with no `maximumScale`, so pinch-zoom stays available
+(SC 1.4.4). `src/app/manifest.ts` serves `/manifest.webmanifest` with
+`display: "browser"`; `<link rel="manifest">` comes from layout metadata.
+`apple-touch-icon` already existed via the `app/apple-icon.png` file convention.
+
+**Touch sizing keys off `pointer: coarse`, not viewport width.** A phone in
+landscape is 844px wide — above `sm` — so width-based rules switch off exactly
+where a thumb still needs the room. Sizing rules use the `pointer-coarse:`
+variant; layout rules (single-column footer, dividers, full-width buttons) stay
+width-based.
+
+**Local measurement note.** `NEXT_PUBLIC_SITE_URL` is not set in `.env.local`, so
+a local build leaks `localhost` into canonical/hreflang/OG and caps Lighthouse
+SEO at 92 for reasons unrelated to this phase. The Lighthouse run was therefore
+built and served with `NEXT_PUBLIC_SITE_URL=https://www.daliborplecic.com`
+supplied inline; `.env.local` was **not** modified.

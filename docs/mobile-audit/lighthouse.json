@@ -1,0 +1,104 @@
+[
+  {
+    "page": "home",
+    "url": "http://localhost:3210/mk",
+    "scores": {
+      "performance": 0.86,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 0.92
+    },
+    "metrics": {
+      "lcp": 4194.224399999999,
+      "cls": 0,
+      "tbt": 39.5,
+      "fcp": 1515.2244,
+      "si": 1515.2244
+    }
+  },
+  {
+    "page": "reviews",
+    "url": "http://localhost:3210/mk/reviews",
+    "scores": {
+      "performance": 0.91,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 0.92
+    },
+    "metrics": {
+      "lcp": 3458.3845,
+      "cls": 0,
+      "tbt": 10.000000000000227,
+      "fcp": 1516.3845000000001,
+      "si": 1516.3845000000001
+    }
+  },
+  {
+    "page": "review-detail",
+    "url": "http://localhost:3210/mk/reviews/albert-poeticna-teznja-slobodi",
+    "scores": {
+      "performance": 0.8,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 0.92
+    },
+    "metrics": {
+      "lcp": 5266.941,
+      "cls": 0,
+      "tbt": 13,
+      "fcp": 1366.941,
+      "si": 1366.941
+    }
+  },
+  {
+    "page": "blog",
+    "url": "http://localhost:3210/mk/blog",
+    "scores": {
+      "performance": 0.9,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 0.92
+    },
+    "metrics": {
+      "lcp": 3587.5242,
+      "cls": 0,
+      "tbt": 67.80947500000002,
+      "fcp": 1363.1431499999999,
+      "si": 1363.1431499999999
+    }
+  },
+  {
+    "page": "blog-post",
+    "url": "http://localhost:3210/mk/blog/very-difficult-to-translate-my-friend",
+    "scores": {
+      "performance": 0.9,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 0.92
+    },
+    "metrics": {
+      "lcp": 3520.8591,
+      "cls": 0,
+      "tbt": 3.5,
+      "fcp": 1363.8591,
+      "si": 1363.8591
+    }
+  },
+  {
+    "page": "contact",
+    "url": "http://localhost:3210/mk/contact",
+    "scores": {
+      "performance": 0.91,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 0.92
+    },
+    "metrics": {
+      "lcp": 3532.9653500000004,
+      "cls": 0,
+      "tbt": 10.5,
+      "fcp": 1064.9653500000002,
+      "si": 1064.9653500000002
+    }
+  }
+]

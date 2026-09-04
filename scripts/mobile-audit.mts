@@ -312,6 +312,17 @@ const MEASURE_FN = String.raw`
       obscured: false, inline: false,
     };
 
+    // WCAG 2.2 SC 2.5.8 "Inline" exception, decided from the DOM before any
+    // geometry: a link that wraps across two lines has a bounding-box centre
+    // that lands in the gap between its line boxes, so the probe below would
+    // call it "obscured" when it is simply inline prose.
+    const parentEl = el.parentElement;
+    rec.inline =
+      cs.display.startsWith('inline') &&
+      !!parentEl &&
+      ['P', 'LI', 'SPAN', 'TD', 'DD', 'BLOCKQUOTE', 'FIGCAPTION'].includes(parentEl.tagName) &&
+      (parentEl.textContent || '').trim().length > (el.textContent || '').trim().length + 8;
+
     if (!owns(el, cx, cy)) {
       // Obscured by an overlay (or nested inside a bigger link). Report honestly.
       rec.obscured = true;
@@ -326,14 +337,6 @@ const MEASURE_FN = String.raw`
     rec.effW = l + rr + 1;
     rec.effH = u + d + 1;
     if (rec.effW >= MIN && rec.effH >= MIN) continue;
-
-    // WCAG 2.2 SC 2.5.8 "Inline" exception.
-    const parent = el.parentElement;
-    rec.inline =
-      cs.display.startsWith('inline') &&
-      !!parent &&
-      ['P', 'LI', 'SPAN', 'TD', 'DD', 'BLOCKQUOTE', 'FIGCAPTION'].includes(parent.tagName) &&
-      (parent.textContent || '').trim().length > (el.textContent || '').trim().length + 8;
 
     small.push(rec);
   }

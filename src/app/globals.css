@@ -375,6 +375,13 @@ h1,h2,h3,h4,.font-display { font-family: var(--font-display); }
   gap: 0.5rem;
 }
 
+/* Wrapped (>= sm) on a touch device the chips are 36px tall, so an 8px row gap
+   puts the pitch at exactly 44 — no room at all between two rows' hit areas.
+   12px takes it to 48. */
+@media (pointer: coarse) {
+  .chip-rail { row-gap: 0.75rem; }
+}
+
 @media (width < 40rem) {
   .chip-rail {
     flex-wrap: nowrap;

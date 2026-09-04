@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
  * footer was measurably unreachable. Real height is the only fix that holds.
  */
 const FOOTER_LINK =
-  "inline-flex w-fit items-center gap-2 rounded-sm py-[5px] text-meta text-on-footer/[88%] transition-colors max-sm:flex max-sm:min-h-11 max-sm:w-full max-sm:py-2.5 hover:text-on-footer hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-footer";
+  "inline-flex w-fit items-center gap-2 rounded-sm py-[5px] text-meta text-on-footer/[88%] transition-colors max-sm:flex max-sm:w-full max-sm:py-2.5 pointer-coarse:min-h-11 hover:text-on-footer hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-footer";
 
 function FooterGroup({
   heading,
@@ -117,7 +117,7 @@ export async function SiteFooter() {
           <Link
             href="/privacy"
             className={cn(
-              "inline-flex min-h-[24px] w-fit items-center rounded-sm transition-colors max-sm:min-h-11 max-sm:w-full",
+              "inline-flex min-h-[24px] w-fit items-center rounded-sm transition-colors max-sm:w-full pointer-coarse:min-h-11",
               "hover:text-on-footer hover:underline",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-footer",
             )}

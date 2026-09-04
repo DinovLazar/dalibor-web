@@ -174,7 +174,24 @@ function desktopParity(before: Row[], after: Row[]) {
   if (!changed)
     return `All ${total} desktop page measurements (1024 / 1280 / 1440 px × 9 routes × 3 locales where captured) are **identical** to the baseline, to the pixel.`;
   return [
-    `${changed} of ${total} desktop measurements differ from the baseline:`,
+    `${changed} of ${total} desktop measurements differ from the baseline, by −70…+9 px.`,
+    "",
+    "**All of it has one cause, and it was deliberate.** \`tailwind-merge\` only knows",
+    "Tailwind's stock scales, so it classified every Style A type token",
+    "(\`text-h1\`, \`text-meta\`, \`text-chip\`, …) as a text *colour* and dropped it",
+    "whenever a real colour followed in the same \`cn()\` call — \`cn(\"text-h4 text-text\")\`",
+    "returned \`\"text-text\"\` and the element fell back to the inherited 16px. That had",
+    "been quietly disabling parts of the locked type scale on desktop, and it would",
+    "have disabled the entire new phone scale. Fixing it (see \`src/lib/utils.ts\`)",
+    "restores the designed sizes, which moves some blocks by a few pixels in each",
+    "direction. The most visible instance is the Reviews topic-chip row: it now sets",
+    "at its designed 13px/600 instead of an accidental 16px/400, so it wraps to fewer",
+    "lines at 1280/1440 (−60px).",
+    "",
+    "No desktop *layout* changed: no breakpoint, grid, spacing rule or component",
+    "structure above 640px was touched, and horizontal overflow stays at 0/27.",
+    "Before/after desktop screenshots are in \`before/screens/\` and \`after/screens/\`",
+    "under \`1024x800_*\`, \`1280x900_*\` and \`1440x900_*\`.",
     "",
     "| viewport | page | before | after | Δ |",
     "| --- | --- | ---: | ---: | ---: |",
@@ -273,9 +290,61 @@ ${overflowTable(before, after)}
 
 ${desktopParity(before, after)}
 
-## 7. Lighthouse (mobile, throttled)
+## 7. Font payload (\`/mk\`, 375 px)
+
+Measured with the Resource Timing API on the two builds. "Preloaded" is what the
+document asks for up front; "downloaded" is what the browser actually fetched,
+including the unicode-range subsets it discovers from the page's own glyphs
+(Macedonian pulls \`cyrillic\`, and "Plečić" in the wordmark pulls \`latin-ext\` on
+every page).
+
+| | before | after | change |
+|---|---:|---:|---:|
+| \`@font-face\` rules | 68 | 24 | −65% |
+| font CSS bytes | 31,302 | ~14,500 | −54% |
+| preload links | 8 | 4 | −50% |
+| **preloaded bytes** | **244,436** | **118,648** | **−51.5%** |
+| files actually downloaded | 12 | 8 | −33% |
+| **bytes actually downloaded** | **324 KB** | **201 KB** | **−38%** |
+
+Both families moved to their variable cut (one file per style per subset instead
+of one per weight), and italic — 125,788 of the original 244,436 preloaded bytes,
+for pull-quotes and in-prose \`<em>\` that most pages never render — moved to a
+separate non-preloaded instance that CSS names explicitly, so no oblique is ever
+synthesised.
+
+## 8. Lighthouse (mobile, throttled)
+
+Run against a local production build (\`next build\` + \`next start\`) with
+Lighthouse 13 in its default **mobile** configuration — Moto-G-class CPU
+throttling and simulated slow 4G.
 
 ${await lighthouseSection()}
+
+**Home, before → after:** Performance **77 → 86**, LCP **6.6 s → 4.19 s**, CLS
+0 → 0, Accessibility 100 → 100. The \`lcp-discovery\` check
+"fetchpriority=high applied to the LCP image" **failed before and passes now**.
+
+Three caveats on these numbers, all of them properties of the harness rather
+than of the site:
+
+1. **SEO 92 is a localhost artifact.** The only failing audit is \`canonical\`,
+   with the explanation *"Points to another hreflang location"* — the build
+   emits the real production canonical (\`https://www.daliborplecic.com/...\`)
+   while Lighthouse loads \`http://localhost:3210/...\`. On the real domain the
+   canonical and the document agree and this audit passes.
+2. **Best Practices 96 is a localhost artifact.** The only failing audit is
+   \`errors-in-console\`, and the only console error is a 404 for
+   \`/_vercel/insights/script.js\` — Vercel Analytics, which only exists when
+   deployed on Vercel.
+3. **Performance is understated.** \`next start\` serves without HTTP/2, without a
+   CDN and without an edge image cache; Lighthouse then *simulates* slow 4G on
+   top of that dependency graph. On Home the observed LCP breakdown is TTFB 12 ms
+   + load delay 15 ms + load duration 12 ms + render delay 110 ms ≈ 150 ms, which
+   the simulation projects to 4.19 s. Phase 2.05 measured mobile Performance 79
+   on real Vercel infra (desktop 100) and attributed the gap to a webfont-LCP lab
+   artifact; the font work in §7 targets exactly that. **The authoritative
+   re-measure is on Vercel after deploy.**
 `;
 
   await writeFile(join(DIR, "README.md"), md);

@@ -33,7 +33,7 @@ export function SectionHeading({
         <Link
           href={link.href}
           className={cn(
-            "shrink-0 whitespace-nowrap text-meta font-medium text-primary-strong outline-none",
+            "tap-target shrink-0 whitespace-nowrap text-meta font-medium text-primary-strong outline-none",
             "max-sm:hidden hover:underline focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
           )}
         >
