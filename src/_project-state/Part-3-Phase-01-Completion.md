@@ -224,3 +224,58 @@ Home before → after: Performance **77 → 86**, LCP **6.6s → 4.19s**.
 ## 8. What's now possible that wasn't before
 
 Dalibor can hand someone his phone and let them read — the Reviews archive is browsable in a few swipes instead of fifteen screens, every link takes a thumb, and the page has a shape.
+
+
+---
+
+## Addendum — post-merge production measurement (2026-09-04)
+
+§4.4 left one item open: "the authoritative re-measure is on Vercel after deploy."
+The merge deployed (`588ce44`, production status `success`), and it has now been
+measured. Nothing above is edited; this is the answer to that open item.
+
+**Live checks on `https://www.daliborplecic.com/mk`:** `/mk`, `/mk/reviews` and
+`/manifest.webmanifest` all 200; `viewport-fit=cover`, `theme-color #F4EDE1`,
+`<link rel="manifest">` and the correct production canonical are all present;
+4 font preloads (was 8); no `noindex`.
+
+**Lighthouse mobile, same machine, back-to-back runs.** "Before" is the previous
+production deployment of `a20d021` (`dalibor-pj6zawgt6…`), still served by Vercel,
+so this is a true production-to-production comparison rather than a localhost one.
+
+| | before (`a20d021`) | after (`588ce44`) |
+|---|---:|---:|
+| **Performance** | **60** | **74** |
+| Accessibility | — | **100** |
+| Best Practices | — | **100** |
+| SEO | — | **100** |
+| LCP | 9.1 s | **5.0 s** (−45%) |
+| FCP | 3.2 s | **2.2 s** (−31%) |
+| TBT | 250 ms | **90 ms** (−64%) |
+| Speed Index | 5.6 s | 5.5 s |
+| CLS | 0 | **0** |
+
+Two things this settles:
+
+1. **Accessibility, Best Practices and SEO are all 100 in production**, exactly as
+   §4.4 predicted — the 96/92 seen locally were the Vercel-Analytics 404 and the
+   localhost-vs-production canonical, and both disappear on the real domain. Three
+   of the four DoD Lighthouse categories are met.
+2. **Performance improved by 14 points and LCP by 4.1 seconds**, but at 74 it is
+   still short of the ≥95 bar, so that DoD item remains ❌. (Phase 2.05's recorded
+   79 is not comparable — measured at a different time on different content; the
+   pre-phase build measured 60 on today's run.)
+
+**Where the remaining time goes, and what the next lever is.** The production LCP
+breakdown is TTFB 184 ms + **element render delay 2,388 ms**, with no resource
+load phase — meaning the LCP element in production is *text*, blocked behind the
+render-blocking stylesheet and the webfonts, not the hero image. Fonts are still
+**203 KB across 8 files** on the critical path even after this phase halved the
+preload. The next real gain is character-level subsetting (self-hosted woff2
+subset to the glyphs actually used), which `next/font/google` cannot do — it is a
+phase of its own, not a tweak. Secondary: `image-delivery-insight` flags ~30 KB on
+the featured-book cover, which is a lazy-loaded below-fold image and does not
+affect LCP.
+
+The portrait request in §4.6 stands and is now doubly motivated: a correctly-sized
+source also stops the browser being served an upscaled hero.
