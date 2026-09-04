@@ -140,12 +140,14 @@ The phase requires Workstreams B–E to run as parallel subagents, and they were
 
 ### 4.3 Home is 3,447px, not ≤3,200px
 
-The arithmetic, plainly: Home went **4,181 → 3,447** (−734, −18%). Two other DoD items *add* height and both are mandatory:
+The arithmetic, plainly: Home went **4,181 → 3,447** (−734, −18%), against a target that needed −981. Two other DoD items *add* height, and both are mandatory (all four figures measured live at 375px):
 
-- the full-bleed 3:4 phone hero is **500px** tall at 375px where the old inset portrait was 419px (**+81**);
-- 44px footer rows add roughly **+230px** on every page (the footer is 842 → 810px after trimming its top padding).
+| | before | after | Δ |
+|---|---:|---:|---:|
+| hero image (inset 4:5 card → full-bleed 3:4) | 419 | **500** | **+81** |
+| footer (33px links → 44px touch rows) | 736 | **818** | **+82** |
 
-Without those two the page would be near 3,140px. I trimmed what could honestly be trimmed (section padding 48 → 40px on a phone, featured-book padding, footer top padding) and stopped short of removing content, which the DoD forbids. Closing the remaining 247px means reverting one of the two structural requirements or cutting content — a call for Lazar, not for me.
+So **+163px** of required additions sit inside that −734. Even with both reverted the page would land near **3,284px** — still ~84px over the 3,200 target. I trimmed what could honestly be trimmed (section padding 48 → 40px on a phone, featured-book padding, footer top padding) and stopped short of removing content, which the DoD forbids. The target as written is not reachable alongside the phase's own hero and touch-target requirements; closing the gap needs a content decision, which is Lazar's call, not mine.
 
 ### 4.4 Lighthouse: Accessibility 100 everywhere; Performance 80–91; BP 96 and SEO 92 are localhost artifacts
 
@@ -212,7 +214,7 @@ Home before → after: Performance **77 → 86**, LCP **6.6s → 4.19s**.
 1. **The `tailwind-merge` list must stay in sync** with the `--text-*` tokens in `globals.css`. Adding a token without adding it to `src/lib/utils.ts` re-introduces the silent-drop bug for that token.
 2. **Re-measure Lighthouse on Vercel after deploy.** The local Performance numbers understate production, and the Best Practices and SEO deductions disappear there.
 3. **The portrait request in §4.6 is the one thing blocking a fully sharp phone hero.**
-4. **`docs/mobile-audit/` is ~26MB** of committed JPEG evidence across the two sets. That is deliberate — the DoD asks for before/after screenshots — but it is worth knowing before the next evidence-heavy phase.
+4. **`docs/mobile-audit/` is ~24MB** of committed JPEG evidence across the two sets. That is deliberate — the DoD asks for before/after screenshots — but it is worth knowing before the next evidence-heavy phase.
 5. **The harness is reusable and cheap:** `npm run audit:mobile -- --out <dir>` then `npm run audit:report`. Run it after any layout change. It needs a running `next start` and Chrome; `--from`/`--to`/`--append` split long runs, and it recycles the browser every 24 pages because headless Chrome destabilises after a few dozen tall full-page captures.
 6. **Two harness bugs were found and fixed during the phase**, and both would have produced false results: `document.fonts.ready` can resolve before a face that nothing has requested yet begins loading, so pages were measuring in the Georgia fallback and chip rows wrapped differently between runs; and a prose link that wraps across two lines has a bounding-box centre that lands *between* its line boxes, so it was reported "obscured" instead of inline-exempt. The `before/` set was recaptured from a pristine worktree of `a20d021` with the final harness, so both sets come from the same instrument.
 7. **Not verified on real hardware.** Everything here is Chrome device emulation. Safari on iOS differs most in `env(safe-area-inset-*)` behaviour and in `-webkit-overflow-scrolling` momentum on the chip rail — worth a real-device pass before launch.
